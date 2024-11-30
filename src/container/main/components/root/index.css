@@ -1,0 +1,95 @@
+body {
+  background-color: rgb(252, 252, 252);
+}
+
+.main {
+  width: 100%;
+  max-width: 1256px;
+  padding: 0 15px;
+  margin: 10px auto;
+  background-color: white;
+  border-radius: 15px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1256px;
+  padding: 0 15px;
+  margin: 0 auto;
+  background-color: white;
+  filter: drop-shadow(5px 5px 5px rgba(180, 180, 180, 0.3));
+  border-radius: 15px;
+}
+
+.container:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+
+
+.logo {
+  float: left;
+  width: 120px;
+  height: 120px;
+}
+
+.nav_v1 {
+  display: inline;
+}
+
+.menu_v1 {
+  background-color: blue;
+  display: inline-block;
+}
+
+.menu_v1_1 {
+  background-color: rgb(0, 106, 255);
+  float: right;
+}
+
+.nav_v2 {
+  background-color: blueviolet;
+}
+
+.menu_v2 {
+  display: inline-block;
+  margin-left: 30%;
+  margin-right: auto;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  display: inline-block; /*один из способов разместить элементы в строку*/
+}
+
+nav a {
+  text-decoration: none;
+  line-height: 60px;
+  margin-left: 30px;
+  font-size: 24px;
+}
+
+.footer {
+  margin-top: 5px;
+  background-color: white;
+}
+
+.left-footer-z {
+  display: inline;
+}
+
+.left-footer {
+  display: inline-block;
+}
+
+.right-footer {
+  float: right;
+  margin-right: 20%;
+}
