@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { Link as LinkBase } from 'react-router-dom';
+import styled from "@emotion/styled";
+import { Link as LinkBase } from "react-router-dom";
 
 export const CardStyled = styled.div<{ width }>`
   display: inline-block;

@@ -1,18 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { getNavigationsValue } from '@brojs/cli';
+import React from "react";
+import { Link } from "react-router-dom";
+import { getNavigationsValue } from "@brojs/cli";
 
-const pagesV1_1 = [{ id: 1, title: 'Войти', navigation: 'eng-it-lean.main' }];
+const pagesV1_1 = [{ id: 1, title: "Войти", navigation: "eng-it-lean.main" }];
 
 const pagesV1 = [
-  { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
-  { id: 2, title: 'Практика', navigation: 'eng-it-lean.main' }
+  { id: 1, title: "Главная", navigation: "eng-it-lean.main" },
+  { id: 2, title: "Практика", navigation: "eng-it-lean.main" },
 ];
 
 const pagesV2 = [
-  { id: 1, title: 'Материалы', navigation: 'eng-it-lean.main' },
-  { id: 2, title: 'Прогресс', navigation: 'eng-it-lean.main' },
-  { id: 3, title: 'Ссылки', navigation: 'eng-it-lean.main' }
+  { id: 1, title: "Материалы", navigation: "eng-it-lean.main" },
+  { id: 2, title: "Прогресс", navigation: "eng-it-lean.main" },
+  { id: 3, title: "Ссылки", navigation: "eng-it-lean.main" },
 ];
 
 const Header = (): React.ReactElement => {
@@ -35,7 +35,7 @@ const Header = (): React.ReactElement => {
   return (
     <header>
       <div className="container">
-        <img src={require('./images/Logo.jpg')} className="logo" />
+        <img src={require("./images/Logo.jpg")} className="logo" />
         <nav className="nav_v1">
           <div className="menu_v1">
             <ul>{linksV1}</ul>
