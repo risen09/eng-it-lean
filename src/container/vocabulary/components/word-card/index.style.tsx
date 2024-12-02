@@ -1,7 +1,8 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-export const WordCardStyled = styled.div`
+export const WordCardStyled = styled.button`
   display: flex;
+  text-align: start;
   flex-direction: column;
   background-color: rgb(255, 255, 255);
   width: 550px;

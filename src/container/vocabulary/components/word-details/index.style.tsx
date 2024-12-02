@@ -56,7 +56,7 @@ export const Example = styled.p`
 `;
 
 export const SynonymLink = styled(Link)`
-padding-right: 20px;
-		text-decoration: none;
-    color: blue;
+  padding-right: 20px;
+  text-decoration: none;
+  color: blue;
 `;
