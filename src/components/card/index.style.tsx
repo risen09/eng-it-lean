@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
-import { Link as LinkBase } from "react-router-dom";
+import styled from '@emotion/styled';
+import { Link as LinkBase } from 'react-router-dom';
 
-export const CardStyled = styled.div`
+export const CardStyled = styled.div<{ width }>`
   display: inline-block;
   float: left;
-  width: 220px;
+  width: {width};
   height: 350px;
   background-color: rgb(255, 255, 255);
   margin-right: 25px;
