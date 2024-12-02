@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
       {
         path: getNavigationsValue('eng-it-lean.vocabulary'),
         element: <VocabularyPage />
-      },
+      }
     ]
   }
 ]);

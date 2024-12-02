@@ -1,12 +1,13 @@
 import './index.css';
 import React from 'react';
+import { WordCardStyled, WordCardTitle } from './index.style';
 
-const WordCard = ({id, word, definition}): React.ReactElement => {
+const WordCard = ({ id, word, definition }): React.ReactElement => {
   return (
-    <div key={id} className="word-card">
-      <h3>{word}</h3>
+    <WordCardStyled>
+      <WordCardTitle>{word}</WordCardTitle>
       <p>{definition}</p>
-    </div>
+    </WordCardStyled>
   );
 };
 
