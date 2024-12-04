@@ -1,18 +1,12 @@
 import "./index.css";
-import React from "react";
+import React, { useState } from "react";
 import { Word } from "./types";
 import WordCard from "./components/word-card";
 import WordDetails from "./components/word-details";
 import { vocabulary } from "./vocabulary";
 
-const VocabularyPage = (): React.ReactElement => {
-  const [wordId, setWordId] = React.useState(-1);
-
-  const handleWordClick = (newWordId: number) => {
-    console.log(newWordId);
-    setWordId(newWordId);
-    console.log(wordId);
-  };
+const DictionaryPage = (): React.ReactElement => {
+  const [wordId, setWordId] = useState(-1);
 
   const wordCards = vocabulary.map((word) => (
     <WordCard
@@ -45,4 +39,4 @@ const VocabularyPage = (): React.ReactElement => {
   );
 };
 
-export default VocabularyPage;
+export default DictionaryPage;
