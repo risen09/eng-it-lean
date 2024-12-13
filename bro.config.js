@@ -10,7 +10,7 @@ module.exports = {
   /* use https://admin.bro-js.ru/ to create config, navigations and features */
   navigations: {
     "eng-it-lean.main": "/eng-it-lean",
-    "eng-it-lean.vocabulary": "/eng-it-lean/vocabulary",
+    "eng-it-lean.dictionary": "/eng-it-lean/dictionary/:id",
   },
   features: {
     sandbox: {

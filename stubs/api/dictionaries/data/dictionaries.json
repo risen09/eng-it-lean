@@ -1,38 +1,12 @@
 [
   {
-    "id": 1,
+    "id": 0,
     "description": "1000 часто используемых",
-    "imageFilename": "kart1.jpg",
-    "link": "eng-it-lean.vocabulary"
+    "imageFilename": "kart1.jpg"
   },
   {
-    "id": 2,
+    "id": 1,
     "description": "10 слов в Data Science",
-    "imageFilename": "kart1.jpg",
-    "link": "eng-it-lean.vocabulary"
-  },
-  {
-    "id": 3,
-    "description": "10 слов в Data Science",
-    "imageFilename": "kart1.jpg",
-    "link": "eng-it-lean.vocabulary"
-  },
-  {
-    "id": 4,
-    "description": "10 слов в Data Science",
-    "imageFilename": "kart1.jpg",
-    "link": "eng-it-lean.vocabulary"
-  },
-  {
-    "id": 5,
-    "description": "10 слов в Data Science",
-    "imageFilename": "kart1.jpg",
-    "link": "eng-it-lean.vocabulary"
-  },
-  {
-    "id": 6,
-    "description": "10 слов в Data Science",
-    "imageFilename": "kart1.jpg",
-    "link": "eng-it-lean.vocabulary"
+    "imageFilename": "kart1.jpg"
   }
 ]

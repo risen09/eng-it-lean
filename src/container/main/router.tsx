@@ -4,7 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { getNavigationsValue } from "@brojs/cli";
 import Root from "./components/root";
 import HomePage from "../home";
-import VocabularyPage from "../vocabulary";
+import DictionaryPage from "../dictionary";
 
 export const router = createBrowserRouter([
   {
@@ -16,8 +16,8 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: getNavigationsValue("eng-it-lean.vocabulary"),
-        element: <VocabularyPage />,
+        path: getNavigationsValue("eng-it-lean.dictionary"),
+        element: <DictionaryPage />,
       },
     ],
   },

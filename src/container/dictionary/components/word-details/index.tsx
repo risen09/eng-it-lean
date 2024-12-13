@@ -10,10 +10,8 @@ import {
   Block,
   Example,
 } from "./index.style";
-import { vocabulary } from "../../vocabulary";
 
-const WordDetails = ({ wordId }): React.ReactElement => {
-  const word = vocabulary.find((word) => word.id == wordId);
+const WordDetails = ({ word }): React.ReactElement => {
   const wordSynonyms = word.synonyms.map((synonym) => (
     <SynonymLink to={undefined}>{synonym}</SynonymLink>
   ));
