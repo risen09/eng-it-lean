@@ -1,6 +1,6 @@
-import "./index.css";
+<<<<<<import "./index.css";
 import React, { useState } from "react";
-import Card from "./components/card";
+import Card from '../../components/card';
 import { DictionaryItem } from "./types";
 import { getNavigationsValue } from "@brojs/cli";
 
