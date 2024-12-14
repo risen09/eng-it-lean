@@ -1,6 +1,6 @@
 import './index.css';
 import React from 'react';
-import Card from './components/card';
+import Card from '../../components/card';
 import { getNavigationsValue } from '@brojs/cli';
 
 const dictionaries = [
