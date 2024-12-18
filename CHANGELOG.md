@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.1](https://github.com/risen09/eng-it-lean/compare/v0.1.0...v0.1.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* in HomePage render 'Loading...' in place of dictionaries, not in whole page ([7bc4787](https://github.com/risen09/eng-it-lean/commit/7bc4787a3e128584e8de5f56d9bf744355ed2a34))
+* remove colors in header ([8e9ec7a](https://github.com/risen09/eng-it-lean/commit/8e9ec7a98daba5fc729ae48650bf0af2926e1785))
+
 ## 0.1.0 (2024-12-14)
 
 
