@@ -24,7 +24,6 @@ const HomePage = (): React.ReactElement => {
       });
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   const dictionaryCards = dictionaries
@@ -49,7 +48,11 @@ const HomePage = (): React.ReactElement => {
         />
       </div>
       <div className="main">
-        <div className="card_center_blocks">{dictionaryCards}</div>
+				{
+					isLoading ? <div>Loading...</div> : (
+						<div className="card_center_blocks">{dictionaryCards}</div>
+					)
+				}
       </div>
     </div>
   );
