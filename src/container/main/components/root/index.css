@@ -38,17 +38,17 @@ body {
 }
 
 .menu_v1 {
-  background-color: blue;
+  /* background-color: blue; */
   display: inline-block;
 }
 
 .menu_v1_1 {
-  background-color: rgb(0, 106, 255);
+  /* background-color: rgb(0, 106, 255); */
   float: right;
 }
 
 .nav_v2 {
-  background-color: blueviolet;
+  /* background-color: blueviolet; */
 }
 
 .menu_v2 {
