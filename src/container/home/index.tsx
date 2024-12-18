@@ -4,6 +4,8 @@ import Card from '../../components/card';
 import { DictionaryItem } from "./types";
 import { getNavigationsValue } from "@brojs/cli";
 
+import mainBanner from "./images/osn_banner2.jpg";
+
 const HomePage = (): React.ReactElement => {
   const [error, setError] = useState<string>(null);
   const [dictionaries, setDictionaries] = useState<DictionaryItem[]>([]);
@@ -41,7 +43,7 @@ const HomePage = (): React.ReactElement => {
     <div>
       <div className="main-banner">
         <img
-          src={require("./images/osn_banner2.jpg")}
+          src={mainBanner}
           alt=""
           className="img_main_banner"
         />
