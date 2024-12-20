@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Card from '../../components/card';
 import { DictionaryItem } from "./types";
 import { getNavigationsValue } from "@brojs/cli";
+import { getConfigValue } from '@brojs/cli';
 
 import mainBanner from "./images/osn_banner2.jpg";
 
@@ -12,7 +13,7 @@ const HomePage = (): React.ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   React.useEffect(() => {
-    fetch("/api/dictionaries")
+    fetch(`${getConfigValue('eng-it-lean.api')}/dictionaries`)
       .then((res) => res.json())
       .catch((error) => {
         setError(error);

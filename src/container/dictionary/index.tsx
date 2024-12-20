@@ -4,6 +4,7 @@ import { Word } from "./types";
 import WordCard from "./components/word-card";
 import WordDetails from "./components/word-details";
 import { useParams } from "react-router-dom";
+import { getConfigValue } from '@brojs/cli';
 
 const DictionaryPage = (): React.ReactElement => {
 	const { id } = useParams();
@@ -14,7 +15,7 @@ const DictionaryPage = (): React.ReactElement => {
   const [wordId, setWordId] = React.useState(-1);
 
   useEffect(() => {
-    fetch("/api/dictionaries/" + id)
+    fetch(`${getConfigValue('eng-it-lean.api')}/dictionaries/${id}`)
       .then((res) => res.json())
       .then(
         (result) => {
