@@ -1,6 +1,4 @@
-* {box-sizing: border-box}
-
-  input[type=text], input[type=password] {
+input[type=text], input[type=password] {
   width: 100%;
   padding: 15px;
   margin: 5px 0 22px 0;
@@ -47,27 +45,27 @@ button:hover {
 }
 
 .container {
-  position: absolute; 
+  background: url(registration.jpg);
+  background-size: no-repeat;
+  background-position: center;
+  background-size: cover;
   width: 600px; 
-  height: 550px; 
+  height: 500px; 
+
+  position: absolute; 
   margin: auto; 
   top: 0; 
   bottom: 0; 
   left: 0; 
   right: 0; 
-  background: rgb(8, 0, 255); 
   border: 1px solid #000; 
   padding: 10px; 
+
+  color: rgb(2, 47, 98);
 }
 
 .clearfix::after {
   content: "";
   clear: both;
   display: table;
-}
-
-@media screen and (max-width: 300px) {
-  .cancelbtn, .signupbtn {
-    width: 100%;
-  }
 }
