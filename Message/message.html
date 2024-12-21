@@ -1,16 +1,24 @@
 <html lang="ru">
   <link rel="stylesheet" href="message.css">
   
-    <div class="blok-center">
-      <form>
-      <p>Ваше имя<br />
-      <input class="input" name="name" ENGINE="text" style="width:60%" /></p>
-      <p>Электронная почта<br />
-      <input class="input" name="email" type="text" style="width:60%" /></p>
-      <p>Тема сообщения<br />
-      <input class="input" name="sub" type="text" style="width:60%" /></p>
-      <p>Текст сообщения:<br /><textarea name="body" cols="1" rows="5" style="width:60%" /></textarea></p>
-      <p><input id="submit" value="Отправить" type="submit" /></p>
-      </form>
+  <form>
+    <div class="container">
+        <label for="username"><b>Имя пользователя</b></label>
+        <input type="text" placeholder="Enter username" name="username" required>
+
+        <label for="email"><b>Электронная почта</b></label>
+        <input type="text" placeholder="Enter email" name="email" required>
+
+        <label for="theme"><b>Тема сообщения</b></label>
+        <input type="text" placeholder="Enter theme of message" name="theme" required>
+
+        <label for="message"><b>Текст сообщения</b></label>
+        <input type="text" placeholder="Enter text of message" name="message" required>
+
+      <div class="clearfix">
+        <button type="button" class="cancelbtn">Отменить</button>
+        <button type="submit" class="entrybtn">Отправить</button>
+      </div>
     </div>
+  </form>
 </html>
