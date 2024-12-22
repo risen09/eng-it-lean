@@ -1,23 +1,11 @@
-import React from "react";
-import Row from "../../../../components/row";
-import Column from "../../../../components/column";
-import {
-  WordDetailsStyled,
-  Title,
-  Definition,
-  Heading,
-  SynonymLink,
-  Block,
-  Example,
-} from "./index.style";
+import React from 'react';
+import Row from '../../../../components/row';
+import Column from '../../../../components/column';
+import { WordDetailsStyled, Title, Definition, Heading, SynonymLink, Block, Example } from './index.style';
 
 const WordDetails = ({ word }): React.ReactElement => {
-  const wordSynonyms = word.synonyms.map((synonym) => (
-    <SynonymLink to={undefined}>{synonym}</SynonymLink>
-  ));
-  const wordExamples = word.examples.map((example) => (
-    <Example>{example}</Example>
-  ));
+  const wordSynonyms = word.synonyms.map((synonym) => <SynonymLink to={undefined}>{synonym}</SynonymLink>);
+  const wordExamples = word.examples.map((example) => <Example>{example}</Example>);
 
   return (
     <WordDetailsStyled>
