@@ -1,6 +1,6 @@
-import "./index.css";
-import React from "react";
-import { WordCardStyled, WordCardTitle } from "./index.style";
+import './index.css';
+import React from 'react';
+import { WordCardStyled, WordCardTitle } from './index.style';
 
 const WordCard = ({ onClick, word, definition }): React.ReactElement => {
   return (

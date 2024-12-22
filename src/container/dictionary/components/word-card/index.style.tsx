@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 export const WordCardStyled = styled.button`
 	--bg-color: rgb(255, 255, 255);

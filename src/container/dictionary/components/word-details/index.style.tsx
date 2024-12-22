@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
-import { Link } from "react-router-dom";
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { Link } from 'react-router-dom';
 
 export const WordDetailsStyled = styled.div`
   display: flex;
@@ -35,11 +35,11 @@ export const Block = styled.div<{ direction?: string }>`
 
   ${({ direction }) => {
     switch (direction) {
-      case "row":
+      case 'row':
         return css`
           flex-direction: row;
         `;
-      case "column":
+      case 'column':
         return css`
           flex-direction: column;
         `;
