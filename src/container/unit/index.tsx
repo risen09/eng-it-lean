@@ -1,20 +1,21 @@
 import React from 'react';
-import Markdown from 'react-markdown';
 import { useGetUnitQuery } from '../../store/api';
 import remarkGfm from 'remark-gfm';
+import { Main } from './index.style';
+import MarkdownStyled from '../../components/markdown';
 
 const UnitPage = (): React.ReactElement => {
   const { data: unit, isLoading, error } = useGetUnitQuery(0);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error</div>;
-  }
-
-  return <Markdown remarkPlugins={[remarkGfm]}>{unit?.content}</Markdown>;
+  return (
+    <Main>
+			{ isLoading && <div>Loading...</div> }
+			{ error && <div>Error</div> }
+			<MarkdownStyled>
+				{unit?.content}
+			</MarkdownStyled>
+    </Main>
+  );
 };
 
 export default UnitPage;
