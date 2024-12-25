@@ -1,0 +1,40 @@
+<html lang="ru">
+  <link rel="stylesheet" href="registration.css">
+
+  <form>
+    <div class="container">
+      <h1>Регистрация</h1>
+      <p>Заполните поля, расположенные ниже, чтобы создать аккаунт.</p>
+      <hr>
+  
+      <label for="email"><b>Электронная почта</b></label>
+      <input type="text" placeholder="Enter Email" name="email" required>
+  
+      <label for="psw"><b>Пароль</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
+  
+      <label for="psw-repeat"><b>Повторите пароль</b></label>
+      <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+  
+      <div class="clearfix">
+        <button id="cancelbtn" type="button" class="cancelbtn">Отменить</button>
+        <button id="registerbtn" type="button" class="registerbtn">Зарегистрироваться</button>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    const cancelButton = document.getElementById('cancelbtn');
+    cancelButton.addEventListener('click', function() {
+      window.location.href = "file:///C:/Users/olego/Desktop/%D0%A1%D0%B1%D0%B5%D1%80%D0%A5%D0%B0%D0%B1/%D0%A1%D0%B0%D0%B9%D1%82_eng2/%D0%A1%D0%B0%D0%B9%D1%82_eng/app/templates/base.html"; 
+    });
+  </script>
+
+  <script>
+    const registerButton = document.getElementById('registerbtn');
+    registerButton.addEventListener('click', function() {
+      alert("Регистрация прошла успешно!");
+      window.location.href = "file:///C:/Users/olego/Desktop/%D0%A1%D0%B1%D0%B5%D1%80%D0%A5%D0%B0%D0%B1/Entry/entry.html"; 
+    });
+  </script>
+</html>
