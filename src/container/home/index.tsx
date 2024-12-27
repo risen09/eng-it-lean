@@ -5,6 +5,9 @@ import { DictionaryItem } from './types';
 import { getNavigationsValue } from '@brojs/cli';
 import { getConfigValue } from '@brojs/cli';
 import { useGetDictionaryListQuery } from '../../store/api';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import mainBanner from './images/osn_banner2.jpg';
 
