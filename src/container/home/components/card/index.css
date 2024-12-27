@@ -1,0 +1,31 @@
+.card {
+  display: inline-block;
+}
+
+.main_card {
+  float: left;
+  width: 220px;
+  height: 350px;
+  background-color: rgb(255, 255, 255);
+  padding-top: 20px;
+  margin-right: 25px;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  border-radius: 15px;
+  filter: drop-shadow(5px 5px 5px rgba(180, 180, 180, 0.4));
+}
+
+.img_kart {
+  width: 180px;
+  height: 220px;
+  border-radius: 15px;
+}
+
+.card_div_img,
+.card_text {
+  margin-left: 20px;
+}
+.card_h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
