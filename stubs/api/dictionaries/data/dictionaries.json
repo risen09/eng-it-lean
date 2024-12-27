@@ -1,0 +1,12 @@
+[
+  {
+    "id": 0,
+    "description": "1000 часто используемых",
+    "imageFilename": "kart1.jpg"
+  },
+  {
+    "id": 1,
+    "description": "10 слов в Data Science",
+    "imageFilename": "kart1.jpg"
+  }
+]

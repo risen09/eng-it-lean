@@ -1,0 +1,150 @@
+[
+  {
+    "id": 0,
+    "words": [
+      {
+        "id": 0,
+        "word": "Tech",
+        "definition": "short for technical, relating to the knowledge, machines, or methods used in science and industry. Tech is a whole industry, which includes IT",
+        "examples": [
+          "“As a DevOps engineer I have been working in Tech since 2020.”"
+        ],
+        "synonyms": ["IT"]
+      },
+      {
+        "id": 1,
+        "word": "career path",
+        "definition": "the series of jobs or roles that constitute a person's career, especially one in a particular field",
+        "examples": [
+          "“Technology is an evolving field with a variety of available career paths.”"
+        ],
+        "synonyms": []
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "words": [
+      {
+        "id": 0,
+        "word": "Machine Learning",
+        "translation": "Машинное обучение",
+        "definition": "An approach to artificial intelligence where computers learn from data without being explicitly programmed.",
+        "synonyms": ["Trainable Algorithms", "Automated Learning"],
+        "examples": [
+          "We used machine learning techniques to forecast product demand.",
+          "The movie recommendation system is based on machine learning algorithms.",
+          "Machine learning helped improve the accuracy of speech recognition in our application."
+        ]
+      },
+      {
+        "id": 1,
+        "word": "Neural Network",
+        "translation": "Нейронная сеть",
+        "definition": "A mathematical model inspired by the structure and function of biological neural networks, consisting of interconnected nodes organized in layers that can process information.",
+        "synonyms": ["Artificial Neural Network", "Deep Neural Network"],
+        "examples": [
+          "To process large amounts of data, we created a deep learning neural network.",
+          "This neural network is capable of generating realistic images.",
+          "Using neural networks significantly improved the quality of text translation."
+        ]
+      },
+      {
+        "id": 2,
+        "word": "Algorithm",
+        "translation": "Алгоритм",
+        "definition": "A step-by-step procedure or set of instructions for solving a problem or performing a computation.",
+        "synonyms": ["Procedure", "Method"],
+        "examples": [
+          "The algorithm we developed quickly finds the optimal delivery route.",
+          "This algorithm sorts an array with a minimal number of operations.",
+          "Encryption algorithms ensure secure transmission of data over the internet."
+        ]
+      },
+      {
+        "id": 3,
+        "word": "Data Model",
+        "translation": "Модель данных",
+        "definition": "An abstract representation of the structure of data, describing how data is organized and related to each other.",
+        "synonyms": ["Data Structure", "Schema"],
+        "examples": [
+          "Our data model allows us to efficiently manage relationships between customers and orders.",
+          "The data model was designed considering scalability and performance requirements.",
+          "This data model is used for storing information about social network users."
+        ]
+      },
+      {
+        "id": 4,
+        "word": "Regression",
+        "translation": "Регрессия",
+        "definition": "A statistical method used to determine the relationship between one variable and others.",
+        "synonyms": ["Linear Regression", "Nonlinear Regression"],
+        "examples": [
+          "We applied linear regression to analyze the impact of advertising campaigns on sales.",
+          "Results from the regression analysis showed a strong correlation between customer age and purchase frequency.",
+          "Regression helped us assess how changes in environmental conditions affect crop yield."
+        ]
+      },
+      {
+        "id": 5,
+        "word": "Clustering",
+        "translation": "Кластеризация",
+        "definition": "The process of grouping similar objects into clusters so that objects within the same cluster are more similar to each other than to those in other clusters.",
+        "synonyms": ["Grouping", "Segmentation"],
+        "examples": [
+          "Clustering allowed us to divide customers into several groups according to their purchasing behavior.",
+          "Clustering methods are used to automatically group news by topic.",
+          "As a result of clustering, several market segments were identified, each with its own characteristics."
+        ]
+      },
+      {
+        "id": 6,
+        "word": "Supervised Learning",
+        "translation": "Обучение с учителем",
+        "definition": "A type of machine learning where the algorithm learns from labeled data, meaning data for which correct answers are known.",
+        "synonyms": ["Controlled Learning", "Labeled Classification"],
+        "examples": [
+          "Supervised learning is used to classify emails as spam or not-spam.",
+          "This approach was used to create a model that predicts real estate prices based on multiple parameters.",
+          "Supervised learning helps diagnose diseases at early stages through medical data analysis."
+        ]
+      },
+      {
+        "id": 7,
+        "word": "Data Labeling",
+        "translation": "Разметка данных",
+        "definition": "The process of assigning labels or classes to data so it can be used in supervised learning.",
+        "synonyms": ["Data Annotation", "Tagging"],
+        "examples": [
+          "Before starting model training, we labeled the data by assigning each photo an animal category.",
+          "Data labeling includes marking user reviews as positive or negative.",
+          "Text documents were labeled with special tags for subsequent analysis."
+        ]
+      },
+      {
+        "id": 8,
+        "word": "Hyperparameters",
+        "translation": "Гиперпараметры",
+        "definition": "Parameters that define the structure and behavior of a machine learning model, set before the learning process begins.",
+        "synonyms": ["Model Settings", "Configuration Parameters"],
+        "examples": [
+          "Optimizing hyperparameters enabled us to enhance the performance of our machine learning model.",
+          "Hyperparameters include settings such as the number of layers in a neural network and the learning rate.",
+          "Choosing the right hyperparameters is crucial for achieving high model accuracy."
+        ]
+      },
+      {
+        "id": 9,
+        "word": "Model Validation",
+        "translation": "Валидация модели",
+        "definition": "The process of evaluating the quality of a model by testing it on new, previously unseen data.",
+        "synonyms": ["Model Testing", "Model Verification"],
+        "examples": [
+          "After completing the training, we validated the model using a test dataset.",
+          "During model validation, its ability to make accurate predictions on new data is checked.",
+          "Validation showed that the model is robust against changes in data and has low generalization error."
+        ]
+      }
+    ]
+  }
+]
