@@ -37,7 +37,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "eldar",
+    "git-widget-placeholder": "dev",
     "last_opened_file_path": "/home/eldar/project/sber/pr_2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -106,7 +106,7 @@
       <option name="presentableId" value="Default" />
       <updated>1731746211156</updated>
       <workItem from="1731746212180" duration="2585000" />
-      <workItem from="1735334673179" duration="1895000" />
+      <workItem from="1735334673179" duration="2539000" />
     </task>
     <servers />
   </component>
