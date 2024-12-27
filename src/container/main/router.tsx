@@ -5,6 +5,10 @@ import { getNavigationsValue } from "@brojs/cli";
 import Root from "./components/root";
 import HomePage from "../home";
 import DictionaryPage from "../dictionary";
+import MessagePage from "../message";
+import LoginPage from "../entry";
+import RegistrationPage from "../registration";
+import PersonalAccountPage from "../account";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +23,10 @@ export const router = createBrowserRouter([
         path: getNavigationsValue("eng-it-lean.dictionary"),
         element: <DictionaryPage />,
       },
+      {
+        path: getNavigationsValue("eng-it-lean.registration"),
+        element: <RegistrationPage />,
+      }
     ],
   },
 ]);
