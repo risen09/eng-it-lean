@@ -5,10 +5,7 @@ import { getNavigationsValue } from "@brojs/cli";
 import Root from "./components/root";
 import HomePage from "../home";
 import DictionaryPage from "../dictionary";
-import MessagePage from "../message";
-import LoginPage from "../entry";
 import RegistrationPage from "../registration";
-import PersonalAccountPage from "../account";
 
 export const router = createBrowserRouter([
   {
