@@ -11,6 +11,7 @@ module.exports = {
   navigations: {
     "eng-it-lean.main": "/eng-it-lean",
     "eng-it-lean.dictionary": "/eng-it-lean/dictionary/:id",
+    "eng-it-lean.message": "/eng-it-lean/message"
   },
   features: {
     sandbox: {
