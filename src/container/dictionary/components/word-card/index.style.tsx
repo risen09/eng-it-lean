@@ -13,6 +13,7 @@ export const WordCardStyled = styled.button`
 	border: solid var(--bg-color);
 	border-radius: 15px;
   filter: drop-shadow(5px 5px 5px rgba(180, 180, 180, 0.4));
+	color: black;
 	
 	&:hover {
 		--bg-color: rgb(127, 127, 127);
