@@ -1,6 +1,7 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
-const dictionariesRouter = require("./dictionaries");
+const dictionariesRouter = require('./dictionaries');
+const unitsRouter = require('./units');
 module.exports = router;
 
 const delay =
@@ -10,4 +11,5 @@ const delay =
   };
 
 router.use(delay());
-router.use("/dictionaries", dictionariesRouter);
+router.use('/dictionaries', dictionariesRouter);
+router.use('/units', unitsRouter);
