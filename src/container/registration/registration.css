@@ -44,15 +44,14 @@ input[type=text], input[type=password] {
     width: 50%;
   }
   
-  .container {
-    background: url(registration.jpg);
+  .reg-container {
+    /* background: url(registration.jpg); */
     background-size: no-repeat;
     background-position: center;
     background-size: cover;
     width: 600px; 
     height: 500px; 
   
-    position: absolute; 
     margin: auto; 
     top: 0; 
     bottom: 0; 

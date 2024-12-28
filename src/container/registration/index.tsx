@@ -1,7 +1,7 @@
 import './registration.css'; 
 import React, { useState, useEffect } from 'react';
 
-const RegistrationPage: React.FC = () => {
+const RegistrationPage = (): React.ReactElement => {
   const handleCancel = () => {
     //window.location.href = "file:///C:/Users/olego/Desktop/СберХаб/Сайт_eng2/Сайт_eng/app/templates/base.html";
   };
@@ -12,8 +12,9 @@ const RegistrationPage: React.FC = () => {
   };
 
   return (
+		<div>
     <form>
-      <div className="container">
+      <div className="reg-container">
         <h1>Регистрация</h1>
         <p>Заполните поля, расположенные ниже, чтобы создать аккаунт.</p>
         <hr />
@@ -33,6 +34,7 @@ const RegistrationPage: React.FC = () => {
         </div>
       </div>
     </form>
+</div>
   );
 };
 
