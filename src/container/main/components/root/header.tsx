@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { getNavigationsValue } from "@brojs/cli";
 
-const pagesV1_1 = [{ id: 1, title: "Войти", navigation: "eng-it-lean.main" }];
+const pagesV1_1 = [{ id: 1, title: "Войти", navigation: "eng-it-lean.registration" }];
 
 const pagesV1 = [
   { id: 1, title: "Главная", navigation: "eng-it-lean.main" },
