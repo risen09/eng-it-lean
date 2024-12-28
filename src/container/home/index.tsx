@@ -5,42 +5,62 @@ import { DictionaryItem } from './types';
 import { getNavigationsValue } from '@brojs/cli';
 import { getConfigValue } from '@brojs/cli';
 import { useGetDictionaryListQuery } from '../../store/api';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import mainBanner from './images/osn_banner2.jpg';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation} from 'swiper/modules';
 
-const SimpleCarousel = () => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-    };
 
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+
+// import required modules
+
+ function App() {
     return (
-        <Slider {...settings}>
-            <div>
-                <img src={mainBanner} alt='slide-1' />
-            </div>
-            <div>
-                <img src={mainBanner} alt='slide-2' />
-            </div>
-            <div>
-                <img src={mainBanner} alt='slide-3' />
-            </div>
-        </Slider>
+        <>
+        <div className="main-banner"><Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+            <SwiperSlide>
+                <div className="block-slider">
+                    <img src={mainBanner} alt="" className="img_main_banner}"/>
+                    <div className="block-slider-content">
+                        <div className="block-slider-content-inner">
+                            <h2>Начни сегодня</h2>
+                            <p>Лучшие практики, словари, граматика, материалы, фильмы и многое другое </p>
+                            <button className="recordButton">Начать обучение</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </SwiperSlide>
+            <SwiperSlide>Slide 2</SwiperSlide>
+            <SwiperSlide>Slide 3</SwiperSlide>
+            <SwiperSlide>Slide 4</SwiperSlide>
+            <SwiperSlide>Slide 5</SwiperSlide>
+            <SwiperSlide>Slide 6</SwiperSlide>
+            <SwiperSlide>Slide 7</SwiperSlide>
+            <SwiperSlide>Slide 8</SwiperSlide>
+                <SwiperSlide>Slide 9</SwiperSlide>
+            </Swiper>
+        </div>
+        </>
     );
 };
-const HomePage = (): React.ReactElement => {
+
+import mainBanner from './images/osn_banner2.jpg';
+
+    const HomePage = (): React.ReactElement => {
   const { data: dictionaries, isLoading, error } = useGetDictionaryListQuery(undefined);
 
   return (
       <div>
-          {/*<SimpleCarousel/>*/}
+          <App />
+
+          <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
           <div className="main-banner">
-            <img src={mainBanner} alt="" className="img_main_banner" />
+              <img src={mainBanner} alt="" className="img_main_banner"/>
           </div>
           <div className="main">
               {error && <div>Ошибка!</div>}
@@ -61,6 +81,6 @@ const HomePage = (): React.ReactElement => {
           </div>
       </div>
   );
-};
+    };
 
 export default HomePage;
