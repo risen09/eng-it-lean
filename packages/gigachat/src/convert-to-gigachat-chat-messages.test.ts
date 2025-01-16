@@ -1,8 +1,8 @@
-import { convertToMistralChatMessages } from './convert-to-mistral-chat-messages';
+import { convertToGigachatChatMessages } from './convert-to-gigachat-chat-messages';
 
 describe('user messages', () => {
   it('should convert messages with image parts', async () => {
-    const result = convertToMistralChatMessages([
+    const result = convertToGigachatChatMessages([
       {
         role: 'user',
         content: [
@@ -10,10 +10,10 @@ describe('user messages', () => {
           {
             type: 'image',
             image: new Uint8Array([0, 1, 2, 3]),
-            mimeType: 'image/png',
-          },
-        ],
-      },
+            mimeType: 'image/png'
+          }
+        ]
+      }
     ]);
 
     expect(result).toMatchSnapshot();
@@ -22,7 +22,7 @@ describe('user messages', () => {
 
 describe('tool calls', () => {
   it('should stringify arguments to tool calls', () => {
-    const result = convertToMistralChatMessages([
+    const result = convertToGigachatChatMessages([
       {
         role: 'assistant',
         content: [
@@ -30,9 +30,9 @@ describe('tool calls', () => {
             type: 'tool-call',
             args: { key: 'arg-value' },
             toolCallId: 'tool-call-id-1',
-            toolName: 'tool-1',
-          },
-        ],
+            toolName: 'tool-1'
+          }
+        ]
       },
       {
         role: 'tool',
@@ -41,10 +41,10 @@ describe('tool calls', () => {
             type: 'tool-result',
             toolCallId: 'tool-call-id-1',
             toolName: 'tool-1',
-            result: { key: 'result-value' },
-          },
-        ],
-      },
+            result: { key: 'result-value' }
+          }
+        ]
+      }
     ]);
 
     expect(result).toMatchSnapshot();
@@ -53,15 +53,15 @@ describe('tool calls', () => {
 
 describe('assistant messages', () => {
   it('should add prefix true to trailing assistant messages', () => {
-    const result = convertToMistralChatMessages([
+    const result = convertToGigachatChatMessages([
       {
         role: 'user',
-        content: [{ type: 'text', text: 'Hello' }],
+        content: [{ type: 'text', text: 'Hello' }]
       },
       {
         role: 'assistant',
-        content: [{ type: 'text', text: 'Hello!' }],
-      },
+        content: [{ type: 'text', text: 'Hello!' }]
+      }
     ]);
 
     expect(result).toMatchSnapshot();

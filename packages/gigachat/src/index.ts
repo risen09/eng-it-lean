@@ -1,5 +1,2 @@
-export { createMistral, mistral } from './mistral-provider';
-export type {
-  MistralProvider,
-  MistralProviderSettings,
-} from './mistral-provider';
+export { createGigachat, gigachat } from './gigachat-provider';
+export type { GigachatProvider, GigachatProviderSettings } from './gigachat-provider';

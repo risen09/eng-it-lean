@@ -1,14 +1,9 @@
-import {
-  LanguageModelV1Prompt,
-  UnsupportedFunctionalityError,
-} from '@ai-sdk/provider';
+import { LanguageModelV1Prompt, UnsupportedFunctionalityError } from '@ai-sdk/provider';
 import { convertUint8ArrayToBase64 } from '@ai-sdk/provider-utils';
-import { MistralPrompt } from './mistral-chat-prompt';
+import { GigachatPrompt } from './gigachat-chat-prompt';
 
-export function convertToMistralChatMessages(
-  prompt: LanguageModelV1Prompt,
-): MistralPrompt {
-  const messages: MistralPrompt = [];
+export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): GigachatPrompt {
+  const messages: GigachatPrompt = [];
 
   for (let i = 0; i < prompt.length; i++) {
     const { role, content } = prompt[i];
@@ -23,7 +18,7 @@ export function convertToMistralChatMessages(
       case 'user': {
         messages.push({
           role: 'user',
-          content: content.map(part => {
+          content: content.map((part) => {
             switch (part.type) {
               case 'text': {
                 return { type: 'text', text: part.text };
@@ -34,18 +29,16 @@ export function convertToMistralChatMessages(
                   image_url:
                     part.image instanceof URL
                       ? part.image.toString()
-                      : `data:${
-                          part.mimeType ?? 'image/jpeg'
-                        };base64,${convertUint8ArrayToBase64(part.image)}`,
+                      : `data:${part.mimeType ?? 'image/jpeg'};base64,${convertUint8ArrayToBase64(part.image)}`
                 };
               }
               case 'file': {
                 throw new UnsupportedFunctionalityError({
-                  functionality: 'File content parts in user messages',
+                  functionality: 'File content parts in user messages'
                 });
               }
             }
-          }),
+          })
         });
         break;
       }
@@ -70,8 +63,8 @@ export function convertToMistralChatMessages(
                 type: 'function',
                 function: {
                   name: part.toolName,
-                  arguments: JSON.stringify(part.args),
-                },
+                  arguments: JSON.stringify(part.args)
+                }
               });
               break;
             }
@@ -86,7 +79,7 @@ export function convertToMistralChatMessages(
           role: 'assistant',
           content: text,
           prefix: isLastMessage ? true : undefined,
-          tool_calls: toolCalls.length > 0 ? toolCalls : undefined,
+          tool_calls: toolCalls.length > 0 ? toolCalls : undefined
         });
 
         break;
@@ -97,7 +90,7 @@ export function convertToMistralChatMessages(
             role: 'tool',
             name: toolResponse.toolName,
             content: JSON.stringify(toolResponse.result),
-            tool_call_id: toolResponse.toolCallId,
+            tool_call_id: toolResponse.toolCallId
           });
         }
         break;

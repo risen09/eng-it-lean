@@ -1,72 +1,43 @@
-import {
-  EmbeddingModelV1,
-  LanguageModelV1,
-  ProviderV1,
-} from '@ai-sdk/provider';
-import {
-  FetchFunction,
-  loadApiKey,
-  withoutTrailingSlash,
-} from '@ai-sdk/provider-utils';
-import { MistralChatLanguageModel } from './mistral-chat-language-model';
-import {
-  MistralChatModelId,
-  MistralChatSettings,
-} from './mistral-chat-settings';
-import { MistralEmbeddingModel } from './mistral-embedding-model';
-import {
-  MistralEmbeddingModelId,
-  MistralEmbeddingSettings,
-} from './mistral-embedding-settings';
+import { EmbeddingModelV1, LanguageModelV1, ProviderV1 } from '@ai-sdk/provider';
+import { FetchFunction, loadApiKey, withoutTrailingSlash } from '@ai-sdk/provider-utils';
+import { GigachatChatLanguageModel } from './gigachat-chat-language-model';
+import { GigachatChatModelId, GigachatChatSettings } from './gigachat-chat-settings';
+import { GigachatEmbeddingModel } from './gigachat-embedding-model';
+import { GigachatEmbeddingModelId, GigachatEmbeddingSettings } from './gigachat-embedding-settings';
 
-export interface MistralProvider extends ProviderV1 {
-  (
-    modelId: MistralChatModelId,
-    settings?: MistralChatSettings,
-  ): LanguageModelV1;
+export interface GigachatProvider extends ProviderV1 {
+  (modelId: GigachatChatModelId, settings?: GigachatChatSettings): LanguageModelV1;
 
   /**
 Creates a model for text generation.
 */
-  languageModel(
-    modelId: MistralChatModelId,
-    settings?: MistralChatSettings,
-  ): LanguageModelV1;
+  languageModel(modelId: GigachatChatModelId, settings?: GigachatChatSettings): LanguageModelV1;
 
   /**
 Creates a model for text generation.
 */
-  chat(
-    modelId: MistralChatModelId,
-    settings?: MistralChatSettings,
-  ): LanguageModelV1;
+  chat(modelId: GigachatChatModelId, settings?: GigachatChatSettings): LanguageModelV1;
 
   /**
 @deprecated Use `textEmbeddingModel()` instead.
    */
-  embedding(
-    modelId: MistralEmbeddingModelId,
-    settings?: MistralEmbeddingSettings,
-  ): EmbeddingModelV1<string>;
+  embedding(modelId: GigachatEmbeddingModelId, settings?: GigachatEmbeddingSettings): EmbeddingModelV1<string>;
 
   /**
 @deprecated Use `textEmbeddingModel()` instead.
    */
-  textEmbedding(
-    modelId: MistralEmbeddingModelId,
-    settings?: MistralEmbeddingSettings,
-  ): EmbeddingModelV1<string>;
+  textEmbedding(modelId: GigachatEmbeddingModelId, settings?: GigachatEmbeddingSettings): EmbeddingModelV1<string>;
 
   textEmbeddingModel: (
-    modelId: MistralEmbeddingModelId,
-    settings?: MistralEmbeddingSettings,
+    modelId: GigachatEmbeddingModelId,
+    settings?: GigachatEmbeddingSettings
   ) => EmbeddingModelV1<string>;
 }
 
-export interface MistralProviderSettings {
+export interface GigachatProviderSettings {
   /**
 Use a different URL prefix for API calls, e.g. to use proxy servers.
-The default prefix is `https://api.mistral.ai/v1`.
+The default prefix is `https://api.gigachat.ai/v1`.
    */
   baseURL?: string;
 
@@ -89,53 +60,39 @@ or to provide a custom fetch implementation for e.g. testing.
 }
 
 /**
-Create a Mistral AI provider instance.
+Create a Gigachat AI provider instance.
  */
-export function createMistral(
-  options: MistralProviderSettings = {},
-): MistralProvider {
-  const baseURL =
-    withoutTrailingSlash(options.baseURL) ?? 'https://api.mistral.ai/v1';
+export function createGigachat(options: GigachatProviderSettings = {}): GigachatProvider {
+  const baseURL = withoutTrailingSlash(options.baseURL) ?? 'https://gigachat.devices.sberbank.ru/api/v1';
 
   const getHeaders = () => ({
     Authorization: `Bearer ${loadApiKey({
       apiKey: options.apiKey,
-      environmentVariableName: 'MISTRAL_API_KEY',
-      description: 'Mistral',
+      environmentVariableName: 'GIGACHAT_ACCESS_TOKEN',
+      description: 'Gigachat'
     })}`,
-    ...options.headers,
+    ...options.headers
   });
 
-  const createChatModel = (
-    modelId: MistralChatModelId,
-    settings: MistralChatSettings = {},
-  ) =>
-    new MistralChatLanguageModel(modelId, settings, {
-      provider: 'mistral.chat',
+  const createChatModel = (modelId: GigachatChatModelId, settings: GigachatChatSettings = {}) =>
+    new GigachatChatLanguageModel(modelId, settings, {
+      provider: 'gigachat.chat',
       baseURL,
       headers: getHeaders,
-      fetch: options.fetch,
+      fetch: options.fetch
     });
 
-  const createEmbeddingModel = (
-    modelId: MistralEmbeddingModelId,
-    settings: MistralEmbeddingSettings = {},
-  ) =>
-    new MistralEmbeddingModel(modelId, settings, {
-      provider: 'mistral.embedding',
+  const createEmbeddingModel = (modelId: GigachatEmbeddingModelId, settings: GigachatEmbeddingSettings = {}) =>
+    new GigachatEmbeddingModel(modelId, settings, {
+      provider: 'gigachat.embedding',
       baseURL,
       headers: getHeaders,
-      fetch: options.fetch,
+      fetch: options.fetch
     });
 
-  const provider = function (
-    modelId: MistralChatModelId,
-    settings?: MistralChatSettings,
-  ) {
+  const provider = function (modelId: GigachatChatModelId, settings?: GigachatChatSettings) {
     if (new.target) {
-      throw new Error(
-        'The Mistral model function cannot be called with the new keyword.',
-      );
+      throw new Error('Gigachat function cannot be called with the new keyword.');
     }
 
     return createChatModel(modelId, settings);
@@ -147,10 +104,10 @@ export function createMistral(
   provider.textEmbedding = createEmbeddingModel;
   provider.textEmbeddingModel = createEmbeddingModel;
 
-  return provider as MistralProvider;
+  return provider as GigachatProvider;
 }
 
 /**
-Default Mistral provider instance.
+Default Gigachat provider instance.
  */
-export const mistral = createMistral();
+export const gigachat = createGigachat();

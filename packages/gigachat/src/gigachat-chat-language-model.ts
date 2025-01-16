@@ -2,7 +2,7 @@ import {
   LanguageModelV1,
   LanguageModelV1CallWarning,
   LanguageModelV1FinishReason,
-  LanguageModelV1StreamPart,
+  LanguageModelV1StreamPart
 } from '@ai-sdk/provider';
 import {
   FetchFunction,
@@ -10,41 +10,34 @@ import {
   combineHeaders,
   createEventSourceResponseHandler,
   createJsonResponseHandler,
-  postJsonToApi,
+  postJsonToApi
 } from '@ai-sdk/provider-utils';
 import { z } from 'zod';
-import { convertToMistralChatMessages } from './convert-to-mistral-chat-messages';
-import { mapMistralFinishReason } from './map-mistral-finish-reason';
-import {
-  MistralChatModelId,
-  MistralChatSettings,
-} from './mistral-chat-settings';
-import { mistralFailedResponseHandler } from './mistral-error';
+import { convertToGigachatChatMessages } from './convert-to-gigachat-chat-messages';
+import { mapGigachatFinishReason } from './map-gigachat-finish-reason';
+import { GigachatChatModelId, GigachatChatSettings } from './gigachat-chat-settings';
+import { gigachatFailedResponseHandler } from './gigachat-error';
 import { getResponseMetadata } from './get-response-metadata';
-import { prepareTools } from './mistral-prepare-tools';
+import { prepareTools } from './gigachat-prepare-tools';
 
-type MistralChatConfig = {
+type GigachatChatConfig = {
   provider: string;
   baseURL: string;
   headers: () => Record<string, string | undefined>;
   fetch?: FetchFunction;
 };
 
-export class MistralChatLanguageModel implements LanguageModelV1 {
+export class GigachatChatLanguageModel implements LanguageModelV1 {
   readonly specificationVersion = 'v1';
   readonly defaultObjectGenerationMode = 'json';
   readonly supportsImageUrls = false;
 
-  readonly modelId: MistralChatModelId;
-  readonly settings: MistralChatSettings;
+  readonly modelId: GigachatChatModelId;
+  readonly settings: GigachatChatSettings;
 
-  private readonly config: MistralChatConfig;
+  private readonly config: GigachatChatConfig;
 
-  constructor(
-    modelId: MistralChatModelId,
-    settings: MistralChatSettings,
-    config: MistralChatConfig,
-  ) {
+  constructor(modelId: GigachatChatModelId, settings: GigachatChatSettings, config: GigachatChatConfig) {
     this.modelId = modelId;
     this.settings = settings;
     this.config = config;
@@ -65,7 +58,7 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
     presencePenalty,
     stopSequences,
     responseFormat,
-    seed,
+    seed
   }: Parameters<LanguageModelV1['doGenerate']>[0]) {
     const type = mode.type;
 
@@ -74,40 +67,36 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
     if (topK != null) {
       warnings.push({
         type: 'unsupported-setting',
-        setting: 'topK',
+        setting: 'topK'
       });
     }
 
     if (frequencyPenalty != null) {
       warnings.push({
         type: 'unsupported-setting',
-        setting: 'frequencyPenalty',
+        setting: 'frequencyPenalty'
       });
     }
 
     if (presencePenalty != null) {
       warnings.push({
         type: 'unsupported-setting',
-        setting: 'presencePenalty',
+        setting: 'presencePenalty'
       });
     }
 
     if (stopSequences != null) {
       warnings.push({
         type: 'unsupported-setting',
-        setting: 'stopSequences',
+        setting: 'stopSequences'
       });
     }
 
-    if (
-      responseFormat != null &&
-      responseFormat.type === 'json' &&
-      responseFormat.schema != null
-    ) {
+    if (responseFormat != null && responseFormat.type === 'json' && responseFormat.schema != null) {
       warnings.push({
         type: 'unsupported-setting',
         setting: 'responseFormat',
-        details: 'JSON response format schema is not supported',
+        details: 'JSON response format schema is not supported'
       });
     }
 
@@ -125,11 +114,10 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
       random_seed: seed,
 
       // response format:
-      response_format:
-        responseFormat?.type === 'json' ? { type: 'json_object' } : undefined,
+      response_format: responseFormat?.type === 'json' ? { type: 'json_object' } : undefined,
 
       // messages:
-      messages: convertToMistralChatMessages(prompt),
+      messages: convertToGigachatChatMessages(prompt)
     };
 
     switch (type) {
@@ -138,7 +126,7 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
 
         return {
           args: { ...baseArgs, tools, tool_choice },
-          warnings: [...warnings, ...toolWarnings],
+          warnings: [...warnings, ...toolWarnings]
         };
       }
 
@@ -146,9 +134,9 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
         return {
           args: {
             ...baseArgs,
-            response_format: { type: 'json_object' },
+            response_format: { type: 'json_object' }
           },
-          warnings,
+          warnings
         };
       }
 
@@ -157,9 +145,9 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
           args: {
             ...baseArgs,
             tool_choice: 'any',
-            tools: [{ type: 'function', function: mode.tool }],
+            tools: [{ type: 'function', function: mode.tool }]
           },
-          warnings,
+          warnings
         };
       }
 
@@ -171,7 +159,7 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
   }
 
   async doGenerate(
-    options: Parameters<LanguageModelV1['doGenerate']>[0],
+    options: Parameters<LanguageModelV1['doGenerate']>[0]
   ): Promise<Awaited<ReturnType<LanguageModelV1['doGenerate']>>> {
     const { args, warnings } = this.getArgs(options);
 
@@ -179,52 +167,47 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
       url: `${this.config.baseURL}/chat/completions`,
       headers: combineHeaders(this.config.headers(), options.headers),
       body: args,
-      failedResponseHandler: mistralFailedResponseHandler,
-      successfulResponseHandler: createJsonResponseHandler(
-        mistralChatResponseSchema,
-      ),
+      failedResponseHandler: gigachatFailedResponseHandler,
+      successfulResponseHandler: createJsonResponseHandler(gigachatChatResponseSchema),
       abortSignal: options.abortSignal,
-      fetch: this.config.fetch,
+      fetch: this.config.fetch
     });
 
     const { messages: rawPrompt, ...rawSettings } = args;
     const choice = response.choices[0];
     let text = choice.message.content ?? undefined;
 
-    // when there is a trailing assistant message, mistral will send the
+    // when there is a trailing assistant message, Gigachat will send the
     // content of that message again. we skip this repeated content to
     // avoid duplication, e.g. in continuation mode.
     const lastMessage = rawPrompt[rawPrompt.length - 1];
-    if (
-      lastMessage.role === 'assistant' &&
-      text?.startsWith(lastMessage.content)
-    ) {
+    if (lastMessage.role === 'assistant' && text?.startsWith(lastMessage.content)) {
       text = text.slice(lastMessage.content.length);
     }
 
     return {
       text,
-      toolCalls: choice.message.tool_calls?.map(toolCall => ({
+      toolCalls: choice.message.tool_calls?.map((toolCall) => ({
         toolCallType: 'function',
         toolCallId: toolCall.id,
         toolName: toolCall.function.name,
-        args: toolCall.function.arguments!,
+        args: toolCall.function.arguments!
       })),
-      finishReason: mapMistralFinishReason(choice.finish_reason),
+      finishReason: mapGigachatFinishReason(choice.finish_reason),
       usage: {
         promptTokens: response.usage.prompt_tokens,
-        completionTokens: response.usage.completion_tokens,
+        completionTokens: response.usage.completion_tokens
       },
       rawCall: { rawPrompt, rawSettings },
       rawResponse: { headers: responseHeaders },
       request: { body: JSON.stringify(args) },
       response: getResponseMetadata(response),
-      warnings,
+      warnings
     };
   }
 
   async doStream(
-    options: Parameters<LanguageModelV1['doStream']>[0],
+    options: Parameters<LanguageModelV1['doStream']>[0]
   ): Promise<Awaited<ReturnType<LanguageModelV1['doStream']>>> {
     const { args, warnings } = this.getArgs(options);
 
@@ -234,12 +217,10 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
       url: `${this.config.baseURL}/chat/completions`,
       headers: combineHeaders(this.config.headers(), options.headers),
       body,
-      failedResponseHandler: mistralFailedResponseHandler,
-      successfulResponseHandler: createEventSourceResponseHandler(
-        mistralChatChunkSchema,
-      ),
+      failedResponseHandler: gigachatFailedResponseHandler,
+      successfulResponseHandler: createEventSourceResponseHandler(gigachatChatChunkSchema),
       abortSignal: options.abortSignal,
-      fetch: this.config.fetch,
+      fetch: this.config.fetch
     });
 
     const { messages: rawPrompt, ...rawSettings } = args;
@@ -247,17 +228,14 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
     let finishReason: LanguageModelV1FinishReason = 'unknown';
     let usage: { promptTokens: number; completionTokens: number } = {
       promptTokens: Number.NaN,
-      completionTokens: Number.NaN,
+      completionTokens: Number.NaN
     };
     let chunkNumber = 0;
     let trimLeadingSpace = false;
 
     return {
       stream: response.pipeThrough(
-        new TransformStream<
-          ParseResult<z.infer<typeof mistralChatChunkSchema>>,
-          LanguageModelV1StreamPart
-        >({
+        new TransformStream<ParseResult<z.infer<typeof gigachatChatChunkSchema>>, LanguageModelV1StreamPart>({
           transform(chunk, controller) {
             if (!chunk.success) {
               controller.enqueue({ type: 'error', error: chunk.error });
@@ -271,21 +249,21 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
             if (chunkNumber === 1) {
               controller.enqueue({
                 type: 'response-metadata',
-                ...getResponseMetadata(value),
+                ...getResponseMetadata(value)
               });
             }
 
             if (value.usage != null) {
               usage = {
                 promptTokens: value.usage.prompt_tokens,
-                completionTokens: value.usage.completion_tokens,
+                completionTokens: value.usage.completion_tokens
               };
             }
 
             const choice = value.choices[0];
 
             if (choice?.finish_reason != null) {
-              finishReason = mapMistralFinishReason(choice.finish_reason);
+              finishReason = mapGigachatFinishReason(choice.finish_reason);
             }
 
             if (choice?.delta == null) {
@@ -294,17 +272,14 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
 
             const delta = choice.delta;
 
-            // when there is a trailing assistant message, mistral will send the
+            // when there is a trailing assistant message, Gigachat will send the
             // content of that message again. we skip this repeated content to
             // avoid duplication, e.g. in continuation mode.
             if (chunkNumber <= 2) {
               const lastMessage = rawPrompt[rawPrompt.length - 1];
 
-              if (
-                lastMessage.role === 'assistant' &&
-                delta.content === lastMessage.content.trimEnd()
-              ) {
-                // Mistral moves the trailing space from the prefix to the next chunk.
+              if (lastMessage.role === 'assistant' && delta.content === lastMessage.content.trimEnd()) {
+                // Gigachat moves the trailing space from the prefix to the next chunk.
                 // We trim the leading space to avoid duplication.
                 if (delta.content.length < lastMessage.content.length) {
                   trimLeadingSpace = true;
@@ -318,9 +293,7 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
             if (delta.content != null) {
               controller.enqueue({
                 type: 'text-delta',
-                textDelta: trimLeadingSpace
-                  ? delta.content.trimStart()
-                  : delta.content,
+                textDelta: trimLeadingSpace ? delta.content.trimStart() : delta.content
               });
 
               trimLeadingSpace = false;
@@ -328,20 +301,20 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
 
             if (delta.tool_calls != null) {
               for (const toolCall of delta.tool_calls) {
-                // mistral tool calls come in one piece:
+                // Gigachat tool calls come in one piece:
                 controller.enqueue({
                   type: 'tool-call-delta',
                   toolCallType: 'function',
                   toolCallId: toolCall.id,
                   toolName: toolCall.function.name,
-                  argsTextDelta: toolCall.function.arguments,
+                  argsTextDelta: toolCall.function.arguments
                 });
                 controller.enqueue({
                   type: 'tool-call',
                   toolCallType: 'function',
                   toolCallId: toolCall.id,
                   toolName: toolCall.function.name,
-                  args: toolCall.function.arguments,
+                  args: toolCall.function.arguments
                 });
               }
             }
@@ -349,20 +322,20 @@ export class MistralChatLanguageModel implements LanguageModelV1 {
 
           flush(controller) {
             controller.enqueue({ type: 'finish', finishReason, usage });
-          },
-        }),
+          }
+        })
       ),
       rawCall: { rawPrompt, rawSettings },
       rawResponse: { headers: responseHeaders },
       request: { body: JSON.stringify(body) },
-      warnings,
+      warnings
     };
   }
 }
 
 // limited version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
-const mistralChatResponseSchema = z.object({
+const gigachatChatResponseSchema = z.object({
   id: z.string().nullish(),
   created: z.number().nullish(),
   model: z.string().nullish(),
@@ -375,25 +348,25 @@ const mistralChatResponseSchema = z.object({
           .array(
             z.object({
               id: z.string(),
-              function: z.object({ name: z.string(), arguments: z.string() }),
-            }),
+              function: z.object({ name: z.string(), arguments: z.string() })
+            })
           )
-          .nullish(),
+          .nullish()
       }),
       index: z.number(),
-      finish_reason: z.string().nullish(),
-    }),
+      finish_reason: z.string().nullish()
+    })
   ),
   object: z.literal('chat.completion'),
   usage: z.object({
     prompt_tokens: z.number(),
-    completion_tokens: z.number(),
-  }),
+    completion_tokens: z.number()
+  })
 });
 
 // limited version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
-const mistralChatChunkSchema = z.object({
+const gigachatChatChunkSchema = z.object({
   id: z.string().nullish(),
   created: z.number().nullish(),
   model: z.string().nullish(),
@@ -406,19 +379,19 @@ const mistralChatChunkSchema = z.object({
           .array(
             z.object({
               id: z.string(),
-              function: z.object({ name: z.string(), arguments: z.string() }),
-            }),
+              function: z.object({ name: z.string(), arguments: z.string() })
+            })
           )
-          .nullish(),
+          .nullish()
       }),
       finish_reason: z.string().nullish(),
-      index: z.number(),
-    }),
+      index: z.number()
+    })
   ),
   usage: z
     .object({
       prompt_tokens: z.number(),
-      completion_tokens: z.number(),
+      completion_tokens: z.number()
     })
-    .nullish(),
+    .nullish()
 });

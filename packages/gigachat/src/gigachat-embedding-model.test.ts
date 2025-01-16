@@ -1,24 +1,24 @@
 import { EmbeddingModelV1Embedding } from '@ai-sdk/provider';
 import { JsonTestServer } from '@ai-sdk/provider-utils/test';
-import { createMistral } from './mistral-provider';
+import { createGigachat } from './gigachat-provider';
 
 const dummyEmbeddings = [
   [0.1, 0.2, 0.3, 0.4, 0.5],
-  [0.6, 0.7, 0.8, 0.9, 1.0],
+  [0.6, 0.7, 0.8, 0.9, 1.0]
 ];
 const testValues = ['sunny day at the beach', 'rainy day in the city'];
 
-const provider = createMistral({ apiKey: 'test-api-key' });
-const model = provider.embedding('mistral-embed');
+const provider = createGigachat({ apiKey: 'test-api-key' });
+const model = provider.embedding('gigachat-embed');
 
 describe('doEmbed', () => {
-  const server = new JsonTestServer('https://api.mistral.ai/v1/embeddings');
+  const server = new JsonTestServer('https://api.gigachat.ai/v1/embeddings');
 
   server.setupTestEnvironment();
 
   function prepareJsonResponse({
     embeddings = dummyEmbeddings,
-    usage = { prompt_tokens: 8, total_tokens: 8 },
+    usage = { prompt_tokens: 8, total_tokens: 8 }
   }: {
     embeddings?: EmbeddingModelV1Embedding[];
     usage?: { prompt_tokens: number; total_tokens: number };
@@ -29,10 +29,10 @@ describe('doEmbed', () => {
       data: embeddings.map((embedding, i) => ({
         object: 'embedding',
         embedding,
-        index: i,
+        index: i
       })),
-      model: 'mistral-embed',
-      usage,
+      model: 'gigachat-embed',
+      usage
     };
   }
 
@@ -46,7 +46,7 @@ describe('doEmbed', () => {
 
   it('should extract usage', async () => {
     prepareJsonResponse({
-      usage: { prompt_tokens: 20, total_tokens: 20 },
+      usage: { prompt_tokens: 20, total_tokens: 20 }
     });
 
     const { usage } = await model.doEmbed({ values: testValues });
@@ -58,7 +58,7 @@ describe('doEmbed', () => {
     prepareJsonResponse();
 
     server.responseHeaders = {
-      'test-header': 'test-value',
+      'test-header': 'test-value'
     };
 
     const { rawResponse } = await model.doEmbed({ values: testValues });
@@ -69,7 +69,7 @@ describe('doEmbed', () => {
       'content-type': 'application/json',
 
       // custom header
-      'test-header': 'test-value',
+      'test-header': 'test-value'
     });
   });
 
@@ -79,27 +79,27 @@ describe('doEmbed', () => {
     await model.doEmbed({ values: testValues });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'mistral-embed',
+      model: 'gigachat-embed',
       input: testValues,
-      encoding_format: 'float',
+      encoding_format: 'float'
     });
   });
 
   it('should pass headers', async () => {
     prepareJsonResponse();
 
-    const provider = createMistral({
+    const provider = createGigachat({
       apiKey: 'test-api-key',
       headers: {
-        'Custom-Provider-Header': 'provider-header-value',
-      },
+        'Custom-Provider-Header': 'provider-header-value'
+      }
     });
 
-    await provider.embedding('mistral-embed').doEmbed({
+    await provider.embedding('gigachat-embed').doEmbed({
       values: testValues,
       headers: {
-        'Custom-Request-Header': 'request-header-value',
-      },
+        'Custom-Request-Header': 'request-header-value'
+      }
     });
 
     const requestHeaders = await server.getRequestHeaders();
@@ -108,7 +108,7 @@ describe('doEmbed', () => {
       authorization: 'Bearer test-api-key',
       'content-type': 'application/json',
       'custom-provider-header': 'provider-header-value',
-      'custom-request-header': 'request-header-value',
+      'custom-request-header': 'request-header-value'
     });
   });
 });

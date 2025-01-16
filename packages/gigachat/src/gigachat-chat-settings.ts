@@ -1,20 +1,14 @@
-// https://docs.mistral.ai/getting-started/models/models_overview/
-export type MistralChatModelId =
+// https://developers.sber.ru/docs/ru/gigachat/models
+export type GigachatChatModelId =
   // premier
-  | 'ministral-3b-latest'
-  | 'ministral-8b-latest'
-  | 'mistral-large-latest'
-  | 'mistral-small-latest'
-  | 'pixtral-large-latest'
-  // free
-  | 'pixtral-12b-2409'
+  | 'GigaChat-Pro'
+  | 'GigaChat-Max'
+  // lite
+  | 'GigaChat'
   // legacy
-  | 'open-mistral-7b'
-  | 'open-mixtral-8x7b'
-  | 'open-mixtral-8x22b'
   | (string & {});
 
-export interface MistralChatSettings {
+export interface GigachatChatSettings {
   /**
 Whether to inject a safety prompt before all conversations.
 

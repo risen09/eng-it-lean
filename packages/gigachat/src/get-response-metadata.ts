@@ -1,7 +1,7 @@
 export function getResponseMetadata({
   id,
   model,
-  created,
+  created
 }: {
   id?: string | undefined | null;
   created?: number | undefined | null;
@@ -10,6 +10,6 @@ export function getResponseMetadata({
   return {
     id: id ?? undefined,
     modelId: model ?? undefined,
-    timestamp: created != null ? new Date(created * 1000) : undefined,
+    timestamp: created != null ? new Date(created * 1000) : undefined
   };
 }

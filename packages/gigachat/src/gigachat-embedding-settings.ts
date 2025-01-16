@@ -1,6 +1,6 @@
-export type MistralEmbeddingModelId = 'mistral-embed' | (string & {});
+export type GigachatEmbeddingModelId = 'gigachat-embed' | (string & {});
 
-export interface MistralEmbeddingSettings {
+export interface GigachatEmbeddingSettings {
   /**
 Override the maximum number of embeddings per call.
    */

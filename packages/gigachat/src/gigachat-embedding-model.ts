@@ -1,33 +1,22 @@
-import {
-  EmbeddingModelV1,
-  TooManyEmbeddingValuesForCallError,
-} from '@ai-sdk/provider';
-import {
-  combineHeaders,
-  createJsonResponseHandler,
-  FetchFunction,
-  postJsonToApi,
-} from '@ai-sdk/provider-utils';
+import { EmbeddingModelV1, TooManyEmbeddingValuesForCallError } from '@ai-sdk/provider';
+import { combineHeaders, createJsonResponseHandler, FetchFunction, postJsonToApi } from '@ai-sdk/provider-utils';
 import { z } from 'zod';
-import {
-  MistralEmbeddingModelId,
-  MistralEmbeddingSettings,
-} from './mistral-embedding-settings';
-import { mistralFailedResponseHandler } from './mistral-error';
+import { GigachatEmbeddingModelId, GigachatEmbeddingSettings } from './gigachat-embedding-settings';
+import { gigachatFailedResponseHandler } from './gigachat-error';
 
-type MistralEmbeddingConfig = {
+type GigachatEmbeddingConfig = {
   provider: string;
   baseURL: string;
   headers: () => Record<string, string | undefined>;
   fetch?: FetchFunction;
 };
 
-export class MistralEmbeddingModel implements EmbeddingModelV1<string> {
+export class GigachatEmbeddingModel implements EmbeddingModelV1<string> {
   readonly specificationVersion = 'v1';
-  readonly modelId: MistralEmbeddingModelId;
+  readonly modelId: GigachatEmbeddingModelId;
 
-  private readonly config: MistralEmbeddingConfig;
-  private readonly settings: MistralEmbeddingSettings;
+  private readonly config: GigachatEmbeddingConfig;
+  private readonly settings: GigachatEmbeddingSettings;
 
   get provider(): string {
     return this.config.provider;
@@ -43,11 +32,7 @@ export class MistralEmbeddingModel implements EmbeddingModelV1<string> {
     return this.settings.supportsParallelCalls ?? false;
   }
 
-  constructor(
-    modelId: MistralEmbeddingModelId,
-    settings: MistralEmbeddingSettings,
-    config: MistralEmbeddingConfig,
-  ) {
+  constructor(modelId: GigachatEmbeddingModelId, settings: GigachatEmbeddingSettings, config: GigachatEmbeddingConfig) {
     this.modelId = modelId;
     this.settings = settings;
     this.config = config;
@@ -56,7 +41,7 @@ export class MistralEmbeddingModel implements EmbeddingModelV1<string> {
   async doEmbed({
     values,
     abortSignal,
-    headers,
+    headers
   }: Parameters<EmbeddingModelV1<string>['doEmbed']>[0]): Promise<
     Awaited<ReturnType<EmbeddingModelV1<string>['doEmbed']>>
   > {
@@ -65,7 +50,7 @@ export class MistralEmbeddingModel implements EmbeddingModelV1<string> {
         provider: this.provider,
         modelId: this.modelId,
         maxEmbeddingsPerCall: this.maxEmbeddingsPerCall,
-        values,
+        values
       });
     }
 
@@ -75,29 +60,25 @@ export class MistralEmbeddingModel implements EmbeddingModelV1<string> {
       body: {
         model: this.modelId,
         input: values,
-        encoding_format: 'float',
+        encoding_format: 'float'
       },
-      failedResponseHandler: mistralFailedResponseHandler,
-      successfulResponseHandler: createJsonResponseHandler(
-        MistralTextEmbeddingResponseSchema,
-      ),
+      failedResponseHandler: gigachatFailedResponseHandler,
+      successfulResponseHandler: createJsonResponseHandler(GigachatTextEmbeddingResponseSchema),
       abortSignal,
-      fetch: this.config.fetch,
+      fetch: this.config.fetch
     });
 
     return {
-      embeddings: response.data.map(item => item.embedding),
-      usage: response.usage
-        ? { tokens: response.usage.prompt_tokens }
-        : undefined,
-      rawResponse: { headers: responseHeaders },
+      embeddings: response.data.map((item) => item.embedding),
+      usage: response.usage ? { tokens: response.usage.prompt_tokens } : undefined,
+      rawResponse: { headers: responseHeaders }
     };
   }
 }
 
 // minimal version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
-const MistralTextEmbeddingResponseSchema = z.object({
+const GigachatTextEmbeddingResponseSchema = z.object({
   data: z.array(z.object({ embedding: z.array(z.number()) })),
-  usage: z.object({ prompt_tokens: z.number() }).nullish(),
+  usage: z.object({ prompt_tokens: z.number() }).nullish()
 });

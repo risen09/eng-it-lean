@@ -1,36 +1,34 @@
-export type MistralPrompt = Array<MistralMessage>;
+export type GigachatPrompt = Array<GigachatMessage>;
 
-export type MistralMessage =
-  | MistralSystemMessage
-  | MistralUserMessage
-  | MistralAssistantMessage
-  | MistralToolMessage;
+export type GigachatMessage =
+  | GigachatSystemMessage
+  | GigachatUserMessage
+  | GigachatAssistantMessage
+  | GigachatToolMessage;
 
-export interface MistralSystemMessage {
+export interface GigachatSystemMessage {
   role: 'system';
   content: string;
 }
 
-export interface MistralUserMessage {
+export interface GigachatUserMessage {
   role: 'user';
-  content: Array<MistralUserMessageContent>;
+  content: Array<GigachatUserMessageContent>;
 }
 
-export type MistralUserMessageContent =
-  | MistralUserMessageTextContent
-  | MistralUserMessageImageContent;
+export type GigachatUserMessageContent = GigachatUserMessageTextContent | GigachatUserMessageImageContent;
 
-export interface MistralUserMessageImageContent {
+export interface GigachatUserMessageImageContent {
   type: 'image_url';
   image_url: string;
 }
 
-export interface MistralUserMessageTextContent {
+export interface GigachatUserMessageTextContent {
   type: 'text';
   text: string;
 }
 
-export interface MistralAssistantMessage {
+export interface GigachatAssistantMessage {
   role: 'assistant';
   content: string;
   prefix?: boolean;
@@ -41,7 +39,7 @@ export interface MistralAssistantMessage {
   }>;
 }
 
-export interface MistralToolMessage {
+export interface GigachatToolMessage {
   role: 'tool';
   name: string;
   content: string;

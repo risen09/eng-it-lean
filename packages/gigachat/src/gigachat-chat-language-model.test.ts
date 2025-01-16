@@ -1,22 +1,14 @@
 import { LanguageModelV1Prompt } from '@ai-sdk/provider';
-import {
-  JsonTestServer,
-  StreamingTestServer,
-  convertReadableStreamToArray,
-} from '@ai-sdk/provider-utils/test';
-import { createMistral } from './mistral-provider';
+import { JsonTestServer, StreamingTestServer, convertReadableStreamToArray } from '@ai-sdk/provider-utils/test';
+import { createGigachat } from './gigachat-provider';
 
-const TEST_PROMPT: LanguageModelV1Prompt = [
-  { role: 'user', content: [{ type: 'text', text: 'Hello' }] },
-];
+const TEST_PROMPT: LanguageModelV1Prompt = [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }];
 
-const provider = createMistral({ apiKey: 'test-api-key' });
-const model = provider.chat('mistral-small-latest');
+const provider = createGigachat({ apiKey: 'test-api-key' });
+const model = provider.chat('gigachat-small-latest');
 
 describe('doGenerate', () => {
-  const server = new JsonTestServer(
-    'https://api.mistral.ai/v1/chat/completions',
-  );
+  const server = new JsonTestServer('https://api.gigachat.ai/v1/chat/completions');
 
   server.setupTestEnvironment();
 
@@ -25,11 +17,11 @@ describe('doGenerate', () => {
     usage = {
       prompt_tokens: 4,
       total_tokens: 34,
-      completion_tokens: 30,
+      completion_tokens: 30
     },
     id = '16362f24e60340d0994dd205c267a43a',
     created = 1711113008,
-    model = 'mistral-small-latest',
+    model = 'gigachat-small-latest'
   }: {
     content?: string;
     usage?: {
@@ -52,13 +44,13 @@ describe('doGenerate', () => {
           message: {
             role: 'assistant',
             content,
-            tool_calls: null,
+            tool_calls: null
           },
           finish_reason: 'stop',
-          logprobs: null,
-        },
+          logprobs: null
+        }
       ],
-      usage,
+      usage
     };
   }
 
@@ -68,7 +60,7 @@ describe('doGenerate', () => {
     const { text } = await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(text).toStrictEqual('Hello, World!');
@@ -84,9 +76,9 @@ describe('doGenerate', () => {
         { role: 'user', content: [{ type: 'text', text: 'Hello' }] },
         {
           role: 'assistant',
-          content: [{ type: 'text', text: 'prefix ' }],
-        },
-      ],
+          content: [{ type: 'text', text: 'prefix ' }]
+        }
+      ]
     });
 
     expect(text).toStrictEqual('and more content');
@@ -97,7 +89,7 @@ describe('doGenerate', () => {
       id: 'b3999b8c93e04e11bcbff7bcab829667',
       object: 'chat.completion',
       created: 1722349660,
-      model: 'mistral-large-latest',
+      model: 'gigachat-large-latest',
       choices: [
         {
           index: 0,
@@ -109,22 +101,22 @@ describe('doGenerate', () => {
                 id: 'gSIMJiOkT',
                 function: {
                   name: 'weatherTool',
-                  arguments: '{"location": "paris"}',
-                },
-              },
-            ],
+                  arguments: '{"location": "paris"}'
+                }
+              }
+            ]
           },
           finish_reason: 'tool_calls',
-          logprobs: null,
-        },
+          logprobs: null
+        }
       ],
-      usage: { prompt_tokens: 124, total_tokens: 146, completion_tokens: 22 },
+      usage: { prompt_tokens: 124, total_tokens: 146, completion_tokens: 22 }
     };
 
     const { toolCalls } = await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(toolCalls).toStrictEqual([
@@ -132,26 +124,26 @@ describe('doGenerate', () => {
         toolCallId: 'gSIMJiOkT',
         toolCallType: 'function',
         toolName: 'weatherTool',
-        args: '{"location": "paris"}',
-      },
+        args: '{"location": "paris"}'
+      }
     ]);
   });
 
   it('should extract usage', async () => {
     prepareJsonResponse({
       content: '',
-      usage: { prompt_tokens: 20, total_tokens: 25, completion_tokens: 5 },
+      usage: { prompt_tokens: 20, total_tokens: 25, completion_tokens: 5 }
     });
 
     const { usage } = await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(usage).toStrictEqual({
       promptTokens: 20,
-      completionTokens: 5,
+      completionTokens: 5
     });
   });
 
@@ -159,19 +151,19 @@ describe('doGenerate', () => {
     prepareJsonResponse({
       id: 'test-id',
       created: 123,
-      model: 'test-model',
+      model: 'test-model'
     });
 
     const { response } = await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(response).toStrictEqual({
       id: 'test-id',
       timestamp: new Date(123 * 1000),
-      modelId: 'test-model',
+      modelId: 'test-model'
     });
   });
 
@@ -179,13 +171,13 @@ describe('doGenerate', () => {
     prepareJsonResponse({ content: '' });
 
     server.responseHeaders = {
-      'test-header': 'test-value',
+      'test-header': 'test-value'
     };
 
     const { rawResponse } = await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(rawResponse?.headers).toStrictEqual({
@@ -194,7 +186,7 @@ describe('doGenerate', () => {
       'content-type': 'application/json',
 
       // custom header
-      'test-header': 'test-value',
+      'test-header': 'test-value'
     });
   });
 
@@ -204,12 +196,12 @@ describe('doGenerate', () => {
     await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'mistral-small-latest',
-      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }],
+      model: 'gigachat-small-latest',
+      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }]
     });
   });
 
@@ -229,20 +221,20 @@ describe('doGenerate', () => {
               properties: { value: { type: 'string' } },
               required: ['value'],
               additionalProperties: false,
-              $schema: 'https://json-schema.org/draft/2019-09/schema#',
-            },
-          },
+              $schema: 'https://json-schema.org/draft/2019-09/schema#'
+            }
+          }
         ],
         toolChoice: {
           type: 'tool',
-          toolName: 'test-tool',
-        },
+          toolName: 'test-tool'
+        }
       },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'mistral-small-latest',
+      model: 'gigachat-small-latest',
       messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }],
       tools: [
         {
@@ -254,32 +246,32 @@ describe('doGenerate', () => {
               properties: { value: { type: 'string' } },
               required: ['value'],
               additionalProperties: false,
-              $schema: 'https://json-schema.org/draft/2019-09/schema#',
-            },
-          },
-        },
+              $schema: 'https://json-schema.org/draft/2019-09/schema#'
+            }
+          }
+        }
       ],
-      tool_choice: 'any',
+      tool_choice: 'any'
     });
   });
 
   it('should pass headers', async () => {
     prepareJsonResponse({ content: '' });
 
-    const provider = createMistral({
+    const provider = createGigachat({
       apiKey: 'test-api-key',
       headers: {
-        'Custom-Provider-Header': 'provider-header-value',
-      },
+        'Custom-Provider-Header': 'provider-header-value'
+      }
     });
 
-    await provider.chat('mistral-small-latest').doGenerate({
+    await provider.chat('gigachat-small-latest').doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
       prompt: TEST_PROMPT,
       headers: {
-        'Custom-Request-Header': 'request-header-value',
-      },
+        'Custom-Request-Header': 'request-header-value'
+      }
     });
 
     const requestHeaders = await server.getRequestHeaders();
@@ -288,7 +280,7 @@ describe('doGenerate', () => {
       authorization: 'Bearer test-api-key',
       'content-type': 'application/json',
       'custom-provider-header': 'provider-header-value',
-      'custom-request-header': 'request-header-value',
+      'custom-request-header': 'request-header-value'
     });
   });
 
@@ -298,39 +290,37 @@ describe('doGenerate', () => {
     const { request } = await model.doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(request).toStrictEqual({
-      body: '{"model":"mistral-small-latest","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}]}',
+      body: '{"model":"gigachat-small-latest","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}]}'
     });
   });
 });
 
 describe('doStream', () => {
-  const server = new StreamingTestServer(
-    'https://api.mistral.ai/v1/chat/completions',
-  );
+  const server = new StreamingTestServer('https://api.gigachat.ai/v1/chat/completions');
 
   server.setupTestEnvironment();
 
   function prepareStreamResponse({ content }: { content: string[] }) {
     server.responseChunks = [
       `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-        `"created":1711097175,"model":"mistral-small-latest","choices":[{"index":0,` +
+        `"created":1711097175,"model":"gigachat-small-latest","choices":[{"index":0,` +
         `"delta":{"role":"assistant","content":""},"finish_reason":null,"logprobs":null}]}\n\n`,
-      ...content.map(text => {
+      ...content.map((text) => {
         return (
           `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-          `"created":1711097175,"model":"mistral-small-latest","choices":[{"index":0,` +
+          `"created":1711097175,"model":"gigachat-small-latest","choices":[{"index":0,` +
           `"delta":{"role":"assistant","content":"${text}"},"finish_reason":null,"logprobs":null}]}\n\n`
         );
       }),
       `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-        `"created":1711097175,"model":"mistral-small-latest","choices":[{"index":0,` +
+        `"created":1711097175,"model":"gigachat-small-latest","choices":[{"index":0,` +
         `"delta":{"content":""},"finish_reason":"stop","logprobs":null}],` +
         `"usage":{"prompt_tokens":4,"total_tokens":36,"completion_tokens":32}}\n\n`,
-      `data: [DONE]\n\n`,
+      `data: [DONE]\n\n`
     ];
   }
 
@@ -340,7 +330,7 @@ describe('doStream', () => {
     const { stream } = await model.doStream({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(await convertReadableStreamToArray(stream)).toStrictEqual([
@@ -348,7 +338,7 @@ describe('doStream', () => {
         type: 'response-metadata',
         id: '6e2cd91750904b7092f49bdca9083de1',
         timestamp: new Date(1711097175 * 1000),
-        modelId: 'mistral-small-latest',
+        modelId: 'gigachat-small-latest'
       },
       { type: 'text-delta', textDelta: '' },
       { type: 'text-delta', textDelta: 'Hello' },
@@ -358,8 +348,8 @@ describe('doStream', () => {
       {
         type: 'finish',
         finishReason: 'stop',
-        usage: { promptTokens: 4, completionTokens: 32 },
-      },
+        usage: { promptTokens: 4, completionTokens: 32 }
+      }
     ]);
   });
 
@@ -373,9 +363,9 @@ describe('doStream', () => {
         { role: 'user', content: [{ type: 'text', text: 'Hello' }] },
         {
           role: 'assistant',
-          content: [{ type: 'text', text: 'prefix ' }],
-        },
-      ],
+          content: [{ type: 'text', text: 'prefix ' }]
+        }
+      ]
     });
 
     expect(await convertReadableStreamToArray(stream)).toStrictEqual([
@@ -383,7 +373,7 @@ describe('doStream', () => {
         type: 'response-metadata',
         id: '6e2cd91750904b7092f49bdca9083de1',
         timestamp: new Date(1711097175 * 1000),
-        modelId: 'mistral-small-latest',
+        modelId: 'gigachat-small-latest'
       },
       { type: 'text-delta', textDelta: '' },
       { type: 'text-delta', textDelta: 'and' },
@@ -392,26 +382,26 @@ describe('doStream', () => {
       {
         type: 'finish',
         finishReason: 'stop',
-        usage: { promptTokens: 4, completionTokens: 32 },
-      },
+        usage: { promptTokens: 4, completionTokens: 32 }
+      }
     ]);
   });
 
   it('should stream tool deltas', async () => {
     server.responseChunks = [
-      `data: {"id":"ad6f7ce6543c4d0890280ae184fe4dd8","object":"chat.completion.chunk","created":1711365023,"model":"mistral-large-latest",` +
+      `data: {"id":"ad6f7ce6543c4d0890280ae184fe4dd8","object":"chat.completion.chunk","created":1711365023,"model":"gigachat-large-latest",` +
         `"choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null,"logprobs":null}]}\n\n`,
-      `data: {"id":"ad6f7ce6543c4d0890280ae184fe4dd8","object":"chat.completion.chunk","created":1711365023,"model":"mistral-large-latest",` +
+      `data: {"id":"ad6f7ce6543c4d0890280ae184fe4dd8","object":"chat.completion.chunk","created":1711365023,"model":"gigachat-large-latest",` +
         `"choices":[{"index":0,"delta":{"content":null,"tool_calls":[{"id":"yfBEybNYi","function":{"name":"test-tool","arguments":` +
         `"{\\"value\\":\\"Sparkle Day\\"}"` +
         `}}]},"finish_reason":"tool_calls","logprobs":null}],"usage":{"prompt_tokens":183,"total_tokens":316,"completion_tokens":133}}\n\n`,
-      'data: [DONE]\n\n',
+      'data: [DONE]\n\n'
     ];
 
-    const { stream } = await createMistral({
-      apiKey: 'test-api-key',
+    const { stream } = await createGigachat({
+      apiKey: 'test-api-key'
     })
-      .chat('mistral-large-latest')
+      .chat('gigachat-large-latest')
       .doStream({
         inputFormat: 'prompt',
         mode: {
@@ -425,12 +415,12 @@ describe('doStream', () => {
                 properties: { value: { type: 'string' } },
                 required: ['value'],
                 additionalProperties: false,
-                $schema: 'https://json-schema.org/draft/2019-09/schema#',
-              },
-            },
-          ],
+                $schema: 'https://json-schema.org/draft/2019-09/schema#'
+              }
+            }
+          ]
         },
-        prompt: TEST_PROMPT,
+        prompt: TEST_PROMPT
       });
 
     expect(await convertReadableStreamToArray(stream)).toStrictEqual([
@@ -438,7 +428,7 @@ describe('doStream', () => {
         type: 'response-metadata',
         id: 'ad6f7ce6543c4d0890280ae184fe4dd8',
         timestamp: new Date(1711365023 * 1000),
-        modelId: 'mistral-large-latest',
+        modelId: 'gigachat-large-latest'
       },
       { type: 'text-delta', textDelta: '' },
       {
@@ -446,20 +436,20 @@ describe('doStream', () => {
         toolCallId: 'yfBEybNYi',
         toolCallType: 'function',
         toolName: 'test-tool',
-        argsTextDelta: '{"value":"Sparkle Day"}',
+        argsTextDelta: '{"value":"Sparkle Day"}'
       },
       {
         type: 'tool-call',
         toolCallId: 'yfBEybNYi',
         toolCallType: 'function',
         toolName: 'test-tool',
-        args: '{"value":"Sparkle Day"}',
+        args: '{"value":"Sparkle Day"}'
       },
       {
         type: 'finish',
         finishReason: 'tool-calls',
-        usage: { promptTokens: 183, completionTokens: 133 },
-      },
+        usage: { promptTokens: 183, completionTokens: 133 }
+      }
     ]);
   });
 
@@ -467,13 +457,13 @@ describe('doStream', () => {
     prepareStreamResponse({ content: [] });
 
     server.responseHeaders = {
-      'test-header': 'test-value',
+      'test-header': 'test-value'
     };
 
     const { rawResponse } = await model.doStream({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(rawResponse?.headers).toStrictEqual({
@@ -483,7 +473,7 @@ describe('doStream', () => {
       connection: 'keep-alive',
 
       // custom header
-      'test-header': 'test-value',
+      'test-header': 'test-value'
     });
   });
 
@@ -493,33 +483,33 @@ describe('doStream', () => {
     await model.doStream({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
       stream: true,
-      model: 'mistral-small-latest',
-      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }],
+      model: 'gigachat-small-latest',
+      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }]
     });
   });
 
   it('should pass headers', async () => {
     prepareStreamResponse({ content: [] });
 
-    const provider = createMistral({
+    const provider = createGigachat({
       apiKey: 'test-api-key',
       headers: {
-        'Custom-Provider-Header': 'provider-header-value',
-      },
+        'Custom-Provider-Header': 'provider-header-value'
+      }
     });
 
-    await provider.chat('mistral-small-latest').doStream({
+    await provider.chat('gigachat-small-latest').doStream({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
       prompt: TEST_PROMPT,
       headers: {
-        'Custom-Request-Header': 'request-header-value',
-      },
+        'Custom-Request-Header': 'request-header-value'
+      }
     });
 
     const requestHeaders = await server.getRequestHeaders();
@@ -528,7 +518,7 @@ describe('doStream', () => {
       authorization: 'Bearer test-api-key',
       'content-type': 'application/json',
       'custom-provider-header': 'provider-header-value',
-      'custom-request-header': 'request-header-value',
+      'custom-request-header': 'request-header-value'
     });
   });
 
@@ -538,11 +528,11 @@ describe('doStream', () => {
     const { request } = await model.doStream({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
-      prompt: TEST_PROMPT,
+      prompt: TEST_PROMPT
     });
 
     expect(request).toStrictEqual({
-      body: '{"model":"mistral-small-latest","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}],"stream":true}',
+      body: '{"model":"gigachat-small-latest","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}],"stream":true}'
     });
   });
 });
