@@ -5,10 +5,10 @@ import { createGigachat } from './gigachat-provider';
 const TEST_PROMPT: LanguageModelV1Prompt = [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }];
 
 const provider = createGigachat({ apiKey: 'test-api-key' });
-const model = provider.chat('gigachat-small-latest');
+const model = provider.chat('Gigachat');
 
 describe('doGenerate', () => {
-  const server = new JsonTestServer('https://api.gigachat.ai/v1/chat/completions');
+  const server = new JsonTestServer('https://gigachat.devices.sberbank.ru/api/v1/chat/completions');
 
   server.setupTestEnvironment();
 
@@ -21,7 +21,7 @@ describe('doGenerate', () => {
     },
     id = '16362f24e60340d0994dd205c267a43a',
     created = 1711113008,
-    model = 'gigachat-small-latest'
+    model = 'Gigachat'
   }: {
     content?: string;
     usage?: {
@@ -182,7 +182,7 @@ describe('doGenerate', () => {
 
     expect(rawResponse?.headers).toStrictEqual({
       // default headers:
-      'content-length': '314',
+      'content-length': '302',
       'content-type': 'application/json',
 
       // custom header
@@ -200,7 +200,7 @@ describe('doGenerate', () => {
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'gigachat-small-latest',
+      model: 'Gigachat',
       messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }]
     });
   });
@@ -234,7 +234,7 @@ describe('doGenerate', () => {
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'gigachat-small-latest',
+      model: 'Gigachat',
       messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }],
       tools: [
         {
@@ -265,7 +265,7 @@ describe('doGenerate', () => {
       }
     });
 
-    await provider.chat('gigachat-small-latest').doGenerate({
+    await provider.chat('Gigachat').doGenerate({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
       prompt: TEST_PROMPT,
@@ -294,30 +294,30 @@ describe('doGenerate', () => {
     });
 
     expect(request).toStrictEqual({
-      body: '{"model":"gigachat-small-latest","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}]}'
+      body: '{"model":"Gigachat","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}]}'
     });
   });
 });
 
 describe('doStream', () => {
-  const server = new StreamingTestServer('https://api.gigachat.ai/v1/chat/completions');
+  const server = new StreamingTestServer('https://gigachat.devices.sberbank.ru/api/v1/chat/completions');
 
   server.setupTestEnvironment();
 
   function prepareStreamResponse({ content }: { content: string[] }) {
     server.responseChunks = [
       `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-        `"created":1711097175,"model":"gigachat-small-latest","choices":[{"index":0,` +
+        `"created":1711097175,"model":"Gigachat","choices":[{"index":0,` +
         `"delta":{"role":"assistant","content":""},"finish_reason":null,"logprobs":null}]}\n\n`,
       ...content.map((text) => {
         return (
           `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-          `"created":1711097175,"model":"gigachat-small-latest","choices":[{"index":0,` +
+          `"created":1711097175,"model":"Gigachat","choices":[{"index":0,` +
           `"delta":{"role":"assistant","content":"${text}"},"finish_reason":null,"logprobs":null}]}\n\n`
         );
       }),
       `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-        `"created":1711097175,"model":"gigachat-small-latest","choices":[{"index":0,` +
+        `"created":1711097175,"model":"Gigachat","choices":[{"index":0,` +
         `"delta":{"content":""},"finish_reason":"stop","logprobs":null}],` +
         `"usage":{"prompt_tokens":4,"total_tokens":36,"completion_tokens":32}}\n\n`,
       `data: [DONE]\n\n`
@@ -338,7 +338,7 @@ describe('doStream', () => {
         type: 'response-metadata',
         id: '6e2cd91750904b7092f49bdca9083de1',
         timestamp: new Date(1711097175 * 1000),
-        modelId: 'gigachat-small-latest'
+        modelId: 'Gigachat'
       },
       { type: 'text-delta', textDelta: '' },
       { type: 'text-delta', textDelta: 'Hello' },
@@ -373,7 +373,7 @@ describe('doStream', () => {
         type: 'response-metadata',
         id: '6e2cd91750904b7092f49bdca9083de1',
         timestamp: new Date(1711097175 * 1000),
-        modelId: 'gigachat-small-latest'
+        modelId: 'Gigachat'
       },
       { type: 'text-delta', textDelta: '' },
       { type: 'text-delta', textDelta: 'and' },
@@ -488,7 +488,7 @@ describe('doStream', () => {
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
       stream: true,
-      model: 'gigachat-small-latest',
+      model: 'Gigachat',
       messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }]
     });
   });
@@ -503,7 +503,7 @@ describe('doStream', () => {
       }
     });
 
-    await provider.chat('gigachat-small-latest').doStream({
+    await provider.chat('Gigachat').doStream({
       inputFormat: 'prompt',
       mode: { type: 'regular' },
       prompt: TEST_PROMPT,
@@ -532,7 +532,7 @@ describe('doStream', () => {
     });
 
     expect(request).toStrictEqual({
-      body: '{"model":"gigachat-small-latest","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}],"stream":true}'
+      body: '{"model":"Gigachat","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}],"stream":true}'
     });
   });
 });
