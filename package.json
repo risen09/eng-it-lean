@@ -22,6 +22,7 @@
     "@emotion/styled": "^11.13.5",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@reduxjs/toolkit": "^2.5.0",
+    "ai": "^4.0.39",
     "axios": "^1.7.9",
     "express": "^4.21.1",
     "mdb-react-ui-kit": "^9.0.0",

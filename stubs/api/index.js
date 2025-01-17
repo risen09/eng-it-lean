@@ -3,6 +3,7 @@ const router = require('express').Router();
 const wordsRouter = require('./words');
 const dictionariesRouter = require('./dictionaries');
 const unitsRouter = require('./units');
+const gigachatRouter = require('./gigachat');
 module.exports = router;
 
 const delay =
@@ -15,3 +16,4 @@ router.use(delay());
 router.use('/words', wordsRouter);
 router.use('/dictionaries', dictionariesRouter);
 router.use('/units', unitsRouter);
+router.use('/gigachat', gigachatRouter);
