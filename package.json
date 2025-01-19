@@ -36,7 +36,8 @@
     "react-slick": "^0.30.3",
     "remark-gfm": "^4.0.0",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.1.15"
+    "swiper": "^11.1.15",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
