@@ -4,7 +4,7 @@ export type GigachatMessage =
   | GigachatSystemMessage
   | GigachatUserMessage
   | GigachatAssistantMessage
-  | GigachatToolMessage;
+  | GigachatFunctionMessage;
 
 export interface GigachatSystemMessage {
   role: 'system';
@@ -13,35 +13,18 @@ export interface GigachatSystemMessage {
 
 export interface GigachatUserMessage {
   role: 'user';
-  content: Array<GigachatUserMessageContent>;
-}
-
-export type GigachatUserMessageContent = GigachatUserMessageTextContent | GigachatUserMessageImageContent;
-
-export interface GigachatUserMessageImageContent {
-  type: 'image_url';
-  image_url: string;
-}
-
-export interface GigachatUserMessageTextContent {
-  type: 'text';
-  text: string;
+  content: string;
 }
 
 export interface GigachatAssistantMessage {
   role: 'assistant';
   content: string;
   prefix?: boolean;
-  tool_calls?: Array<{
-    id: string;
-    type: 'function';
-    function: { name: string; arguments: string };
-  }>;
+  function_call?: { name: string; arguments: unknown };
 }
 
-export interface GigachatToolMessage {
-  role: 'tool';
+export interface GigachatFunctionMessage {
+  role: 'function';
   name: string;
   content: string;
-  tool_call_id: string;
 }

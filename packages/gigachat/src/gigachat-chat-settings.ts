@@ -9,10 +9,7 @@ export type GigachatChatModelId =
   | (string & {});
 
 export interface GigachatChatSettings {
-  /**
-Whether to inject a safety prompt before all conversations.
-
-Defaults to `false`.
-   */
-  safePrompt?: boolean;
+  stream?: boolean,
+  repetition_penalty?: number,
+  update_interval?: number,
 }

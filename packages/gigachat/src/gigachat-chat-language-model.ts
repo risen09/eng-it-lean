@@ -105,13 +105,14 @@ export class GigachatChatLanguageModel implements LanguageModelV1 {
       model: this.modelId,
 
       // model specific settings:
-      safe_prompt: this.settings.safePrompt,
+      stream: this.settings.stream,
+      repetition_penalty: this.settings.repetition_penalty,
+      update_interval: this.settings.update_interval,
 
       // standardized settings:
       max_tokens: maxTokens,
       temperature,
       top_p: topP,
-      random_seed: seed,
 
       // response format:
       response_format: responseFormat?.type === 'json' ? { type: 'json_object' } : undefined,
@@ -187,12 +188,14 @@ export class GigachatChatLanguageModel implements LanguageModelV1 {
 
     return {
       text,
-      toolCalls: choice.message.tool_calls?.map((toolCall) => ({
-        toolCallType: 'function',
-        toolCallId: toolCall.id,
-        toolName: toolCall.function.name,
-        args: toolCall.function.arguments!
-      })),
+      toolCalls: choice.message.function_call ? [
+        {
+          toolCallType: 'function',
+          toolCallId: choice.message.function_call.name,
+          toolName: choice.message.function_call.name,
+          args: JSON.stringify(choice.message.function_call.arguments),
+        }
+      ] : [],
       finishReason: mapGigachatFinishReason(choice.finish_reason),
       usage: {
         promptTokens: response.usage.prompt_tokens,
@@ -299,24 +302,21 @@ export class GigachatChatLanguageModel implements LanguageModelV1 {
               trimLeadingSpace = false;
             }
 
-            if (delta.tool_calls != null) {
-              for (const toolCall of delta.tool_calls) {
-                // Gigachat tool calls come in one piece:
-                controller.enqueue({
-                  type: 'tool-call-delta',
-                  toolCallType: 'function',
-                  toolCallId: toolCall.id,
-                  toolName: toolCall.function.name,
-                  argsTextDelta: toolCall.function.arguments
-                });
-                controller.enqueue({
-                  type: 'tool-call',
-                  toolCallType: 'function',
-                  toolCallId: toolCall.id,
-                  toolName: toolCall.function.name,
-                  args: toolCall.function.arguments
-                });
-              }
+            if (delta.function_call != null) {
+              controller.enqueue({
+                type: 'tool-call-delta',
+                toolCallType: 'function',
+                toolCallId: delta.function_call.name,
+                toolName: delta.function_call.name,
+                argsTextDelta: JSON.stringify(delta.function_call.arguments)
+              });
+              controller.enqueue({
+                type: 'tool-call',
+                toolCallType: 'function',
+                toolCallId: delta.function_call.name,
+                toolName: delta.function_call.name,
+                args: JSON.stringify(delta.function_call.arguments)
+              });
             }
           },
 
@@ -336,7 +336,6 @@ export class GigachatChatLanguageModel implements LanguageModelV1 {
 // limited version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
 const gigachatChatResponseSchema = z.object({
-  id: z.string().nullish(),
   created: z.number().nullish(),
   model: z.string().nullish(),
   choices: z.array(
@@ -344,14 +343,13 @@ const gigachatChatResponseSchema = z.object({
       message: z.object({
         role: z.literal('assistant'),
         content: z.string().nullable(),
-        tool_calls: z
-          .array(
-            z.object({
-              id: z.string(),
-              function: z.object({ name: z.string(), arguments: z.string() })
-            })
-          )
-          .nullish()
+        created: z.number().nullish(),
+        name: z.string().nullish(),
+        function_call: z.object({
+          name: z.string(),
+          arguments: z.record(z.any())
+        }).nullish(),
+        data_for_context: z.array(z.object({})).nullish()
       }),
       index: z.number(),
       finish_reason: z.string().nullish()
@@ -360,29 +358,27 @@ const gigachatChatResponseSchema = z.object({
   object: z.literal('chat.completion'),
   usage: z.object({
     prompt_tokens: z.number(),
-    completion_tokens: z.number()
+    completion_tokens: z.number(),
+    total_tokens: z.number()
   })
 });
 
 // limited version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
 const gigachatChatChunkSchema = z.object({
-  id: z.string().nullish(),
   created: z.number().nullish(),
   model: z.string().nullish(),
+  object: z.literal('chat.completion'),
   choices: z.array(
     z.object({
       delta: z.object({
         role: z.enum(['assistant']).optional(),
         content: z.string().nullish(),
-        tool_calls: z
-          .array(
-            z.object({
-              id: z.string(),
-              function: z.object({ name: z.string(), arguments: z.string() })
-            })
-          )
-          .nullish()
+        functions_state_id: z.string().nullish(),
+        function_call: z.object({
+          name: z.string(),
+          arguments: z.object({})
+        }).nullish(),
       }),
       finish_reason: z.string().nullish(),
       index: z.number()

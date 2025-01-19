@@ -5,8 +5,19 @@ import { useChat } from 'ai/react';
 import { getConfigValue } from '@brojs/cli';
 
 export default function Page() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, error, reload } = useChat({
     api: `${getConfigValue("eng-it-lean.api")}/gigachat/chat`,
+    onFinish(message, { usage, finishReason }) {
+      console.log('Finished streaming message:', message);
+      console.log('Token usage:', usage);
+      console.log('Finish reason:', finishReason);
+    },
+    onError: error => {
+      console.error('An error occurred:', error);
+    },
+    onResponse: response => {
+      console.log('Received HTTP response from server:', response);
+    },
   });
 
   return (
@@ -17,6 +28,15 @@ export default function Page() {
           {message.content}
         </div>
       ))}
+
+      {error && (
+        <>
+          <div>{error.message}</div>
+          <button type='button' onClick={() => reload()}>
+            Reload
+          </button>
+        </>
+      )}
 
       <form onSubmit={handleSubmit}>
         <input name="prompt" value={input} onChange={handleInputChange} />

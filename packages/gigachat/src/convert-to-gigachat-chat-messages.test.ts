@@ -16,7 +16,7 @@ describe('user messages', () => {
       }
     ]);
 
-    expect(result).toMatchSnapshot();
+    expect(result).toThrowError();
   });
 });
 

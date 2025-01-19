@@ -3,19 +3,14 @@
 exports[`assistant messages > should add prefix true to trailing assistant messages 1`] = `
 [
   {
-    "content": [
-      {
-        "text": "Hello",
-        "type": "text",
-      },
-    ],
+    "content": "Hello",
     "role": "user",
   },
   {
     "content": "Hello!",
     "prefix": true,
     "role": "assistant",
-    "tool_calls": undefined,
+    "function_call": undefined,
   },
 ]
 `;
@@ -26,22 +21,17 @@ exports[`tool calls > should stringify arguments to tool calls 1`] = `
     "content": "",
     "prefix": undefined,
     "role": "assistant",
-    "tool_calls": [
-      {
-        "function": {
-          "arguments": "{"key":"arg-value"}",
-          "name": "tool-1",
-        },
-        "id": "tool-call-id-1",
-        "type": "function",
+    "function_call": {
+      "arguments": {
+        "key": "arg-value",
       },
-    ],
+      "name": "tool-1",
+    },
   },
   {
     "content": "{"key":"result-value"}",
     "name": "tool-1",
-    "role": "tool",
-    "tool_call_id": "tool-call-id-1",
+    "role": "function",
   },
 ]
 `;

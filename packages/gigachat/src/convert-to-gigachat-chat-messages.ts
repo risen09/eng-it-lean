@@ -21,16 +21,12 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
           content: content.map((part) => {
             switch (part.type) {
               case 'text': {
-                return { type: 'text', text: part.text };
+                return part.text;
               }
               case 'image': {
-                return {
-                  type: 'image_url',
-                  image_url:
-                    part.image instanceof URL
-                      ? part.image.toString()
-                      : `data:${part.mimeType ?? 'image/jpeg'};base64,${convertUint8ArrayToBase64(part.image)}`
-                };
+                throw new UnsupportedFunctionalityError({
+                  functionality: 'Images should be added in "attachments" object'
+                });
               }
               case 'file': {
                 throw new UnsupportedFunctionalityError({
@@ -38,18 +34,14 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
                 });
               }
             }
-          })
+          }).join('')
         });
         break;
       }
 
       case 'assistant': {
         let text = '';
-        const toolCalls: Array<{
-          id: string;
-          type: 'function';
-          function: { name: string; arguments: string };
-        }> = [];
+        let functionCall;
 
         for (const part of content) {
           switch (part.type) {
@@ -58,14 +50,10 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
               break;
             }
             case 'tool-call': {
-              toolCalls.push({
-                id: part.toolCallId,
-                type: 'function',
-                function: {
-                  name: part.toolName,
-                  arguments: JSON.stringify(part.args)
-                }
-              });
+              functionCall = {
+                name: part.toolName,
+                arguments: part.args
+              };
               break;
             }
             default: {
@@ -79,7 +67,7 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
           role: 'assistant',
           content: text,
           prefix: isLastMessage ? true : undefined,
-          tool_calls: toolCalls.length > 0 ? toolCalls : undefined
+          function_call: functionCall
         });
 
         break;
@@ -87,10 +75,9 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
       case 'tool': {
         for (const toolResponse of content) {
           messages.push({
-            role: 'tool',
+            role: 'function',
             name: toolResponse.toolName,
             content: JSON.stringify(toolResponse.result),
-            tool_call_id: toolResponse.toolCallId
           });
         }
         break;

@@ -7,8 +7,10 @@ export function mapGigachatFinishReason(finishReason: string | null | undefined)
     case 'length':
     case 'model_length':
       return 'length';
-    case 'tool_calls':
+    case 'function_call':
       return 'tool-calls';
+    case 'error':
+      return 'error';
     default:
       return 'unknown';
   }

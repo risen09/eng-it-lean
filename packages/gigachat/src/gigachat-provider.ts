@@ -69,7 +69,7 @@ export function createGigachat(options: GigachatProviderSettings = {}): Gigachat
     Authorization: `Bearer ${loadApiKey({
       apiKey: options.apiKey,
       environmentVariableName: 'GIGACHAT_ACCESS_TOKEN',
-      description: 'Gigachat'
+      description: 'GigaChat'
     })}`,
     ...options.headers
   });

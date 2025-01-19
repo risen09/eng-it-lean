@@ -8,7 +8,6 @@ const path = require('path')
 process.env.NODE_EXTRA_CA_CERTS= path.resolve(__dirname, 'certs')
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-
 const gigachat = gigachatProvider.createGigachat( { 
   apiKey: '<api-key>',
   headers: {
@@ -17,16 +16,17 @@ const gigachat = gigachatProvider.createGigachat( {
   }
 })
 
-router.post('/chat', (req, res) => {
+router.post('/chat', async (req, res) => {
   const { messages } = req.body;
+
+  console.log(messages);
 
   const result = ai.streamText({
     model: gigachat('GigaChat'),
     system: 'You are a helpful assistant.',
     messages,
-    maxTokens: 5,
-    stream: true
+    stream: true,
   });
 
-  return result.toDataStreamResponse();
+  result.pipeDataStreamToResponse(res);
 })

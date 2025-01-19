@@ -5,7 +5,7 @@ import { createGigachat } from './gigachat-provider';
 const TEST_PROMPT: LanguageModelV1Prompt = [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }];
 
 const provider = createGigachat({ apiKey: 'test-api-key' });
-const model = provider.chat('Gigachat');
+const model = provider.chat('GigaChat');
 
 describe('doGenerate', () => {
   const server = new JsonTestServer('https://gigachat.devices.sberbank.ru/api/v1/chat/completions');
@@ -15,13 +15,12 @@ describe('doGenerate', () => {
   function prepareJsonResponse({
     content = '',
     usage = {
-      prompt_tokens: 4,
-      total_tokens: 34,
-      completion_tokens: 30
+      prompt_tokens: 18,
+      total_tokens: 86,
+      completion_tokens: 68
     },
-    id = '16362f24e60340d0994dd205c267a43a',
-    created = 1711113008,
-    model = 'Gigachat'
+    created = 1625284800,
+    model = 'GigaChat'
   }: {
     content?: string;
     usage?: {
@@ -29,13 +28,11 @@ describe('doGenerate', () => {
       total_tokens: number;
       completion_tokens: number;
     };
-    id?: string;
     created?: number;
     model?: string;
   }) {
     server.responseBodyJson = {
       object: 'chat.completion',
-      id,
       created,
       model,
       choices: [
@@ -44,10 +41,10 @@ describe('doGenerate', () => {
           message: {
             role: 'assistant',
             content,
-            tool_calls: null
+            tool_calls: null,
+            data_for_context: [{}]
           },
           finish_reason: 'stop',
-          logprobs: null
         }
       ],
       usage
@@ -86,31 +83,27 @@ describe('doGenerate', () => {
 
   it('should extract tool call response', async () => {
     server.responseBodyJson = {
-      id: 'b3999b8c93e04e11bcbff7bcab829667',
       object: 'chat.completion',
-      created: 1722349660,
-      model: 'gigachat-large-latest',
+      created: 1700471392,
+      model: 'GigaChat',
       choices: [
         {
           index: 0,
           message: {
             role: 'assistant',
             content: '',
-            tool_calls: [
-              {
-                id: 'gSIMJiOkT',
-                function: {
-                  name: 'weatherTool',
-                  arguments: '{"location": "paris"}'
-                }
+            function_call: {
+              name: 'weather_forecast',
+              arguments: {
+                'location': "Москва",
+                'format': 'celcius'
               }
-            ]
+            }
           },
-          finish_reason: 'tool_calls',
-          logprobs: null
+          finish_reason: 'function_calls',
         }
       ],
-      usage: { prompt_tokens: 124, total_tokens: 146, completion_tokens: 22 }
+      usage: { prompt_tokens: 150, total_tokens: 185, completion_tokens: 35 }
     };
 
     const { toolCalls } = await model.doGenerate({
@@ -121,10 +114,10 @@ describe('doGenerate', () => {
 
     expect(toolCalls).toStrictEqual([
       {
-        toolCallId: 'gSIMJiOkT',
+        toolCallId: 'weather_forecast',
         toolCallType: 'function',
-        toolName: 'weatherTool',
-        args: '{"location": "paris"}'
+        toolName: 'weather_forecast',
+        args: '{"location":"Москва","format":"celcius"}'
       }
     ]);
   });
@@ -143,13 +136,12 @@ describe('doGenerate', () => {
 
     expect(usage).toStrictEqual({
       promptTokens: 20,
-      completionTokens: 5
+      completionTokens: 5,
     });
   });
 
   it('should send additional response information', async () => {
     prepareJsonResponse({
-      id: 'test-id',
       created: 123,
       model: 'test-model'
     });
@@ -161,7 +153,6 @@ describe('doGenerate', () => {
     });
 
     expect(response).toStrictEqual({
-      id: 'test-id',
       timestamp: new Date(123 * 1000),
       modelId: 'test-model'
     });
@@ -182,7 +173,7 @@ describe('doGenerate', () => {
 
     expect(rawResponse?.headers).toStrictEqual({
       // default headers:
-      'content-length': '302',
+      'content-length': '271',
       'content-type': 'application/json',
 
       // custom header
@@ -200,8 +191,8 @@ describe('doGenerate', () => {
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'Gigachat',
-      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }]
+      model: 'GigaChat',
+      messages: [{ role: 'user', content: 'Hello' }]
     });
   });
 
@@ -234,8 +225,8 @@ describe('doGenerate', () => {
     });
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
-      model: 'Gigachat',
-      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }],
+      model: 'GigaChat',
+      messages: [{ role: 'user', content: 'Hello' }],
       tools: [
         {
           type: 'function',
@@ -294,7 +285,7 @@ describe('doGenerate', () => {
     });
 
     expect(request).toStrictEqual({
-      body: '{"model":"Gigachat","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}]}'
+      body: '{"model":"GigaChat","messages":[{"role":"user","content":"Hello"}]}'
     });
   });
 });
@@ -306,18 +297,18 @@ describe('doStream', () => {
 
   function prepareStreamResponse({ content }: { content: string[] }) {
     server.responseChunks = [
-      `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-        `"created":1711097175,"model":"Gigachat","choices":[{"index":0,` +
+      `data:  {"object":"chat.completion",` +
+        `"created":1711097175,"model":"GigaChat","choices":[{"index":0,` +
         `"delta":{"role":"assistant","content":""},"finish_reason":null,"logprobs":null}]}\n\n`,
       ...content.map((text) => {
         return (
-          `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-          `"created":1711097175,"model":"Gigachat","choices":[{"index":0,` +
+          `data:  {"object":"chat.completion",` +
+          `"created":1711097175,"model":"GigaChat","choices":[{"index":0,` +
           `"delta":{"role":"assistant","content":"${text}"},"finish_reason":null,"logprobs":null}]}\n\n`
         );
       }),
-      `data:  {"id":"6e2cd91750904b7092f49bdca9083de1","object":"chat.completion.chunk",` +
-        `"created":1711097175,"model":"Gigachat","choices":[{"index":0,` +
+      `data:  {"object":"chat.completion",` +
+        `"created":1711097175,"model":"GigaChat","choices":[{"index":0,` +
         `"delta":{"content":""},"finish_reason":"stop","logprobs":null}],` +
         `"usage":{"prompt_tokens":4,"total_tokens":36,"completion_tokens":32}}\n\n`,
       `data: [DONE]\n\n`
@@ -336,9 +327,8 @@ describe('doStream', () => {
     expect(await convertReadableStreamToArray(stream)).toStrictEqual([
       {
         type: 'response-metadata',
-        id: '6e2cd91750904b7092f49bdca9083de1',
         timestamp: new Date(1711097175 * 1000),
-        modelId: 'Gigachat'
+        modelId: 'GigaChat'
       },
       { type: 'text-delta', textDelta: '' },
       { type: 'text-delta', textDelta: 'Hello' },
@@ -371,9 +361,8 @@ describe('doStream', () => {
     expect(await convertReadableStreamToArray(stream)).toStrictEqual([
       {
         type: 'response-metadata',
-        id: '6e2cd91750904b7092f49bdca9083de1',
         timestamp: new Date(1711097175 * 1000),
-        modelId: 'Gigachat'
+        modelId: 'GigaChat'
       },
       { type: 'text-delta', textDelta: '' },
       { type: 'text-delta', textDelta: 'and' },
@@ -389,9 +378,9 @@ describe('doStream', () => {
 
   it('should stream tool deltas', async () => {
     server.responseChunks = [
-      `data: {"id":"ad6f7ce6543c4d0890280ae184fe4dd8","object":"chat.completion.chunk","created":1711365023,"model":"gigachat-large-latest",` +
+      `data: {"object":"chat.completion","created":1711365023,"model":"GigaChat",` +
         `"choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null,"logprobs":null}]}\n\n`,
-      `data: {"id":"ad6f7ce6543c4d0890280ae184fe4dd8","object":"chat.completion.chunk","created":1711365023,"model":"gigachat-large-latest",` +
+      `data: {"object":"chat.completion","created":1711365023,"model":"GigaChat",` +
         `"choices":[{"index":0,"delta":{"content":null,"tool_calls":[{"id":"yfBEybNYi","function":{"name":"test-tool","arguments":` +
         `"{\\"value\\":\\"Sparkle Day\\"}"` +
         `}}]},"finish_reason":"tool_calls","logprobs":null}],"usage":{"prompt_tokens":183,"total_tokens":316,"completion_tokens":133}}\n\n`,
@@ -401,7 +390,7 @@ describe('doStream', () => {
     const { stream } = await createGigachat({
       apiKey: 'test-api-key'
     })
-      .chat('gigachat-large-latest')
+      .chat('GigaChat')
       .doStream({
         inputFormat: 'prompt',
         mode: {
@@ -409,7 +398,7 @@ describe('doStream', () => {
           tools: [
             {
               type: 'function',
-              name: 'test-tool',
+              name: 'function-tool',
               parameters: {
                 type: 'object',
                 properties: { value: { type: 'string' } },
@@ -426,9 +415,8 @@ describe('doStream', () => {
     expect(await convertReadableStreamToArray(stream)).toStrictEqual([
       {
         type: 'response-metadata',
-        id: 'ad6f7ce6543c4d0890280ae184fe4dd8',
         timestamp: new Date(1711365023 * 1000),
-        modelId: 'gigachat-large-latest'
+        modelId: 'GigaChat'
       },
       { type: 'text-delta', textDelta: '' },
       {
@@ -447,7 +435,7 @@ describe('doStream', () => {
       },
       {
         type: 'finish',
-        finishReason: 'tool-calls',
+        finishReason: 'function-call',
         usage: { promptTokens: 183, completionTokens: 133 }
       }
     ]);
@@ -488,8 +476,8 @@ describe('doStream', () => {
 
     expect(await server.getRequestBodyJson()).toStrictEqual({
       stream: true,
-      model: 'Gigachat',
-      messages: [{ role: 'user', content: [{ type: 'text', text: 'Hello' }] }]
+      model: 'GigaChat',
+      messages: [{ role: 'user', content: 'Hello' }]
     });
   });
 
@@ -532,7 +520,7 @@ describe('doStream', () => {
     });
 
     expect(request).toStrictEqual({
-      body: '{"model":"Gigachat","messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}],"stream":true}'
+      body: '{"model":"GigaChat","stream":true,"messages":[{"role":"user","content":"Hello"}]}'
     });
   });
 });
