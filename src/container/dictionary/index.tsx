@@ -1,4 +1,3 @@
-import './index.css';
 import React, { useState, useEffect } from 'react';
 import { Word } from './types';
 import WordCard from './components/word-card';

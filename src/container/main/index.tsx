@@ -5,6 +5,8 @@ import { router } from "./router";
 import { store } from "../../store";
 import { Provider } from "react-redux";
 
+import "./index.css";
+
 const Main = (): React.ReactElement => {
 	return (
 		<Provider store={store}>
