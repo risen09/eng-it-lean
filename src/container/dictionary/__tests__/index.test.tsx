@@ -1,8 +1,8 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, getByRole } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 import { describe, expect, test } from '@jest/globals'; 
 import DictionaryPage from "../index";
-import { BrowserRouter } from "react-router-dom";
 import { Wrapper } from "../../../__tests__/wrapper";
 import { mockGetDictionary, spyedGetDictionaryWords } from "../../../__tests__/mocks/api/dictionaries/get-dictionary-words";
 
@@ -13,12 +13,6 @@ const renderWithRouter = (ui, {route = '/'} = {}) => {
     ...render(ui, {wrapper: Wrapper}),
   }
 }
-
-import { jest } from '@jest/globals';
-jest.mock("react-router-dom", () => ({
-  useParams: jest.fn().mockReturnValue(1),
- }));
-
 
 describe("DictionaryPage", () => {
   test("renders", async () => {
@@ -40,4 +34,21 @@ describe("DictionaryPage", () => {
 
 		expect(await screen.findByText("Что-то пошло не так")).toBeInTheDocument();
   })
+
+	test("opens details modal with word's synonyms and examples", async () => {
+		const user = userEvent.setup();
+    mockGetDictionary();
+    renderWithRouter(<DictionaryPage />, { route: 'eng-it-lean/dictionary/1' })
+
+		const firstWord = await screen.findByRole('heading', {
+			level: 5,
+			name: "Machine Learning"
+		})
+		expect(firstWord).toBeInTheDocument();
+
+		await user.click(getByRole(firstWord.parentElement, 'button', { name: /more/i}))
+
+		expect(await screen.findByText(/synonyms/)).toBeInTheDocument();
+		expect(await screen.findByText("We used machine learning techniques to forecast product demand.", {exact: true})).toBeInTheDocument();
+	})
 })
