@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { setupStore } from "../../store";
 import { router } from "./router";
-import { store } from "../../store";
 import { Provider } from "react-redux";
 
 import "./index.css";
+
+const store = setupStore();
 
 const Main = (): React.ReactElement => {
 	return (
