@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3393da0c-05bd-4c5b-89cd-24604c06325b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/container/home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +56,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;eldarver&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/eldar/project/sber/pr_2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/eldar/Downloads/jarvis-jetbrains-ext-1.3.445-ext.zip&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -64,6 +65,7 @@
     &quot;npm.build.executor&quot;: &quot;Run&quot;,
     &quot;npm.start.executor&quot;: &quot;Run&quot;,
     &quot;npm.test.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/eldar/Downloads/WebStorm-2024.2.3/WebStorm-242.23339.15/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -130,6 +132,8 @@
       <workItem from="1731746212180" duration="2585000" />
       <workItem from="1735334673179" duration="5202000" />
       <workItem from="1735369859113" duration="198000" />
+      <workItem from="1737788495700" duration="1543000" />
+      <workItem from="1737795055856" duration="5669000" />
     </task>
     <servers />
   </component>
