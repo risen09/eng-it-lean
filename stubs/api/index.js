@@ -5,7 +5,7 @@ const unitsRouter = require('./units');
 module.exports = router;
 
 const delay =
-  (ms = 1000) =>
+  (ms = 250) =>
   (req, res, next) => {
     setTimeout(next, ms);
   };
