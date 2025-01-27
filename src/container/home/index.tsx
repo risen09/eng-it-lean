@@ -4,7 +4,7 @@ import Card from '../../components/card';
 import { DictionaryItem } from './types';
 import { getNavigationsValue } from '@brojs/cli';
 import { getConfigValue } from '@brojs/cli';
-import { useGetDictionaryListQuery } from '../../store/api';
+import { useGetDictionariesQuery } from '../../store/api';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 
@@ -48,7 +48,7 @@ function App() {
 import mainBanner from './images/osn_banner2.jpg';
 
 const HomePage = (): React.ReactElement => {
-  const { data: dictionaries, isLoading, error } = useGetDictionaryListQuery(undefined);
+  const { data: dictionaries, isLoading, error } = useGetDictionariesQuery(undefined);
 
   return (
     <div>

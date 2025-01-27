@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery, QueryReturnValue } from '@reduxjs/toolkit/query/react';
 import { dictionaryService } from '../service/dictionary';
-import { GetDictionaryWordsResponse, GetDictionaryListResponse } from '../service/dictionary/types';
+import { GetDictionaryResponse, GetDictionariesResponse } from '../service/dictionary/types';
+import { wordsService } from '../service/words';
+import { GetWordResponse, GetWordsResponse, Word } from '../service/words/types';
 
 import { unitService } from '../service/unit';
 import { GetUnitResponse } from '../service/unit/types';
@@ -21,11 +23,29 @@ export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '' }),
   endpoints: (builder) => ({
-    getDictionaryList: builder.query<GetDictionaryListResponse, undefined>({
-      queryFn: createQueryFromPromise(() => dictionaryService.getDictionaryList())
+    getDictionaries: builder.query<GetDictionariesResponse, undefined>({
+      queryFn: createQueryFromPromise(() => dictionaryService.getDictionaries())
     }),
-    getDictionaryWords: builder.query<GetDictionaryWordsResponse, number>({
+    getDictionary: builder.query<GetDictionaryResponse, number>({
       queryFn: createQueryFromPromise((id: number) => dictionaryService.getDictionary(id))
+    }),
+    postDictionary: builder.mutation<Word, { id: number; word: Word }>({
+      queryFn: createQueryFromPromise(({ id, word }: { id: number; word: Word }) =>
+        dictionaryService.postDictionary(id, word)
+      )
+    }),
+
+    getWords: builder.query<GetWordsResponse, undefined>({
+      queryFn: createQueryFromPromise(() => wordsService.getWords())
+    }),
+    getWord: builder.query<GetWordResponse, number>({
+      queryFn: createQueryFromPromise((id: number) => wordsService.getWord(id))
+    }),
+    putWord: builder.mutation<Word, Word>({
+      queryFn: createQueryFromPromise((word: Word) => wordsService.putWord(word))
+    }),
+    deleteWord: builder.mutation<undefined, number>({
+      queryFn: createQueryFromPromise((id: number) => wordsService.deleteWord(id))
     }),
 
     getUnit: builder.query<GetUnitResponse, number>({
@@ -34,4 +54,13 @@ export const api = createApi({
   })
 });
 
-export const { useGetDictionaryListQuery, useGetDictionaryWordsQuery, useGetUnitQuery } = api;
+export const {
+  useGetDictionariesQuery,
+  useGetDictionaryQuery,
+  usePostDictionaryMutation,
+  useGetWordsQuery,
+  useGetWordQuery,
+  usePutWordMutation,
+  useDeleteWordMutation,
+  useGetUnitQuery
+} = api;

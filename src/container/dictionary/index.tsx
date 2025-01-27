@@ -19,15 +19,50 @@ import {
   MDBListGroupItem
 } from 'mdb-react-ui-kit';
 import WordItem from './components/WordItem';
-import { Word } from './types';
 import { useParams } from 'react-router-dom';
-import { useGetDictionaryWordsQuery } from '../../store/api';
+import { useGetDictionaryQuery, usePostDictionaryMutation, usePutWordMutation } from '../../store/api';
+import { Word } from '../../service/words/types';
+import { Controller, useForm } from 'react-hook-form';
+
+interface IFormInput {
+  word: string;
+  translation: string;
+  definition: string;
+  synonyms: string;
+  examples: string;
+}
 
 const DictionaryPage = (): React.ReactElement => {
   const { id } = useParams();
-  const { data: dictionary, isLoading, error } = useGetDictionaryWordsQuery(parseInt(id));
+  const { data: dictionary, isLoading, error } = useGetDictionaryQuery(parseInt(id));
 
   const [isCreateModalOpened, setIsCreateModalOpened] = useState(false);
+  const { register, control, handleSubmit } = useForm();
+  const onSubmit = (data: IFormInput) => {
+    console.log(data);
+    putWord({
+      id: 0,
+      word: data.word,
+      translation: data.translation,
+      definition: data.definition,
+      synonyms: data.synonyms ? data.synonyms.split(',') : [],
+      examples: data.examples ? data.examples.split('\n') : []
+    }).then((value) => {
+      console.log(value);
+      postDictionary({id: parseInt(id), word: value.data}).then(() => {
+        setIsCreateModalOpened(false);
+        data = {
+          word: '',
+          definition: '',
+          translation: '',
+          synonyms: '',
+          examples: ''
+        };
+      });
+    });
+  };
+  const [putWord, { isLoading: isPutting }] = usePutWordMutation();
+  const [postDictionary, { isLoading: isPosting }] = usePostDictionaryMutation();
 
   return (
     <>
@@ -60,27 +95,24 @@ const DictionaryPage = (): React.ReactElement => {
               <MDBBtn className="btn-close" color="none" onClick={() => setIsCreateModalOpened(false)}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <MDBListGroup>
-                <MDBListGroupItem noBorders>
-                  <MDBInput label="Термин" />
-                </MDBListGroupItem>
-                <MDBListGroupItem noBorders>
-                  <MDBTextArea label="Определение" />
-                </MDBListGroupItem>
-                <MDBListGroupItem noBorders>
-                  <MDBInput label="Синонимы">
-                    <div className="form-helper">Введите синонимы через запятую</div>
-                  </MDBInput>
-                </MDBListGroupItem>
-                <MDBListGroupItem noBorders>
-                  <MDBTextArea label="Примеры" />
-                </MDBListGroupItem>
-                <MDBListGroupItem noBorders>
-                  <MDBBtn color="primary" onClick={() => setIsCreateModalOpened(false)}>
-                    Добавить
-                  </MDBBtn>
-                </MDBListGroupItem>
-              </MDBListGroup>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <MDBInput wrapperClass="my-2" {...register('word', { required: true })} label="Термин" />
+                <MDBInput wrapperClass="my-2" {...register('translation', { required: true })} label="Перевод" />
+                <Controller
+                  name="definition"
+                  control={control}
+                  render={({ field }) => <MDBTextArea wrapperClass="my-2" {...field} label="Определение" />}
+                />
+                <MDBInput wrapperClass="my-2" {...register('synonyms')} label="Синонимы" />
+                <Controller
+                  name="examples"
+                  control={control}
+                  render={({ field }) => <MDBTextArea wrapperClass="my-2" {...field} label="Примеры" />}
+                />
+                <MDBBtn className="my-2" disabled={isPutting || isPosting} color="primary" type="submit">
+                  Добавить
+                </MDBBtn>
+              </form>
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>

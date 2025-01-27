@@ -1,21 +1,13 @@
+import { Word } from "../words/types";
+
 export interface Dictionary {
   id: number;
   description: string;
   imageFilename: string;
   link: string;
+  words: Array<Word>;
 }
 
-export interface DictionaryWords {
-  id: number;
-  words: Array<{
-    id: number;
-    word: string;
-    translation: string;
-    definition: string;
-    synonyms: Array<string>;
-    examples: Array<string>;
-  }>;
-}
 
-export type GetDictionaryListResponse = Array<Dictionary>;
-export type GetDictionaryWordsResponse = DictionaryWords;
+export type GetDictionaryResponse = Dictionary;
+export type GetDictionariesResponse = Array<Dictionary>;

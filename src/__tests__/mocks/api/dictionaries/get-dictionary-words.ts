@@ -1,13 +1,16 @@
 import { jest } from '@jest/globals';
 import { dictionaryService } from '../../../../service/dictionary';
-import { GetDictionaryWordsResponse } from '../../../../service/dictionary/types';
+import { GetDictionaryResponse } from '../../../../service/dictionary/types';
 
 export const spyedGetDictionaryWords = jest.spyOn(dictionaryService, 'getDictionary');
 
-export const mockGetDictionary = (data?: GetDictionaryWordsResponse) => {
+export const mockGetDictionary = (data?: GetDictionaryResponse) => {
   spyedGetDictionaryWords.mockResolvedValueOnce(
     data ?? {
       id: 1,
+      description: 'description',
+      imageFilename: 'imageFilename.jpg',
+      link: 'link',
       words: [
         {
           id: 0,
