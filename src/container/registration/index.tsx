@@ -1,14 +1,18 @@
+import './registration.css'; 
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 
 const RegistrationPage = (): React.ReactElement => {
+  const { register, handleSubmit } = useForm();
+
   const handleCancel = () => {
     
   };
 
-  const handleRegister = (): void => {
+  const handleRegister = (data): void => {
     alert("Регистрация прошла успешно!");
-    
+    console.log(data);
   };
 
   return (
@@ -18,12 +22,14 @@ const RegistrationPage = (): React.ReactElement => {
           <p>Заполните поля, расположенные ниже, чтобы создать аккаунт.</p>
           <hr />
 
-          <MDBInput label='Электронная почта' id='form1' type='email' required />
-          <MDBInput label='Пароль' id='form2' type='password' required />
-          <MDBInput label='Повторите пароль' id='form3' type='password' required />
+          <form onSubmit={handleSubmit(handleRegister)}>
+            <MDBInput label='Электронная почта' id='form1' type='email' required {...register('email')} />
+            <MDBInput label='Пароль' id='form2' type='password' required {...register('password')} />
+            <MDBInput label='Повторите пароль' id='form3' type='password' required {...register('passwordRepeat')} />
 
-          <MDBBtn color='secondary' onClick={handleCancel}>Отменить</MDBBtn>
-          <MDBBtn color='primary' onClick={handleRegister}>Зарегистрироваться</MDBBtn>
+            <MDBBtn color='secondary' onClick={handleCancel}>Отменить</MDBBtn>
+            <MDBBtn color='primary' type='submit'>Зарегистрироваться</MDBBtn>
+          </form>
         </MDBCol>
       </MDBRow>
   );
