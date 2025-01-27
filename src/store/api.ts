@@ -2,6 +2,9 @@ import { createApi, fetchBaseQuery, QueryReturnValue } from '@reduxjs/toolkit/qu
 import { dictionaryService } from '../service/dictionary';
 import { GetDictionaryWordsResponse, GetDictionaryListResponse } from '../service/dictionary/types';
 
+import { unitService } from '../service/unit';
+import { GetUnitResponse } from '../service/unit/types';
+
 const createQueryFromPromise =
   <ARGS, RES>(fn: (...args: Array<ARGS>) => Promise<RES>) =>
   async (...args): Promise<QueryReturnValue<RES, any, any>> => {
@@ -23,8 +26,12 @@ export const api = createApi({
     }),
     getDictionaryWords: builder.query<GetDictionaryWordsResponse, number>({
       queryFn: createQueryFromPromise((id: number) => dictionaryService.getDictionary(id))
+    }),
+
+    getUnit: builder.query<GetUnitResponse, number>({
+      queryFn: createQueryFromPromise((id: number) => unitService.getUnit(id))
     })
   })
 });
 
-export const { useGetDictionaryListQuery, useGetDictionaryWordsQuery } = api;
+export const { useGetDictionaryListQuery, useGetDictionaryWordsQuery, useGetUnitQuery } = api;
