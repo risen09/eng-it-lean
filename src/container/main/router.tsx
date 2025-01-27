@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter } from 'react-router-dom';
 import { getNavigationsValue } from '@brojs/cli';
-import Root from "./components/root";
-import HomePage from "../home";
-import DictionaryPage from "../dictionary";
-import LoginPage from "../entry";
+import Root from './components/root';
+import HomePage from '../home';
+import DictionaryPage from '../dictionary';
+import LoginPage from '../entry';
 import RegistrationPage from '../registration';
 import UnitPage from '../unit';
 
@@ -23,16 +23,16 @@ export const router = createBrowserRouter([
         element: <DictionaryPage />
       },
       {
-        path: getNavigationsValue("eng-it-lean.entry"),
-        element: <LoginPage />,
+        path: getNavigationsValue('eng-it-lean.entry'),
+        element: <LoginPage />
       },
       {
         path: getNavigationsValue('eng-it-lean.unit'),
         element: <UnitPage />
       },
       {
-        path: getNavigationsValue("eng-it-lean.registration"),
-        element: <RegistrationPage />,
+        path: getNavigationsValue('eng-it-lean.registration'),
+        element: <RegistrationPage />
       }
     ]
   }

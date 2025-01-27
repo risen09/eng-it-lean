@@ -40,39 +40,37 @@ export const TableCell = styled.td`
 `;
 
 export const TableHead = styled(TableCell)`
-	font-weight: bold;
+  font-weight: bold;
 `;
 
 export const List = styled.ul`
-	background-color: ${mainColor};
-	border-radius: 15px;
+  background-color: ${mainColor};
+  border-radius: 15px;
   filter: drop-shadow(5px 5px 5px rgba(180, 180, 180, 0.8));
-	padding-top: 5px;
-	padding-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
-	ol {
-		filter: none
-	}
+  ol {
+    filter: none;
+  }
 
-	ul {
-		filter: none
-	}
-
+  ul {
+    filter: none;
+  }
 `;
 
 export const NumberedList = styled.ol`
-	// background-color: ${mainColor};
-	// border-radius: 15px;
+  // background-color: ${mainColor};
+  // border-radius: 15px;
   // filter: drop-shadow(5px 5px 5px rgba(180, 180, 180, 0.8));
-	// padding-top: 5px;
-	// padding-bottom: 5px;
+  // padding-top: 5px;
+  // padding-bottom: 5px;
 
-	// ol {
-	// 	filter: none
-	// }
+  // ol {
+  // 	filter: none
+  // }
 
-	// ul {
-	// 	filter: none
-	// }
-
+  // ul {
+  // 	filter: none
+  // }
 `;

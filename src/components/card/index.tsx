@@ -1,12 +1,5 @@
-import React from "react";
-import {
-  Link,
-  CardStyled,
-  CardImage,
-  CardText,
-  CardTitle,
-  CardDescription,
-} from "./index.style";
+import React from 'react';
+import { Link, CardStyled, CardImage, CardText, CardTitle, CardDescription } from './index.style';
 
 const Card = ({ title, description, imgUrl, link }): React.ReactElement => {
   return (

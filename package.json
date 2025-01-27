@@ -13,7 +13,7 @@
     "prettier": "npx prettier . --write",
     "release": "commit-and-tag-version"
   },
-  "author": "Ruslan",
+  "author": "int.tern.dev",
   "license": "ISC",
   "dependencies": {
     "@brojs/cli": "^1.6.3",
