@@ -79,7 +79,7 @@ const DictionaryPage = (): React.ReactElement => {
           ))}
 
         <MDBCol xl={4} lg={6} className="mb-4">
-          <MDBCard tag="button" onClick={() => setIsCreateModalOpened(true)}>
+          <MDBCard tag="button" aria-label="add word button" onClick={() => setIsCreateModalOpened(true)}>
             <MDBCardBody className="h-70">
               <MDBIcon fas icon="add" color="secondary" size="2xl" />
             </MDBCardBody>
@@ -95,8 +95,8 @@ const DictionaryPage = (): React.ReactElement => {
               <MDBBtn className="btn-close" color="none" onClick={() => setIsCreateModalOpened(false)}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <MDBInput wrapperClass="my-2" {...register('word', { required: true })} label="Термин" />
+              <form aria-label="word-form" onSubmit={handleSubmit(onSubmit)}>
+                <MDBInput wrapperClass="my-2" {...register('word', { required: true })} label="Термин" aria-label='term'/>
                 <MDBInput wrapperClass="my-2" {...register('translation', { required: true })} label="Перевод" />
                 <Controller
                   name="definition"
