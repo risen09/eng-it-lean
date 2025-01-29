@@ -6,8 +6,7 @@ import { getNavigationsValue } from '@brojs/cli';
 import { getConfigValue } from '@brojs/cli';
 import { useGetDictionaryListQuery } from '../../store/api';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation} from 'swiper/modules';
-import { MDBCarousel, MDBCarouselItem, MDBCarouselCaption, MDBContainer } from 'mdb-react-ui-kit';
+import { Navigation } from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -17,41 +16,34 @@ import 'swiper/css/navigation';
 
 function App() {
   return (
-    <div className="container text-center py-1">
-      <MDBCarousel
-        showControls
-        showIndicators={false}
-        className="carousel-multi-item"
-        interval={4000}
-      >
-        <MDBCarouselItem itemId={1} className="active">
-              <img
-                src='https://www.google.com/url?sa=i&url=https%3A%2F%2Fru.freepik.com%2Fvectors%2Fit&psig=AOvVaw3rq2SQ7NgkwlGE_bBaCgXX&ust=1738230315362000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNjqur_TmosDFQAAAAAdAAAAABAE'
-                alt="Slide 1"
-                className="d-block w-100"
-              />
-          <MDBCarouselCaption>
-            <h5>First slide label</h5>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </MDBCarouselCaption>
-        </MDBCarouselItem>
-
-        <MDBCarouselItem itemId={2}>
-              <img
-                src='https://mdbootstrap.com/img/new/slides/041.jpg'
-                alt="Slide 2"
-                className="d-block w-100"
-              />
-          <MDBCarouselCaption>
-            <h5>First slide label</h5>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </MDBCarouselCaption>
-        </MDBCarouselItem>
-      </MDBCarousel>
-    </div>
-
+    <>
+      <div className="main-banner">
+        <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+          <SwiperSlide>
+            <div className="block-slider">
+              <img src={mainBanner} alt="" className="img_main_banner}" />
+              <div className="block-slider-content">
+                <div className="block-slider-content-inner">
+                  <h2>Начни сегодня</h2>
+                  <p>Лучшие практики, словари, граматика, материалы, фильмы и многое другое </p>
+                  <button className="recordButton">Начать обучение</button>
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>Slide 2</SwiperSlide>
+          <SwiperSlide>Slide 3</SwiperSlide>
+          <SwiperSlide>Slide 4</SwiperSlide>
+          <SwiperSlide>Slide 5</SwiperSlide>
+          <SwiperSlide>Slide 6</SwiperSlide>
+          <SwiperSlide>Slide 7</SwiperSlide>
+          <SwiperSlide>Slide 8</SwiperSlide>
+          <SwiperSlide>Slide 9</SwiperSlide>
+        </Swiper>
+      </div>
+    </>
   );
-};
+}
 
 import mainBanner from './images/osn_banner2.jpg';
 
@@ -77,7 +69,10 @@ const HomePage = (): React.ReactElement => {
                 title="Словари"
                 description={dictionary.description}
                 imgUrl={require('./images/' + dictionary.imageFilename)}
-                link={getNavigationsValue('eng-it-lean.dictionary').replace(':id', dictionary.id.toString())} />)).slice(0, 5)}
+                link={getNavigationsValue('eng-it-lean.dictionary').replace(':id', dictionary.id.toString())}
+              />
+            ))
+            .slice(0, 5)}
         </div>
       </div>
     </div>

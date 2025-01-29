@@ -11,7 +11,7 @@ body {
   border-radius: 15px;
 }
 
-
+/* 
 .container {
   width: 100%;
   max-width: 1256px;
@@ -22,17 +22,17 @@ body {
   border-radius: 15px;
 }
 
-/*.container:after {*/
-/*  content: "";*/
-/*  display: table;*/
-/*  clear: both;*/
-/*}*/
+.container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+   */
 
-.btn-nav {
-  float: right;
-  margin-right: 1%;
-  margin-top: 15px;
-  margin-bottom: auto;
+.logo {
+  float: left;
+  width: 120px;
+  height: 120px;
 }
 
 .nav_v1 {

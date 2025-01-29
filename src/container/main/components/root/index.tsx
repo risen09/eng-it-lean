@@ -2,13 +2,13 @@ import React from 'react';
 import { MDBContainer } from 'mdb-react-ui-kit';
 import { Outlet } from 'react-router-dom';
 import './index.css';
-import { App } from './header';
+import Header from './header';
 import Footer from './footer';
 
 const Root = (): React.ReactElement => {
   return (
-    <MDBContainer fluid={true}>
-      <App />
+    <MDBContainer>
+      <Header />
       <div>
         <Outlet />
       </div>
