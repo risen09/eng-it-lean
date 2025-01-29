@@ -13,8 +13,7 @@ const path = require('path')
 process.env.NODE_EXTRA_CA_CERTS= path.resolve(__dirname, 'certs')
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-process.env.CLIENT_ID = '<id>'
-process.env.CLIENT_SECRET = '<secret>'
+process.env.GIGACHAT_AUTH = 'NWVjYTczYjctNWRkYi00NzExLTg0YTEtMjhlOWVmODM2MjI4OjlmMTBkMGVkLWZjZjktNGZhOS1hNDZjLTc5ZWU1YzExOGExMw=='
 
 const gigachat = gigachatProvider.createGigachat( { 
   headers: {
@@ -27,7 +26,7 @@ router.use((req, res, next) => {
   const hasToken = process.env.GIGACHAT_ACCESS_TOKEN && process.env.GIGACHAT_EXPIRES_AT != null;
   const hasExpired = new Date(process.env.GIGACHAT_EXPIRES_AT) <= new Date();
   if (!hasToken || hasExpired) {
-    let auth = btoa(Buffer.from((process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET).toString('base64')));
+    let auth = process.env.GIGACHAT_AUTH;
     let rquid = uuid.v4();
     let options = {
       'method': 'POST',
@@ -87,3 +86,35 @@ router.post('/chat', async (req, res) => {
 
   result.pipeDataStreamToResponse(res);
 })
+
+router.post('/new-unit', async (req, res) => {
+  const { prompt } = req.body;
+
+  const result =  ai.streamText({
+    model: gigachat('GigaChat'),
+    system:`
+    Я хочу, чтобы вы выступали в роли помощника для создания продвинутых текстовых уроков английского языка. Я буду указывать тему и уровень сложности (начинающий, средний, продвинутый), а вы будете предоставлять структурированный план урока в формате Markdown. Урок должен включать только текстовые элементы (без видео, картинок, аудио) и содержать следующие разделы:
+    -Цель урока — конкретный навык или знание, которое освоят студенты.
+    -Лексика
+      -Базовые термины: 5-7 слов/фраз с примерами употребления.
+      -Расширенная лексика: 3-5 идиом, фразовых глаголов или сложных выражений (для среднего/продвинутого уровня).
+    -Грамматический фокус
+      -Правило с пояснением и 3-5 примерами.
+      -Типичные ошибки и как их избежать.
+    -Контекстуализация
+      -Короткий текст (диалог, статья, описание) для анализа с использованием лексики и грамматики урока.
+    -Упражнения
+      -Письменное задание: например, составить предложения/эссе по теме.
+      -Устная практика: ролевые диалоги (текстовые сценарии), описание ситуаций.
+      -Аналитическое задание: исправление ошибок в предложениях, перевод сложных конструкций.
+    -Домашнее задание
+      Текстовые задачи: написание текста, грамматические тесты, поиск синонимов/антонимов.
+    Ответ должен быть оформлен в Markdown, лаконичным, без лишних комментариев.
+    `,
+    prompt,
+    stream: true,
+    update_interval: 0.3,
+  });
+
+  result.pipeDataStreamToResponse(res);
+});
