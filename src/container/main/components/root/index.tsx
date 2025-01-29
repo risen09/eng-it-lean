@@ -7,7 +7,7 @@ import Footer from './footer';
 
 const Root = (): React.ReactElement => {
   return (
-    <MDBContainer>
+    <MDBContainer fluid={true}>
       <App />
       <div>
         <Outlet />
