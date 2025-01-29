@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.4.0](https://github.com/risen09/eng-it-lean/compare/v0.3.4...v0.4.0) (2025-01-29)
+
+
+### Features
+
+* add Modal to WordItem component with word's details; add user-event module for testing ([4658ce3](https://github.com/risen09/eng-it-lean/commit/4658ce3b87e5a49ddf763d41828e6b606bdcff0a))
+* rewrite DictionaryPage with MDBootstrap components ([7cbe30e](https://github.com/risen09/eng-it-lean/commit/7cbe30eb81336346ec1d540c266c112e9e6884e1))
+
+
+### Bug Fixes
+
+* button style fix ([87ffe6a](https://github.com/risen09/eng-it-lean/commit/87ffe6a1fb7c6c36a1d24b714e06e1c9b12205d1))
+* change markdown typography components using MDB ([365bf7e](https://github.com/risen09/eng-it-lean/commit/365bf7e1b877559322dadf165b3164e7ec0eba94))
+* footer ui-kit v1 ([8528c9d](https://github.com/risen09/eng-it-lean/commit/8528c9deb30ae124f1c7ec56f5af9dd064219439))
+* footer uikit v0 ([e236666](https://github.com/risen09/eng-it-lean/commit/e236666dd09544422c401b0a18f6e2952d7b30b7))
+* header bootsrap ([06d4d9d](https://github.com/risen09/eng-it-lean/commit/06d4d9d0c61fcd1c96a1dad564ab4f8acfc767a8))
+* layout slider ui bootsrap add in homepage ([9ac2a58](https://github.com/risen09/eng-it-lean/commit/9ac2a580c5cc38858ccc58914a419ac9d233160f))
+* ui-kit v1 header ([dbbdbed](https://github.com/risen09/eng-it-lean/commit/dbbdbed8fd26ae71a2c07e4567a22f02cf242ca1))
+
 ## [0.2.0](https://github.com/risen09/eng-it-lean/compare/v0.1.3...v0.2.0) (2024-12-28)
 
 ### Features
