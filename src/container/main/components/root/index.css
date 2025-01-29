@@ -11,7 +11,7 @@ body {
   border-radius: 15px;
 }
 
-/* 
+/*
 .container {
   width: 100%;
   max-width: 1256px;
@@ -29,10 +29,11 @@ body {
 }
    */
 
-.logo {
-  float: left;
-  width: 120px;
-  height: 120px;
+.btn-nav {
+  float: right;
+  margin-right: 1%;
+  margin-top: 15px;
+  margin-bottom: auto;
 }
 
 .nav_v1 {
