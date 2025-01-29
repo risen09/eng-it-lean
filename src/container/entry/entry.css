@@ -19,6 +19,26 @@ hr {
   margin-bottom: 25px;
 }
 
+.container {
+  background: url(entry.png);
+  background-size: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 400px;
+  width: 600px;
+
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid #000;
+  padding: 10px;
+
+  color: white;
+}
+
 button {
   background-color: #4caf50;
   color: white;
@@ -41,28 +61,9 @@ button:hover {
   width: 50%;
 }
 
-.registerbtn {
+.entrybtn {
   float: left;
   width: 50%;
-}
-
-.reg-container {
-  /* background: url(registration.jpg); */
-  background-size: no-repeat;
-  background-position: center;
-  background-size: cover;
-  width: 600px;
-  height: 500px;
-
-  margin: auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border: 1px solid #000;
-  padding: 10px;
-
-  color: rgb(2, 47, 98);
 }
 
 .clearfix::after {

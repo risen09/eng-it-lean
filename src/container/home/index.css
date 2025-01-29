@@ -31,7 +31,11 @@
 
 body {
   background: #eee;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family:
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: 14px;
   color: #000;
   margin: 0;
@@ -60,14 +64,12 @@ body {
 }
 
 .main-banner .swiper-button-prev,
-.main-banner .swiper-button-next
-{
+.main-banner .swiper-button-next {
   color: #757471;
 }
 
 .block-slider {
   position: relative;
-
 }
 
 .block-slider-content {
@@ -86,33 +88,33 @@ body {
   color: white;
 }
 
-.recordButton  {
+.recordButton {
   text-align: center;
   display: inline-block;
   padding: 15px 40px;
   border: 1px solid #d1f2c7;
   cursor: pointer;
   letter-spacing: 2px;
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
   margin: 0 20px;
 }
 
 .recordButton:before {
-  content: "";
+  content: '';
   position: absolute;
   height: 150px;
   width: 50px;
-  background : #d1f2c7;
+  background: #d1f2c7;
   left: -55px;
   top: -40px;
   transform: rotate(37deg);
-  transition: all .3s;
+  transition: all 0.3s;
   opacity: 0.3;
 }
 
 .recordButton:hover:before {
-  left:95%;
+  left: 95%;
 }
 
 .block-slider-content-inner {

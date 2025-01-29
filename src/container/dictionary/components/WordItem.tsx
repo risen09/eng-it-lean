@@ -55,7 +55,9 @@ const WordItem = ({ word }: { word: Word }): React.ReactElement => {
               examples:
               <MDBModalContent>
                 {word.examples.map((example, index) => (
-                  <MDBModalContent tag="i" key={index}>{example}</MDBModalContent>
+                  <MDBModalContent tag="i" key={index}>
+                    {example}
+                  </MDBModalContent>
                 ))}
               </MDBModalContent>
             </MDBModalBody>

@@ -5,7 +5,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 const rootReducer = combineReducers({
   // Add the generated reducer as a specific top-level slice
   [api.reducerPath]: api.reducer
-})
+});
 
 export function setupStore(preloadedState?: Partial<RootState>) {
   const store = configureStore({

@@ -9,8 +9,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation} from 'swiper/modules';
 import { MDBCarousel, MDBCarouselItem, MDBCarouselCaption, MDBContainer } from 'mdb-react-ui-kit';
 
-
-
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';

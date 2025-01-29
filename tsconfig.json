@@ -3,7 +3,7 @@
     "lib": ["dom", "es2017"],
     "outDir": "./dist/",
     "sourceMap": true,
-	"skipLibCheck": true, 
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
     "module": "esnext",
@@ -14,10 +14,7 @@
     "types": ["webpack-env", "node"],
     "resolveJsonModule": true
   },
-  "include": [
-	"src",
-	"@types/**/*"
-  ],
+  "include": ["src", "@types/**/*"],
   "exclude": [
     "node_modules",
     // "**/*.test.ts",
