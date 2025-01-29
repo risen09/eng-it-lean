@@ -4,8 +4,11 @@ const qs = require('querystring');
 const uuid = require('uuid');
 
 const router = require('express').Router();
+
+// vercel/ai package
+const ai = require('./ai')
+// gigachat provider for vercel/ai
 const gigachatProvider = require('./gigachat')
-const ai = require('ai')
 
 module.exports = router;
 
