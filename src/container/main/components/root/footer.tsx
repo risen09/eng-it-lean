@@ -12,24 +12,30 @@ import {
   MDBIcon
 } from 'mdb-react-ui-kit';
 
-const contacts = [
-  { id: 1, title: "VK", description: "ВКонтакте", link: "https://vk.com" },
-  {
-    id: 2,
-    title: "VK",
-    description: "Группа ВКонтакте",
-    link: "https://vk.com",
-  },
-];
+// const contacts = [
+//   { id: 1, title: "VK", description: "ВКонтакте", link: "https://vk.com" },
+//   {
+//     id: 2,
+//     title: "VK",
+//     description: "Группа ВКонтакте",
+//     link: "https://vk.com",
+//   },
+// ];
 
 export function Footer() {
+  const pagesV1 = [
+    { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
+    { id: 2, title: 'Практика', navigation: 'eng-it-lean.unit' },
+    { id: 3, title: 'Материалы', navigation: 'eng-it-lean.main' },
+    { id: 4, title: 'Прогресс', navigation: 'eng-it-lean.main' },
+    { id: 5, title: 'Ссылки', navigation: 'eng-it-lean.main' }
+  ];
   return (
     <footer>
       <MDBFooter bgColor="white" className="text-center text-lg-start text-muted">
-        <section className="d-flex justify-content-center justify-content-lg-between border-bottom">
-        </section>
+        <section className="d-flex justify-content-center justify-content-lg-between border-bottom"></section>
         <section className="">
-          <MDBContainer className="text-center text-md-start mt-5" fluid={true} >
+          <MDBContainer className="text-center text-md-start mt-5" fluid={true}>
             <MDBRow className="mt-3">
               <MDBCol md="3" lg="2" xl="1" className="mx-0 mb-4 text-end">
                 <div className="d-inline-flex position-relative">
@@ -44,42 +50,42 @@ export function Footer() {
               <MDBCol md="3" lg="4" xl="3" className="mx-0 mb-4">
                 <MDBListGroup style={{ minWidth: 'auto' }} light>
                   <MDBListGroupItem noBorders>
-                    <h6 className="text-uppercase fw-bold">
-                      Eng-it-learn
-                    </h6>
+                    <h6 className="text-uppercase fw-bold">Eng-it-learn</h6>
                   </MDBListGroupItem>
                   <MDBListGroupItem noBorders>
                     <p>
-                      Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet,
-                      consectetur adipisicing elit.
+                      Наш сайт предлагает уникальные курсы и ресурсы, разработанные специально для тех, кто работает в сфере информационных технологий
                     </p>
                   </MDBListGroupItem>
                 </MDBListGroup>
               </MDBCol>
-              <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
+              <MDBCol md="3" lg="4" xl="2" className="mx-auto mb-4">
                 <MDBListGroup style={{ minWidth: '15rem' }} light>
                   <MDBListGroupItem noBorders className="px-3">
                     <h6 className="text-uppercase fw-bold">Навигация</h6>
                   </MDBListGroupItem>
-                  <MDBListGroupItem tag="a" href="#" action noBorders className='px-3 rounded-3 mb-2'>
-                    Dapibus ac facilisis in
-                  </MDBListGroupItem>
-                  <MDBListGroupItem tag="a" href="#" action noBorders className="px-3 rounded-3 mb-2">
-                    Morbi leo risus
-                  </MDBListGroupItem>
-                  <MDBListGroupItem tag="a" href="#" action noBorders className="px-3 rounded-3 mb-2">
-                    Porta ac consectetur ac
-                  </MDBListGroupItem>
+                  {pagesV1.map((page) => (
+                    <MDBListGroupItem
+                      tag={Link}
+                      key={page.id}
+                      to={getNavigationsValue(page.navigation)}
+                      action
+                      noBorders
+                      className="px-3"
+                    >
+                      {page.title}
+                    </MDBListGroupItem>
+                  ))}
                 </MDBListGroup>
               </MDBCol>
 
               <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                 <MDBListGroup style={{ minWidth: 'auto' }} light>
                   <MDBListGroupItem noBorders>
-                    <h6 className="text-uppercase fw-bold" >Контакты</h6>
+                    <h6 className="text-uppercase fw-bold">Контакты</h6>
                   </MDBListGroupItem>
                   <MDBListGroupItem noBorders>
-                    <MDBIcon color="secondary" icon="home" className="me-2" />
+                    <MDBIcon color="secondary" icon="home" className="me-3" />
                     Казань, It-park
                   </MDBListGroupItem>
                   <MDBListGroupItem noBorders>
@@ -89,6 +95,18 @@ export function Footer() {
                   <MDBListGroupItem noBorders>
                     <MDBIcon color="secondary" icon="phone" className="me-3" />+ 8 800 355 35 35
                   </MDBListGroupItem>
+                  <MDBListGroupItem noBorders>
+                    <MDBIcon fab color="secondary" icon="vk" className="me-3" />
+                    <Link to={'https://vk.com'} style={{ color: '#4f4f4f', textDecoration: 'none' }}>
+                      Мы в Вконтакте
+                    </Link>
+                  </MDBListGroupItem>
+                  <MDBListGroupItem noBorders>
+                    <MDBIcon fab color="secondary" icon="telegram-plane" className="me-3" />
+                    <Link to={'https://web.telegram.org/a/'} style={{ color: '#4f4f4f', textDecoration: 'none' }}>
+                      Наш Телеграм
+                    </Link>
+                  </MDBListGroupItem>
                 </MDBListGroup>
               </MDBCol>
             </MDBRow>
@@ -96,10 +114,10 @@ export function Footer() {
         </section>
 
         <div className="text-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-          © 2021 Copyright:
-          <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
-            MDBootstrap.com
-          </a>
+          © 2025:
+          <Link to={'#'} className="text-reset fw-bold">
+            Int.tern.dev
+          </Link>
         </div>
       </MDBFooter>
       <MDBRow className="bg-body-tertiary mb-3">
@@ -108,47 +126,47 @@ export function Footer() {
     </footer>
   );
 }
-
-const Footerd = (): React.ReactElement => {
-  const contactLinks = contacts.map((contact) => (
-    <li>
-      <a href={contact.link}>
-        <p>
-          <strong>{contact.title}: </strong>
-          {contact.description}
-        </p>
-      </a>
-    </li>
-  ));
-
-  return (
-    <footer>
-      <div className="container">
-        <div className="left-footer-z">
-          <div className="left-footer">
-            <ul>
-              <li>
-                <p>Возникли проблемы с сайтом?</p>
-              </li>
-              <li>
-                <Link to={getNavigationsValue("sandbox.main")}>
-                  Написать в поддержку
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="right-footer">
-            <ul>
-              <li>
-                <p>Контакты</p>
-              </li>
-              {contactLinks}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
+//
+// const Footerd = (): React.ReactElement => {
+//   const contactLinks = contacts.map((contact) => (
+//     <li>
+//       <a href={contact.link}>
+//         <p>
+//           <strong>{contact.title}: </strong>
+//           {contact.description}
+//         </p>
+//       </a>
+//     </li>
+//   ));
+//
+//   return (
+//     <footer>
+//       <div className="container">
+//         <div className="left-footer-z">
+//           <div className="left-footer">
+//             <ul>
+//               <li>
+//                 <p>Возникли проблемы с сайтом?</p>
+//               </li>
+//               <li>
+//                 <Link to={getNavigationsValue("sandbox.main")}>
+//                   Написать в поддержку
+//                 </Link>
+//               </li>
+//             </ul>
+//           </div>
+//           <div className="right-footer">
+//             <ul>
+//               <li>
+//                 <p>Контакты</p>
+//               </li>
+//               {contactLinks}
+//             </ul>
+//           </div>
+//         </div>
+//       </div>
+//     </footer>
+//   );
+// };
 
 export default Footer;
