@@ -1,47 +1,37 @@
 'use client';
 
 import React from 'react';
-import { useChat } from 'ai/react';
+import { useChat, useCompletion } from 'ai/react';
 import { getConfigValue } from '@brojs/cli';
+import { MDBBtn, MDBCol, MDBInput, MDBRow } from 'mdb-react-ui-kit';
+import MarkdownStyled from '../../components/markdown';
 
 export default function Page() {
-  const { messages, input, handleInputChange, handleSubmit, error, reload } = useChat({
-    api: `${getConfigValue("eng-it-lean.api")}/gigachat/chat`,
-    onFinish(message, { usage, finishReason }) {
-      console.log('Finished streaming message:', message);
-      console.log('Token usage:', usage);
-      console.log('Finish reason:', finishReason);
-    },
-    onError: error => {
+  const { completion, input, handleInputChange, handleSubmit } = useCompletion({
+    api: `${getConfigValue('eng-it-lean.api')}/gigachat/completion`,
+    onError: (error) => {
       console.error('An error occurred:', error);
     },
-    onResponse: response => {
+    onResponse: (response) => {
       console.log('Received HTTP response from server:', response);
-    },
+    }
   });
 
   return (
     <>
-      {messages.map(message => (
-        <div key={message.id}>
-          {message.role === 'user' ? 'User: ' : 'GigaChat: '}
-          {message.content}
-        </div>
-      ))}
-
-      {error && (
-        <>
-          <div>{error.message}</div>
-          <button type='button' onClick={() => reload()}>
-            Reload
-          </button>
-        </>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <input name="prompt" value={input} onChange={handleInputChange} />
-        <button type="submit">Submit</button>
-      </form>
+      <MDBRow tag="form" className="g-3 align-items-center">
+        <MDBCol size={2} />
+        <MDBCol size={6}>
+          <MDBInput label="Введите тему урока" />
+        </MDBCol>
+        <MDBCol size={2}>
+          <MDBBtn disabled onClick={handleSubmit}>
+            Отправить
+          </MDBBtn>
+        </MDBCol>
+        <MDBCol size={2} />
+      </MDBRow>
+      <MarkdownStyled>{completion}</MarkdownStyled>
     </>
   );
 }

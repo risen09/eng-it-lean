@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 const MarkdownStyled = ({ children }: { children: string }): React.ReactElement => {
   return (
     <Markdown
+      className='mb-3'
       remarkPlugins={[remarkGfm]}
       components={{
         h1(props) {
