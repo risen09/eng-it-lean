@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
 router.put('/', (req, res) => {
   const newUnit = req.body;
 
+  console.log(newUnit);
   if (!newUnit) {
     return res.status(400).send('No new unit to be added');
   }
@@ -20,7 +21,11 @@ router.put('/', (req, res) => {
     return res.status(500).send('No data to be updated');
   }
 
-  data.push({ id: data.length, ...newUnit });
+  const newId = data.length + 1;
+  const fileName = newUnit.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  fs.writeFileSync(path.join(__dirname, 'data', `${fileName}.md`), newUnit.content);
+
+  data.push({ id: newId, fileName: fileName, name: newUnit.name });
 
   fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
   res.status(200).send(data);

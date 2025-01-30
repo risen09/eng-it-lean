@@ -7,3 +7,8 @@ export interface Unit {
 
 export type GetUnitListResponse = Array<Unit>;
 export type GetUnitResponse = Unit;
+export type PutUnitRequest = {
+  id?: number;
+  name: string;
+  content: string;
+}

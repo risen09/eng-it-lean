@@ -13,7 +13,7 @@ const gigachatProvider = require('./gigachat')
 module.exports = router;
 
 const path = require('path')
-process.env.NODE_EXTRA_CA_CERTS= path.resolve(__dirname, 'certs')
+//process.env.NODE_EXTRA_CA_CERTS= path.resolve(__dirname, 'certs')
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 process.env.GIGACHAT_AUTH = 'NWVjYTczYjctNWRkYi00NzExLTg0YTEtMjhlOWVmODM2MjI4OjlmMTBkMGVkLWZjZjktNGZhOS1hNDZjLTc5ZWU1YzExOGExMw=='
