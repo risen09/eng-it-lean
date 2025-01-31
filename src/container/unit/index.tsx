@@ -9,11 +9,9 @@ const UnitPage = (): React.ReactElement => {
 
   return (
     <Main>
-			{ isLoading && <div>Loading...</div> }
-			{ error && <div>Error</div> }
-			<MarkdownStyled>
-				{unit?.content}
-			</MarkdownStyled>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>Error</div>}
+      <MarkdownStyled>{unit?.content}</MarkdownStyled>
     </Main>
   );
 };

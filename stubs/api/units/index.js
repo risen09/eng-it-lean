@@ -10,33 +10,33 @@ router.get('/', (req, res) => {
 });
 
 router.put('/', (req, res) => {
-	const newUnit = req.body
+  const newUnit = req.body;
 
-	if (!newUnit) {
-		return res.status(400).send('No new unit to be added')
-	}
+  if (!newUnit) {
+    return res.status(400).send('No new unit to be added');
+  }
 
-	if (!data) {
-		return res.status(500).send('No data to be updated')
-	}
+  if (!data) {
+    return res.status(500).send('No data to be updated');
+  }
 
-	data.push({ "id": data.length, ...newUnit })
+  data.push({ id: data.length, ...newUnit });
 
-	fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
-	res.status(200).send(data);
+  fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
+  res.status(200).send(data);
 });
 
 router.delete('/:id', (req, res) => {
-	const id = parseInt(req.params.id);
-	const index = data.findIndex((unit) => unit.id === id);
+  const id = parseInt(req.params.id);
+  const index = data.findIndex((unit) => unit.id === id);
 
-	if (index < 0) {
-		return res.status(404).send('Not found');
-	}
+  if (index < 0) {
+    return res.status(404).send('Not found');
+  }
 
-	data.splice(index, 1);
-	fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
-	res.send({ message: `Unit with ID ${id} deleted` });
+  data.splice(index, 1);
+  fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
+  res.send({ message: `Unit with ID ${id} deleted` });
 });
 
 router.get('/:id', (req, res) => {

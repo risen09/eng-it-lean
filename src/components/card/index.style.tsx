@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { Link as LinkBase } from "react-router-dom";
+import styled from '@emotion/styled';
+import { Link as LinkBase } from 'react-router-dom';
 
 export const CardStyled = styled.div`
   display: inline-block;
@@ -13,9 +13,9 @@ export const CardStyled = styled.div`
   border-radius: 15px;
   filter: drop-shadow(5px 5px 5px rgba(180, 180, 180, 0.4));
 
-	&:hover {
-		background-color: rgba(255, 255, 255, 0.6);
-	};
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 export const Link = styled(LinkBase)`

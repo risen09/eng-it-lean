@@ -14,7 +14,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { getNavigationValue } from '@brojs/cli';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Word } from '../types';
+import { Word } from '../../../service/words/types';
 
 const WordItem = ({ word }: { word: Word }): React.ReactElement => {
   const [centredModal, setCentredModal] = useState(false);
@@ -45,17 +45,15 @@ const WordItem = ({ word }: { word: Word }): React.ReactElement => {
               synonyms:
               <br />
               {word.synonyms.map((synonym, index) => (
-                <LinkContainer to={`${getNavigationValue('eng-it-lean.dictionary')}`} key={index}>
-                  <MDBBtn color="link" rippleColor="dark">
-                    {synonym}
-                  </MDBBtn>
-                </LinkContainer>
+                <div key={index}>
+                  {synonym}
+                </div>
               ))}
               <br />
               examples:
               <MDBModalContent>
                 {word.examples.map((example, index) => (
-                  <MDBModalContent tag="i" key={index}>{example}</MDBModalContent>
+                  <i key={index}>{example}</i>
                 ))}
               </MDBModalContent>
             </MDBModalBody>
