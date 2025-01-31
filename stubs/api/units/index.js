@@ -22,10 +22,10 @@ router.put('/', (req, res) => {
   }
 
   const newId = data.length + 1;
-  const fileName = newUnit.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-  fs.writeFileSync(path.join(__dirname, 'data', `${fileName}.md`), newUnit.content);
+  const filename = newUnit.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  fs.writeFileSync(path.join(__dirname, 'data', `${filename}.md`), newUnit.content);
 
-  data.push({ id: newId, fileName: fileName, name: newUnit.name });
+  data.push({ id: newId, filename: filename, name: newUnit.name });
 
   fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
   res.status(200).send(data);

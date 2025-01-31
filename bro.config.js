@@ -17,6 +17,7 @@ module.exports = {
     'eng-it-lean.registration': '/eng-it-lean/registration',
     'eng-it-lean.account': '/eng-it-lean/account',
     'eng-it-lean.generate-unit': '/eng-it-lean/generate-unit',
+    'eng-it-lean.units': '/eng-it-lean/units',
   },
   features: {
     sandbox: {
