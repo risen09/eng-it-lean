@@ -5,7 +5,7 @@ import { wordsService } from '../service/words';
 import { GetWordResponse, GetWordsResponse, Word } from '../service/words/types';
 
 import { unitService } from '../service/unit';
-import { GetUnitResponse } from '../service/unit/types';
+import { GetUnitListResponse, GetUnitResponse, PutUnitRequest, Unit } from '../service/unit/types';
 
 const createQueryFromPromise =
   <ARGS, RES>(fn: (...args: Array<ARGS>) => Promise<RES>) =>
@@ -48,9 +48,18 @@ export const api = createApi({
       queryFn: createQueryFromPromise((id: number) => wordsService.deleteWord(id))
     }),
 
+    getUnits: builder.query<GetUnitListResponse, undefined>({
+      queryFn: createQueryFromPromise(() => unitService.getUnitList())
+    }),
     getUnit: builder.query<GetUnitResponse, number>({
       queryFn: createQueryFromPromise((id: number) => unitService.getUnit(id))
-    })
+    }),
+    putUnit: builder.mutation<GetUnitResponse, PutUnitRequest>({
+      queryFn: createQueryFromPromise((unit: PutUnitRequest) => unitService.putUnit(unit))
+    }),
+    deleteUnit: builder.mutation<any, number>({
+      queryFn: createQueryFromPromise((id: number) => unitService.deleteUnit(id))
+    }),
   })
 });
 
@@ -62,5 +71,7 @@ export const {
   useGetWordQuery,
   usePutWordMutation,
   useDeleteWordMutation,
-  useGetUnitQuery
+  useGetUnitsQuery,
+  useGetUnitQuery,
+  usePutUnitMutation
 } = api;

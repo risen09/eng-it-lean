@@ -3,16 +3,23 @@ import { useGetUnitQuery } from '../../store/api';
 import remarkGfm from 'remark-gfm';
 import { Main } from './index.style';
 import MarkdownStyled from '../../components/markdown';
+import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import { useParams } from 'react-router-dom';
 
 const UnitPage = (): React.ReactElement => {
-  const { data: unit, isLoading, error } = useGetUnitQuery(0);
+  const { id } = useParams();
+  const { data: unit, isLoading, error } = useGetUnitQuery(parseInt(id));
 
   return (
-    <Main>
+    <>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error</div>}
-      <MarkdownStyled>{unit?.content}</MarkdownStyled>
-    </Main>
+      <MDBRow>
+        <MDBCol>
+          <MarkdownStyled>{unit?.content}</MarkdownStyled>
+        </MDBCol>
+      </MDBRow>
+    </>
   );
 };
 

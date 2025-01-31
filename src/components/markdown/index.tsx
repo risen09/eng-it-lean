@@ -2,10 +2,12 @@ import { MDBTable, MDBTableBody, MDBTableHead, MDBTypography } from 'mdb-react-u
 import React from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 const MarkdownStyled = ({ children }: { children: string }): React.ReactElement => {
   return (
     <Markdown
+      className="mb-3"
       remarkPlugins={[remarkGfm]}
       components={{
         h1(props) {
@@ -50,6 +52,22 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
         },
         tbody(props) {
           return <MDBTableBody {...props} />;
+        },
+        code(props) {
+          const { children, className, node, ...rest } = props;
+          const match = /language-(\w+)/.exec(className || '');
+          return match ? (
+            <SyntaxHighlighter
+              {...rest}
+              PreTag="div"
+              children={String(children).replace(/\n$/, '')}
+              language={match[1]}
+            />
+          ) : (
+            <code {...rest} className={className}>
+              {children}
+            </code>
+          );
         }
       }}
     >

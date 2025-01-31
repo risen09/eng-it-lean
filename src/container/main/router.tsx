@@ -8,6 +8,8 @@ import DictionaryPage from '../dictionary';
 import LoginPage from '../entry';
 import RegistrationPage from '../registration';
 import UnitPage from '../unit';
+import GenerateUnitPage from '../generate-unit';
+import UnitsPage from '../units-list';
 
 export const router = createBrowserRouter([
   {
@@ -31,8 +33,16 @@ export const router = createBrowserRouter([
         element: <UnitPage />
       },
       {
+        path: getNavigationsValue('eng-it-lean.generate-unit'),
+        element: <GenerateUnitPage />
+      },
+      {
         path: getNavigationsValue('eng-it-lean.registration'),
         element: <RegistrationPage />
+      },
+      {
+        path: getNavigationsValue('eng-it-lean.units'),
+        element: <UnitsPage />
       }
     ]
   }

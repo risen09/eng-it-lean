@@ -19,8 +19,8 @@ import {
 export const App = () => {
   const pagesV1 = [
     { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
-    { id: 2, title: 'Практика', navigation: 'eng-it-lean.unit' },
-    { id: 3, title: 'Материалы', navigation: 'eng-it-lean.main' },
+    { id: 2, title: 'Практика', navigation: 'eng-it-lean.main' },
+    { id: 3, title: 'Материалы', navigation: 'eng-it-lean.units' },
     { id: 4, title: 'Прогресс', navigation: 'eng-it-lean.main' },
     { id: 5, title: 'Ссылки', navigation: 'eng-it-lean.main' }
   ];
@@ -79,8 +79,8 @@ const pagesV1_1 = [{ id: 1, title: 'Войти', navigation: 'eng-it-lean.regist
 
 const pagesV1 = [
   { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
-  { id: 2, title: 'Практика', navigation: 'eng-it-lean.unit' },
-  { id: 3, title: 'Материалы', navigation: 'eng-it-lean.main' },
+  { id: 2, title: 'Практика', navigation: 'eng-it-lean.main' },
+  { id: 3, title: 'Материалы', navigation: 'eng-it-lean.units' },
   { id: 4, title: 'Прогресс', navigation: 'eng-it-lean.main' },
   { id: 5, title: 'Ссылки', navigation: 'eng-it-lean.main' }
 ];
