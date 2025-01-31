@@ -1,4 +1,5 @@
-const https = require('follow-redirects').https;
+const axios = require('axios');
+const https = require('https');
 const fs = require('fs');
 const qs = require('querystring');
 const uuid = require('uuid');
@@ -6,74 +7,88 @@ const uuid = require('uuid');
 const router = require('express').Router();
 
 // vercel/ai package
-const ai = require('./ai')
+const ai = require('./ai');
 // gigachat provider for vercel/ai
-const gigachatProvider = require('./gigachat')
+const gigachatProvider = require('./gigachat');
 
 module.exports = router;
 
-const path = require('path')
+const path = require('path');
 //process.env.NODE_EXTRA_CA_CERTS= path.resolve(__dirname, 'certs')
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-process.env.GIGACHAT_AUTH = 'NWVjYTczYjctNWRkYi00NzExLTg0YTEtMjhlOWVmODM2MjI4OjlmMTBkMGVkLWZjZjktNGZhOS1hNDZjLTc5ZWU1YzExOGExMw=='
+process.env.GIGACHAT_AUTH =
+  'NWVjYTczYjctNWRkYi00NzExLTg0YTEtMjhlOWVmODM2MjI4OjlmMTBkMGVkLWZjZjktNGZhOS1hNDZjLTc5ZWU1YzExOGExMw==';
 
-const gigachat = gigachatProvider.createGigachat( { 
+const agent = new https.Agent({
+  rejectUnauthorized: false
+});
+
+const gigachat = gigachatProvider.createGigachat({
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    Accept: 'text/event-stream'
+  },
+  fetch: (url, options) => {
+    return axios({
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: url,
+      headers: options.headers,
+      httpsAgent: agent,
+      data: options.body
+    }).then((response) => {
+      return new Response(response.data, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+        body: response.data
+      });
+    }).catch((error) => {
+      return new Response(error.message, {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        headers: error.response.headers,
+        body: error.response.data
+      });
+    });
   }
-})
+});
 
-router.use((req, res, next) => {
+router.use(async (req, res, next) => {
   const hasToken = process.env.GIGACHAT_ACCESS_TOKEN && process.env.GIGACHAT_EXPIRES_AT != null;
   const hasExpired = new Date(process.env.GIGACHAT_EXPIRES_AT) <= new Date();
   if (!hasToken || hasExpired) {
     let auth = process.env.GIGACHAT_AUTH;
     let rquid = uuid.v4();
-    let options = {
-      'method': 'POST',
-      'hostname': 'ngw.devices.sberbank.ru',
-      'port': 9443,
-      'path': '/api/v2/oauth',
-      'headers': {
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth',
+      headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-        'RqUID': rquid,
-        'Authorization': 'Basic ' + auth
+        Accept: 'application/json',
+        RqUID: rquid,
+        Authorization: 'Basic ' + auth
       },
-      'maxRedirects': 20
+      httpsAgent: agent,
+      data: qs.stringify({
+        scope: 'GIGACHAT_API_PERS'
+      })
     };
-    
-    const req = https.request(options, (response) => {
-      let chunks = [];
-    
-      response.on("data", (chunk) => {
-        chunks.push(chunk);
-      });
-    
-      response.on("end", (chunk) => {
-        let body = Buffer.concat(chunks);
-        console.log(body.toString());
-        let json = JSON.parse(body.toString());
-        process.env.GIGACHAT_ACCESS_TOKEN = json.access_token;
-        process.env.GIGACHAT_EXPIRES_AT = json.expires_at;
-      });
-    
-      response.on("error", (error) => {
-        console.error(error);
-        res.status(500).send(error);
-      });
-    });
-    
-    let postData = qs.stringify({
-      'scope': 'GIGACHAT_API_PERS'
-    });
-    
-    req.write(postData);
-    req.end();
+
+    try {
+      const response = await axios(config);
+      const json = response.data;
+      process.env.GIGACHAT_ACCESS_TOKEN = json.access_token;
+      process.env.GIGACHAT_EXPIRES_AT = json.expires_at;
+      console.log(JSON.stringify(response.data));
+    } catch {
+      console.log(error);
+    }
   }
-  next()
+  next();
 });
 
 router.post('/chat', async (req, res) => {
@@ -84,18 +99,16 @@ router.post('/chat', async (req, res) => {
     system: 'You are a helpful assistant.',
     messages,
     stream: true,
-    update_interval: 0.2,
+    update_interval: 0.2
   });
 
   result.pipeDataStreamToResponse(res);
-})
+});
 
 router.post('/new-unit', async (req, res) => {
   const { prompt } = req.body;
 
-  const result =  ai.streamText({
-    model: gigachat('GigaChat'),
-    system:`
+  const systemMessage = `
     Я хочу, чтобы вы выступали в роли помощника для создания продвинутых текстовых уроков английского языка. Я буду указывать тему и уровень сложности (начинающий, средний, продвинутый), а вы будете предоставлять структурированный план урока в формате Markdown. Урок должен включать только текстовые элементы (без видео, картинок, аудио) и содержать следующие разделы:
     -Цель урока — конкретный навык или знание, которое освоят студенты.
     -Лексика
@@ -113,11 +126,19 @@ router.post('/new-unit', async (req, res) => {
     -Домашнее задание
       Текстовые задачи: написание текста, грамматические тесты, поиск синонимов/антонимов.
     Ответ должен быть оформлен в Markdown, лаконичным, без лишних комментариев, если пишешь блок кода, начинай его с новой строки.
-    `,
-    prompt,
-    stream: true,
-    update_interval: 0.3,
-  });
+    `;
 
-  result.pipeDataStreamToResponse(res);
+  try {
+    const result = ai.streamText({
+      model: gigachat('GigaChat'),
+      system: systemMessage,
+      prompt,
+      stream: true,
+      update_interval: 0.3
+    });
+
+    result.pipeTextStreamToResponse(res);
+  } catch (e) {
+    console.log(e);
+  }
 });

@@ -3,36 +3,57 @@
 import React from 'react';
 import { useCompletion } from 'ai/react';
 import { getConfigValue } from '@brojs/cli';
-import { MDBBtn, MDBCol, MDBInput, MDBModal, MDBModalBody, MDBModalContent, MDBModalDialog, MDBModalFooter, MDBModalHeader, MDBModalTitle, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
+import {
+  MDBBtn,
+  MDBCol,
+  MDBInput,
+  MDBModal,
+  MDBModalBody,
+  MDBModalContent,
+  MDBModalDialog,
+  MDBModalFooter,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBRow,
+  MDBSpinner,
+  MDBTypography
+} from 'mdb-react-ui-kit';
 import MarkdownStyled from '../../components/markdown';
 import { usePutUnitMutation } from '../../store/api';
 import { isPlainObject } from '@reduxjs/toolkit';
 
-export default function Page() {
-  const { completion, input, handleInputChange, handleSubmit } = useCompletion({
+export default function GenerateUnitPage() {
+  const {
+    completion,
+    isLoading: isGenerating,
+    input,
+    handleInputChange,
+    handleSubmit
+  } = useCompletion({
     api: `${getConfigValue('eng-it-lean.api')}/gigachat/new-unit`,
     onError: (error) => {
       console.error('An error occurred:', error);
     },
     onResponse: (response) => {
       console.log('Received HTTP response from server:', response);
-    }
+    },
+    streamProtocol: 'text'
   });
 
   const inputIsEmpty = input === '';
   const completionIsEmpty = completion === '';
-  const [ isModalOpen, setIsModalOpen ] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const toggleOpen = () => setIsModalOpen(!isModalOpen);
-  
-  const [ putUnit, { isLoading }] = usePutUnitMutation();
+
+  const [putUnit, { isLoading }] = usePutUnitMutation();
   const handleCreate = () => {
     putUnit({
       name: input,
-      content: completion 
+      content: completion
     }).then(() => {
       setIsModalOpen(false);
     });
-  }
+  };
 
   return (
     <>
@@ -45,10 +66,17 @@ export default function Page() {
           <MDBInput value={input} name="prompt" onChange={handleInputChange} id="input" label="Введите тему урока" />
         </MDBCol>
         <MDBCol size={2}>
-          <MDBBtn type="submit" disabled={inputIsEmpty} color='success'>Сгенерировать</MDBBtn>
+          <MDBBtn type="submit" disabled={inputIsEmpty} color="success">
+            Сгенерировать
+          </MDBBtn>
         </MDBCol>
         <MDBCol size={2} />
       </MDBRow>
+      {isGenerating ? (
+        <MDBSpinner role="status">
+          <span className="visually-hidden">Loading...</span>
+        </MDBSpinner>
+      ) : null}
       <MDBRow>
         <MDBCol>
           <MarkdownStyled>{completion}</MarkdownStyled>
@@ -56,31 +84,31 @@ export default function Page() {
       </MDBRow>
       <MDBRow>
         <MDBCol size={2} />
-        <MDBCol size={8} className='text-center'>
-          <MDBBtn type="button" disabled={completionIsEmpty} color='success' onClick={toggleOpen}>
+        <MDBCol size={8} className="text-center">
+          <MDBBtn type="button" disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
             Добавить
           </MDBBtn>
         </MDBCol>
         <MDBCol size={2} />
       </MDBRow>
 
-      <MDBModal open={isModalOpen} onClose={() => setIsModalOpen(false)} >
+      <MDBModal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <MDBModalDialog>
           <MDBModalContent>
             <MDBModalHeader>
               <MDBModalTitle>Вы уверены?</MDBModalTitle>
-              <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+              <MDBBtn className="btn-close" color="none" onClick={toggleOpen}></MDBBtn>
             </MDBModalHeader>
 
-            <MDBModalBody>
-              Добавить новый урок: {input}?
-            </MDBModalBody>
+            <MDBModalBody>Добавить новый урок: {input}?</MDBModalBody>
 
             <MDBModalFooter>
-              <MDBBtn color='secondary' onClick={toggleOpen}>
+              <MDBBtn color="secondary" onClick={toggleOpen}>
                 Закрыть
               </MDBBtn>
-              <MDBBtn color='success' disabled={isLoading} onClick={handleCreate}>Подтвердить</MDBBtn>
+              <MDBBtn color="success" disabled={isLoading} onClick={handleCreate}>
+                Подтвердить
+              </MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
