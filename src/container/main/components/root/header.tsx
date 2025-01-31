@@ -75,7 +75,7 @@ export const App = () => {
   );
 };
 
-const pagesV1_1 = [{ id: 1, title: 'Войти', navigation: 'eng-it-lean.registration' }];
+const pagesV1_1 = [{ id: 1, title: 'Войти', navigation: 'eng-it-lean.entry' }];
 
 const pagesV1 = [
   { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
