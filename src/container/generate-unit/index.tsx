@@ -20,11 +20,33 @@ import {
 } from 'mdb-react-ui-kit';
 import MarkdownStyled from '../../components/markdown';
 import { usePutUnitMutation } from '../../store/api';
-import { isPlainObject } from '@reduxjs/toolkit';
+import {
+  BlockTypeSelect,
+  BoldItalicUnderlineToggles,
+  ChangeCodeMirrorLanguage,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  CodeToggle,
+  headingsPlugin,
+  InsertCodeBlock,
+  InsertTable,
+  listsPlugin,
+  ListsToggle,
+  markdownShortcutPlugin,
+  MDXEditor,
+  MDXEditorMethods,
+  quotePlugin,
+  tablePlugin,
+  thematicBreakPlugin,
+  toolbarPlugin,
+  UndoRedo
+} from '@mdxeditor/editor';
+import '@mdxeditor/editor/style.css';
 
 export default function GenerateUnitPage() {
   const {
     completion,
+    setCompletion,
     isLoading: isGenerating,
     input,
     handleInputChange,
@@ -37,7 +59,7 @@ export default function GenerateUnitPage() {
     onResponse: (response) => {
       console.log('Received HTTP response from server:', response);
     },
-    streamProtocol: 'text'
+    streamProtocol: 'text',
   });
 
   const inputIsEmpty = input === '';
@@ -54,6 +76,10 @@ export default function GenerateUnitPage() {
       setIsModalOpen(false);
     });
   };
+
+  const [isEditorOpen, setIsEditorOpen] = React.useState(false);
+  const toggleEditor = () => setIsEditorOpen(!isEditorOpen);
+  const ref = React.useRef<MDXEditorMethods>(null);
 
   return (
     <>
@@ -79,15 +105,75 @@ export default function GenerateUnitPage() {
           </MDBSpinner>
         ) : null}
         <MDBRow>
-          <MDBCol>
+          {isEditorOpen && (
+          <MDBCol md={6}>
+            <MDXEditor
+              ref={ref}
+              markdown={completion}
+              onChange={(value) => {
+                setCompletion(value);
+              }}
+              plugins={[
+                headingsPlugin(),
+                listsPlugin(),
+                quotePlugin(),
+                thematicBreakPlugin(),
+                tablePlugin(),
+                markdownShortcutPlugin(),
+                codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
+                codeMirrorPlugin({
+                  codeBlockLanguages: {
+                    js: 'JavaScript',
+                    css: 'CSS',
+                    jsx: 'JavaScript (React)',
+                    ts: 'TypeScript',
+                    tsx: 'TypeScript (React)'
+                  }
+                }),
+                toolbarPlugin({
+                  toolbarClassName: 'my-classname',
+                  toolbarContents: () => (
+                    <>
+                      {' '}
+                      <UndoRedo />
+                      <BlockTypeSelect />
+                      <BoldItalicUnderlineToggles />
+                      <CodeToggle />
+                      <InsertCodeBlock />
+                      <InsertTable />
+                      <ListsToggle />
+                    </>
+                  )
+                })
+              ]}
+            />
+          </MDBCol>
+        )}
+        <MDBCol md={isEditorOpen ? 6 : 12}>
             <MarkdownStyled>{completion}</MarkdownStyled>
           </MDBCol>
         </MDBRow>
         <MDBRow>
           <MDBCol size={2} />
-          <MDBCol size={8} className="text-center">
+          <MDBCol size={4} className="text-center">
+          <MDBBtn
+            type="button"
+            disabled={completionIsEmpty}
+            color="secondary"
+            onClick={() => {
+              toggleEditor();
+              if (isEditorOpen) {
+                ref.current?.focus();
+                ref.current?.setMarkdown(completion);
+              }
+            }}
+          >
+            Редактировать
+          </MDBBtn>
+        </MDBCol>
+        <MDBCol size={4} className="text-center">
             <MDBBtn type="button" disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
-              Добавить
+              Сохранить
             </MDBBtn>
           </MDBCol>
           <MDBCol size={2} />

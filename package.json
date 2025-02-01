@@ -21,6 +21,7 @@
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@mdxeditor/editor": "^3.21.2",
     "@reduxjs/toolkit": "^2.5.0",
     "ai": "^4.0.39",
     "axios": "^1.7.9",
