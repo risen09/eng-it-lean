@@ -42,6 +42,7 @@ import {
   UndoRedo
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
+import Editor from '../../components/editor';
 
 export default function GenerateUnitPage() {
   const {
@@ -74,6 +75,8 @@ export default function GenerateUnitPage() {
       content: completion
     }).then(() => {
       setIsModalOpen(false);
+      setIsEditorOpen(false);
+      setCompletion('');
     });
   };
 
@@ -104,74 +107,41 @@ export default function GenerateUnitPage() {
             <span className="visually-hidden">Loading...</span>
           </MDBSpinner>
         ) : null}
-        <MDBRow>
+        <MDBRow className='my-4'>
           {isEditorOpen && (
-          <MDBCol md={6}>
-            <MDXEditor
-              ref={ref}
-              markdown={completion}
-              onChange={(value) => {
-                setCompletion(value);
-              }}
-              plugins={[
-                headingsPlugin(),
-                listsPlugin(),
-                quotePlugin(),
-                thematicBreakPlugin(),
-                tablePlugin(),
-                markdownShortcutPlugin(),
-                codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
-                codeMirrorPlugin({
-                  codeBlockLanguages: {
-                    js: 'JavaScript',
-                    css: 'CSS',
-                    jsx: 'JavaScript (React)',
-                    ts: 'TypeScript',
-                    tsx: 'TypeScript (React)'
-                  }
-                }),
-                toolbarPlugin({
-                  toolbarClassName: 'my-classname',
-                  toolbarContents: () => (
-                    <>
-                      {' '}
-                      <UndoRedo />
-                      <BlockTypeSelect />
-                      <BoldItalicUnderlineToggles />
-                      <CodeToggle />
-                      <InsertCodeBlock />
-                      <InsertTable />
-                      <ListsToggle />
-                    </>
-                  )
-                })
-              ]}
-            />
-          </MDBCol>
-        )}
-        <MDBCol md={isEditorOpen ? 6 : 12}>
+            <MDBCol md={6}>
+              <Editor
+                editorRef={ref}
+                markdown={completion}
+                onChange={(value) => {
+                  setCompletion(value);
+                }}
+              />
+            </MDBCol>
+          )}
+          <MDBCol md={isEditorOpen ? 6 : 12}>
             <MarkdownStyled>{completion}</MarkdownStyled>
           </MDBCol>
         </MDBRow>
         <MDBRow>
           <MDBCol size={2} />
           <MDBCol size={4} className="text-center">
-          <MDBBtn
-            type="button"
-            disabled={completionIsEmpty}
-            color="secondary"
-            onClick={() => {
-              toggleEditor();
-              if (isEditorOpen) {
-                ref.current?.focus();
-                ref.current?.setMarkdown(completion);
-              }
-            }}
-          >
-            Редактировать
-          </MDBBtn>
-        </MDBCol>
-        <MDBCol size={4} className="text-center">
+            <MDBBtn
+              type="button"
+              disabled={completionIsEmpty}
+              color="secondary"
+              onClick={() => {
+                toggleEditor();
+                if (isEditorOpen) {
+                  ref.current?.focus();
+                  ref.current?.setMarkdown(completion);
+                }
+              }}
+            >
+              Редактировать
+            </MDBBtn>
+          </MDBCol>
+          <MDBCol size={4} className="text-center">
             <MDBBtn type="button" disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
               Сохранить
             </MDBBtn>
@@ -200,7 +170,7 @@ export default function GenerateUnitPage() {
             </MDBModalContent>
           </MDBModalDialog>
         </MDBModal>
-        </div>
-      </>
-      );
-      }
+      </div>
+    </>
+  );
+}
