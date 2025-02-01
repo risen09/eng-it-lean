@@ -19,7 +19,13 @@ import {
   MDBRow,
   MDBTypography,
   MDBBtn,
-  MDBIcon, MDBCard, MDBRipple, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText
+  MDBIcon,
+  MDBCard,
+  MDBRipple,
+  MDBCardImage,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText
 } from 'mdb-react-ui-kit';
 
 // import required modules
@@ -29,11 +35,7 @@ function App() {
     <div className="container text-left py-1">
       <MDBCarousel showControls showIndicators={false} className="carousel-multi-item" interval={4000}>
         <MDBCarouselItem itemId={1} className="active">
-              <img
-                src={imgBlock1}
-                alt="Telephone Booth"
-                className="img-fluid rounded"
-              />
+          <img src={imgBlock1} alt="Telephone Booth" className="img-fluid rounded" />
         </MDBCarouselItem>
       </MDBCarousel>
     </div>
@@ -74,11 +76,7 @@ const HomePage = (): React.ReactElement => {
       <div className="container my-2 py-4">
         <MDBRow className="align-items-center">
           <MDBCol md="5" className="text-center">
-            <img
-              src={imgBlock1}
-              alt="Telephone Booth"
-              className="img-fluid rounded"
-            />
+            <img src={imgBlock1} alt="Telephone Booth" className="img-fluid rounded" />
           </MDBCol>
           <MDBCol md="7">
             <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-3">
@@ -86,16 +84,17 @@ const HomePage = (): React.ReactElement => {
               Построение словарного запаса
             </MDBTypography>
             <MDBTypography tag="p" className="text-muted mb-4 me-4">
-              Eng-it-learn позволяет изучать и повторять слова на реальных примерах. Наш искусственный интеллект подберёт
-              оптимальные моменты для повторения слов, чтобы помочь прочно закрепить пройденный материал в памяти.
+              Eng-it-learn позволяет изучать и повторять слова на реальных примерах. Наш искусственный интеллект
+              подберёт оптимальные моменты для повторения слов, чтобы помочь прочно закрепить пройденный материал в
+              памяти.
             </MDBTypography>
             <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-3">
               <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
               Справочные материалы всегда под рукой
             </MDBTypography>
             <MDBTypography tag="p" className="text-muted mb-4 me-4">
-              Eng-it-learn снабжает каждое изучаемое слово грамматической справкой, которая позволит разобраться в сложных
-              вопросах и не сомневаться в правильности речи и письма.
+              Eng-it-learn снабжает каждое изучаемое слово грамматической справкой, которая позволит разобраться в
+              сложных вопросах и не сомневаться в правильности речи и письма.
             </MDBTypography>
             <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-4">
               <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
@@ -125,8 +124,8 @@ const HomePage = (): React.ReactElement => {
               Специализированные курсы
             </MDBTypography>
             <MDBTypography tag="p" className="text-muted mb-4 ms-3">
-              В Eng-it-learn доступны специальные курсы, с помощью которых можно пополнить словарный запас лексикой на такие
-              темы, как бизнес, путешествия и т.д.
+              В Eng-it-learn доступны специальные курсы, с помощью которых можно пополнить словарный запас лексикой на
+              такие темы, как бизнес, путешествия и т.д.
             </MDBTypography>
             <MDBTypography tag="h5" className="fw-bold mb-2 text-muted ms-3">
               <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
@@ -137,15 +136,10 @@ const HomePage = (): React.ReactElement => {
             </MDBTypography>
           </MDBCol>
           <MDBCol md="5" className="text-center">
-            <img
-              src={imgBlock2}
-              alt="UK Streets"
-              className="img-fluid rounded"
-            />
+            <img src={imgBlock2} alt="UK Streets" className="img-fluid rounded" />
           </MDBCol>
         </MDBRow>
       </div>
-      )
       <div className="container my-2 py-5">
         <MDBRow className="g-2 justify-content-center">
           {dictionaries
@@ -153,7 +147,12 @@ const HomePage = (): React.ReactElement => {
               <MDBCol md="4">
                 <MDBCard style={{ width: '18rem' }} className="rounded-4 shadow-sm">
                   <MDBRipple rippleColor="light" rippleTag="div" className="bg-image hover-overlay">
-                    <MDBCardImage src={require('./images/' + dictionary.imageFilename)} fluid alt="..." className="rounded-top" />
+                    <MDBCardImage
+                      src={require('./images/' + dictionary.imageFilename)}
+                      fluid
+                      alt="..."
+                      className="rounded-top"
+                    />
                     <div className="mask" style={{ backgroundColor: 'rgba(251, 251, 251, 0.15)' }}></div>
                   </MDBRipple>
                   <MDBCardBody>

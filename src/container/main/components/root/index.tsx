@@ -1,7 +1,6 @@
 import React from 'react';
 import { MDBContainer } from 'mdb-react-ui-kit';
 import { Outlet } from 'react-router-dom';
-import './index.css';
 import { App } from './header';
 import Footer from './footer';
 
