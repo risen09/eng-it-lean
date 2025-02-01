@@ -12,7 +12,7 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
       components={{
         h1(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h3" {...rest} />;
+          return <MDBTypography variant="h3" className='text-center' {...rest} />;
         },
         h2(props) {
           const { node, ...rest } = props;
