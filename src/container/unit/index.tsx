@@ -14,13 +14,15 @@ const UnitPage = (): React.ReactElement => {
     <>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error</div>}
-      <MDBRow>
-        <MDBCol>
-          <MarkdownStyled>{unit?.content}</MarkdownStyled>
-        </MDBCol>
-      </MDBRow>
-    </>
-  );
-};
+      <div className="container my-2 py-5">
+        <MDBRow>
+          <MDBCol>
+            <MarkdownStyled>{unit?.content}</MarkdownStyled>
+          </MDBCol>
+        </MDBRow>
+        </div>
+      </>
+      );
+      };
 
-export default UnitPage;
+      export default UnitPage;

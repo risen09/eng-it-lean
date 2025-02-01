@@ -26,7 +26,7 @@ const WordItem = ({ word }: { word: Word }): React.ReactElement => {
         <MDBCardBody>
           <MDBCardTitle>{word.word}</MDBCardTitle>
           <MDBModalContent>{word.definition}</MDBModalContent>
-          <MDBBtn aria-expanded="false" onClick={toggleOpen}>
+          <MDBBtn aria-expanded="false" color="success" onClick={toggleOpen}>
             More
           </MDBBtn>
         </MDBCardBody>

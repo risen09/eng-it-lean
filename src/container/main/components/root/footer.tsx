@@ -1,34 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { getNavigationsValue } from "@brojs/cli";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { getNavigationsValue } from '@brojs/cli';
 import mainLogo from './images/Logo_new.jpg';
-import {
-  MDBListGroup,
-  MDBListGroupItem,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBFooter,
-  MDBIcon
-} from 'mdb-react-ui-kit';
-
-// const contacts = [
-//   { id: 1, title: "VK", description: "ВКонтакте", link: "https://vk.com" },
-//   {
-//     id: 2,
-//     title: "VK",
-//     description: "Группа ВКонтакте",
-//     link: "https://vk.com",
-//   },
-// ];
+import { MDBListGroup, MDBListGroupItem, MDBContainer, MDBRow, MDBCol, MDBFooter, MDBIcon } from 'mdb-react-ui-kit';
 
 export function Footer() {
   const pagesV1 = [
     { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
-    { id: 2, title: 'Практика', navigation: 'eng-it-lean.unit' },
-    { id: 3, title: 'Материалы', navigation: 'eng-it-lean.main' },
-    { id: 4, title: 'Прогресс', navigation: 'eng-it-lean.main' },
-    { id: 5, title: 'Ссылки', navigation: 'eng-it-lean.main' }
+    { id: 2, title: 'Словари', navigation: 'eng-it-lean.main' },
+    { id: 3, title: 'Материалы', navigation: 'eng-it-lean.units' },
+    { id: 4, title: 'ИИ-учитель', navigation: 'eng-it-lean.generate-unit' },
+    { id: 5, title: 'Контакты', navigation: 'eng-it-lean.main' }
   ];
   return (
     <footer>
@@ -54,7 +36,8 @@ export function Footer() {
                   </MDBListGroupItem>
                   <MDBListGroupItem noBorders>
                     <p>
-                      Наш сайт предлагает уникальные курсы и ресурсы, разработанные специально для тех, кто работает в сфере информационных технологий
+                      Наш сайт предлагает уникальные курсы и ресурсы, разработанные специально для тех, кто работает в
+                      сфере информационных технологий
                     </p>
                   </MDBListGroupItem>
                 </MDBListGroup>
@@ -126,47 +109,5 @@ export function Footer() {
     </footer>
   );
 }
-//
-// const Footerd = (): React.ReactElement => {
-//   const contactLinks = contacts.map((contact) => (
-//     <li>
-//       <a href={contact.link}>
-//         <p>
-//           <strong>{contact.title}: </strong>
-//           {contact.description}
-//         </p>
-//       </a>
-//     </li>
-//   ));
-//
-//   return (
-//     <footer>
-//       <div className="container">
-//         <div className="left-footer-z">
-//           <div className="left-footer">
-//             <ul>
-//               <li>
-//                 <p>Возникли проблемы с сайтом?</p>
-//               </li>
-//               <li>
-//                 <Link to={getNavigationsValue("sandbox.main")}>
-//                   Написать в поддержку
-//                 </Link>
-//               </li>
-//             </ul>
-//           </div>
-//           <div className="right-footer">
-//             <ul>
-//               <li>
-//                 <p>Контакты</p>
-//               </li>
-//               {contactLinks}
-//             </ul>
-//           </div>
-//         </div>
-//       </div>
-//     </footer>
-//   );
-// };
 
 export default Footer;

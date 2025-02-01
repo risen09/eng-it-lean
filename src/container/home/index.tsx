@@ -7,7 +7,7 @@ import { getNavigationsValue } from '@brojs/cli';
 import { getConfigValue } from '@brojs/cli';
 import { useGetDictionariesQuery } from '../../store/api';
 import mainKurs from './images/main.jpg';
-import mainBanner from './images/osn_banner2.jpg';
+import mainBanner from './images/imgbanner2.jpg';
 import imgBlock1 from './images/block1.jpg';
 import imgBlock2 from './images/block2.jpg';
 import {
@@ -26,26 +26,43 @@ import {
 
 function App() {
   return (
-    <div className="container text-center py-1">
+    <div className="container text-left py-1">
       <MDBCarousel showControls showIndicators={false} className="carousel-multi-item" interval={4000}>
         <MDBCarouselItem itemId={1} className="active">
-          <img
-            src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fru.freepik.com%2Fvectors%2Fit&psig=AOvVaw3rq2SQ7NgkwlGE_bBaCgXX&ust=1738230315362000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNjqur_TmosDFQAAAAAdAAAAABAE"
-            alt="Slide 1"
-            className="d-block w-100"
-          />
-          <MDBCarouselCaption>
-            <h5>First slide label</h5>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </MDBCarouselCaption>
-        </MDBCarouselItem>
-
-        <MDBCarouselItem itemId={2}>
-          <img src="https://mdbootstrap.com/img/new/slides/041.jpg" alt="Slide 2" className="d-block w-100" />
-          <MDBCarouselCaption>
-            <h5>First slide label</h5>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </MDBCarouselCaption>
+          <MDBRow className="align-items-center">
+          <MDBCol md="7">
+            <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-3">
+              <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
+              Построение словарного запаса
+            </MDBTypography>
+            <MDBTypography tag="p" className="text-muted mb-4 me-4 text-left">
+              Eng-it-learn позволяет изучать и повторять слова на реальных примерах. Наш искусственный интеллект подберёт
+              оптимальные моменты для повторения слов, чтобы помочь прочно закрепить пройденный материал в памяти.
+            </MDBTypography>
+            <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-3">
+              <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
+              Справочные материалы всегда под рукой
+            </MDBTypography>
+            <MDBTypography tag="p" className="text-muted mb-4 me-4">
+              Eng-it-learn снабжает каждое изучаемое слово грамматической справкой, которая позволит разобраться в сложных
+              вопросах и не сомневаться в правильности речи и письма.
+            </MDBTypography>
+            <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-4">
+              <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
+              Индивидуальная программа для каждого учащегося
+            </MDBTypography>
+            <MDBTypography tag="p" className="text-muted me-4">
+              Eng-it-learn создан на основе нейронных сетей, способных не только оценить уже имеющиеся знания, но и
+              динамически подстраивать процесс обучения.
+            </MDBTypography>
+          </MDBCol>
+            <MDBCol md="5" className="text-center">
+              <img
+                src={imgBlock1}
+                alt="Telephone Booth"
+                className="img-fluid rounded"
+              />
+          </MDBRow>
         </MDBCarouselItem>
       </MDBCarousel>
     </div>
@@ -58,7 +75,7 @@ const HomePage = (): React.ReactElement => {
   return (
     <div>
       <App />
-      <MDBContainer className="my-2 py-3">
+      <div className="container my-2 py-3">
         <MDBRow className="align-items-center">
           <MDBCol md="5" className="pe-md-5 border-end ms-5">
             <MDBTypography tag="h2" className="fw-bold mb-5">
@@ -70,6 +87,8 @@ const HomePage = (): React.ReactElement => {
               Встроенный помощник
             </MDBTypography>
             <MDBBtn
+              tag={Link}
+              to={getNavigationsValue('eng-it-lean.units')}
               color="success"
               className="btn-sm w-50 px-4 py-2 fw-bold shadow rounded-2 text-center d-inline-block fs-8"
             >
@@ -80,8 +99,8 @@ const HomePage = (): React.ReactElement => {
             <img src={mainKurs} alt="Learning Illustration" className="img-fluid rounded" width="75%" height="75%" />
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
-      <MDBContainer className="my-2 py-4">
+      </div>
+      <div className="container my-2 py-4">
         <MDBRow className="align-items-center">
           <MDBCol md="5" className="text-center">
             <img
@@ -117,8 +136,8 @@ const HomePage = (): React.ReactElement => {
             </MDBTypography>
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
-      <MDBContainer className="my-2 py-4">
+      </div>
+      <div className=" container my-2 py-4">
         <MDBRow className="align-items-center">
           <MDBCol md="7">
             <MDBTypography tag="h5" className="fw-bold mb-2 text-muted ms-3">
@@ -154,9 +173,9 @@ const HomePage = (): React.ReactElement => {
             />
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
+      </div>
       )
-      <MDBContainer className="my-2 py-5">
+      <div className="container my-2 py-5">
         <MDBRow className="g-2 justify-content-center">
           {dictionaries
             ?.map((dictionary) => (
@@ -183,7 +202,7 @@ const HomePage = (): React.ReactElement => {
             ))
             .slice(0, 5)}
         </MDBRow>
-      </MDBContainer>
+      </div>
     </div>
   );
 };
