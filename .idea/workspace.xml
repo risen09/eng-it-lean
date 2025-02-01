@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3393da0c-05bd-4c5b-89cd-24604c06325b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/dictionary/components/WordItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/dictionary/components/WordItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/dictionary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/dictionary/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/entry/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/entry/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/generate-unit/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/generate-unit/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/container/home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/unit/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/unit/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/units-list/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/units-list/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +127,7 @@
       <workItem from="1735334673179" duration="5202000" />
       <workItem from="1735369859113" duration="198000" />
       <workItem from="1738403342217" duration="5853000" />
-      <workItem from="1738411383550" duration="6108000" />
+      <workItem from="1738411383550" duration="6401000" />
     </task>
     <servers />
   </component>

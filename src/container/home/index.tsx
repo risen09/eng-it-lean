@@ -29,40 +29,11 @@ function App() {
     <div className="container text-left py-1">
       <MDBCarousel showControls showIndicators={false} className="carousel-multi-item" interval={4000}>
         <MDBCarouselItem itemId={1} className="active">
-          <MDBRow className="align-items-center">
-          <MDBCol md="7">
-            <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-3">
-              <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
-              Построение словарного запаса
-            </MDBTypography>
-            <MDBTypography tag="p" className="text-muted mb-4 me-4 text-left">
-              Eng-it-learn позволяет изучать и повторять слова на реальных примерах. Наш искусственный интеллект подберёт
-              оптимальные моменты для повторения слов, чтобы помочь прочно закрепить пройденный материал в памяти.
-            </MDBTypography>
-            <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-3">
-              <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
-              Справочные материалы всегда под рукой
-            </MDBTypography>
-            <MDBTypography tag="p" className="text-muted mb-4 me-4">
-              Eng-it-learn снабжает каждое изучаемое слово грамматической справкой, которая позволит разобраться в сложных
-              вопросах и не сомневаться в правильности речи и письма.
-            </MDBTypography>
-            <MDBTypography tag="h5" className="fw-bold mb-2 text-muted me-4">
-              <MDBIcon fas icon="circle" className="me-2 text-success" size="xs" />
-              Индивидуальная программа для каждого учащегося
-            </MDBTypography>
-            <MDBTypography tag="p" className="text-muted me-4">
-              Eng-it-learn создан на основе нейронных сетей, способных не только оценить уже имеющиеся знания, но и
-              динамически подстраивать процесс обучения.
-            </MDBTypography>
-          </MDBCol>
-            <MDBCol md="5" className="text-center">
               <img
                 src={imgBlock1}
                 alt="Telephone Booth"
                 className="img-fluid rounded"
               />
-          </MDBRow>
         </MDBCarouselItem>
       </MDBCarousel>
     </div>
