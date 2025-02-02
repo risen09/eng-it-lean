@@ -1,6 +1,6 @@
 import { network } from '../network';
-import { User } from './types';
-import { GetUserListResponse, GetUserResponse } from './types';
+import { GetLoginRequest, User } from './types';
+import { GetUserListResponse, GetUserResponse, GetLoginResponse } from './types';
 
 class UserService {
   async getUsers() {
@@ -15,6 +15,11 @@ class UserService {
 
   async postUsers(user: User){
     const response = await network.post<GetUserResponse>('/users', user);
+    return response.data;
+  }
+
+  async postLogin(user: GetLoginRequest){
+    const response = await network.post<GetLoginResponse>('/users/login', user);
     return response.data;
   }
 }

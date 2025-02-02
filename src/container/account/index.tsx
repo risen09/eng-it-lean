@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './account.css';
 
 const avatars = [
   'https://via.placeholder.com/100/ff7f7f/333333?text=Avatar+1',

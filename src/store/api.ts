@@ -7,7 +7,7 @@ import { GetWordResponse, GetWordsResponse, Word } from '../service/words/types'
 import { unitService } from '../service/unit';
 import { GetUnitListResponse, GetUnitResponse, PutUnitRequest, Unit } from '../service/unit/types';
 import { userService } from '../service/users';
-import { GetUserListResponse, User } from '../service/users/types';
+import { GetLoginResponse, GetUserListResponse, User } from '../service/users/types';
 
 const createQueryFromPromise =
   <ARGS, RES>(fn: (...args: Array<ARGS>) => Promise<RES>) =>
@@ -68,6 +68,9 @@ export const api = createApi({
     }),
     postUsers: builder.mutation<GetUserListResponse, User>({
       queryFn: createQueryFromPromise((user: User) => userService.postUsers(user))
+    }),
+    postLogin: builder.mutation<GetLoginResponse, { email: string; password: string }>({
+       queryFn: createQueryFromPromise((user: { email: string; password: string }) => userService.postLogin(user))
     })
   })
 });
@@ -83,5 +86,6 @@ export const {
   useGetUnitsQuery,
   useGetUnitQuery,
   usePutUnitMutation,
-  usePostUsersMutation
+  usePostUsersMutation,
+  usePostLoginMutation
 } = api;

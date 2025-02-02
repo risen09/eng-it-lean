@@ -26,3 +26,15 @@ router.post('/', (req, res) => {
     });
 });
 
+router.post('/login', (req, res) => {
+  const { email } = req.body;
+  console.log(email);
+  console.log(req.body);
+  const user = data.find(user => user.email === email);
+  console.log(user);
+
+  if (!user) {
+    res.status(404).send('Пользователь не найден');
+  }
+  res.json({public_id: user.public_id});
+});

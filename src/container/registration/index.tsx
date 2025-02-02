@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import { usePostUsersMutation } from '../../store/api';
-import { useNavigate } from 'react-router-dom'; // Импортируем используем navigate
+import { useNavigate } from 'react-router-dom'; 
+import { getNavigationsValue } from '@brojs/cli';
 
 const RegistrationPage = (): React.ReactElement => {
   const { register, handleSubmit } = useForm();
-  const navigate = useNavigate(); // Инициализируем useNavigate
+  const navigate = useNavigate();
 
   const handleCancel = () => {
-    window.history.back();
+    navigate(getNavigationsValue("eng-it-lean.main"));
   };
 
   const [postUsers, isLoading] = usePostUsersMutation();
@@ -17,6 +18,7 @@ const RegistrationPage = (): React.ReactElement => {
   const handleRegister = (data): void => {
     postUsers({
       id: Date.now(),
+      public_id: Date.now(),
       email: data.email,
       password: data.password
     });
@@ -24,8 +26,7 @@ const RegistrationPage = (): React.ReactElement => {
     alert("Регистрация прошла успешно!");
     console.log(data);
 
-    // Переход на страницу учетной записи
-    navigate('./account'); // Замените на '../account' в зависимости от вашей структуры маршрута
+    navigate(getNavigationsValue("eng-it-lean.entry")); 
   };
 
   return (
