@@ -54,6 +54,9 @@ export const api = createApi({
     getUnit: builder.query<GetUnitResponse, number>({
       queryFn: createQueryFromPromise((id: number) => unitService.getUnit(id))
     }),
+    postUnit: builder.mutation<GetUnitResponse, Unit>({
+      queryFn: createQueryFromPromise((unit: Unit) => unitService.postUnit(unit))
+    }),
     putUnit: builder.mutation<GetUnitResponse, PutUnitRequest>({
       queryFn: createQueryFromPromise((unit: PutUnitRequest) => unitService.putUnit(unit))
     }),
@@ -73,5 +76,6 @@ export const {
   useDeleteWordMutation,
   useGetUnitsQuery,
   useGetUnitQuery,
-  usePutUnitMutation
+  usePutUnitMutation,
+  usePostUnitMutation
 } = api;
