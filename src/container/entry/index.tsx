@@ -5,7 +5,9 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit
 const LoginPage: React.FC = () => {
   const { register, handleSubmit } = useForm();
 
-  const handleCancel = (): void => {};
+  const handleCancel = (): void => {
+    window.history.back();
+  };
 
   const handleEntry = (data): void => {
     console.log(data);
@@ -19,7 +21,7 @@ const LoginPage: React.FC = () => {
             <h1>Вход</h1>
             <p>Заполните поля, расположенные ниже, чтобы войти в свой аккаунт.</p>
             <hr />
-            <form onSubmit={handleSubmit(handleEntry)}>
+            <form>
               <div className="container-fluid justify-content-center my-0 py-3">
                 <MDBInput label="Электронная почта" id="form1" type="email" required {...register('email')} className="mb-2 py-2"/>
                 <MDBInput label="Пароль" id="form2" type="password" required {...register('password')} className="my-0 py-2"/>
@@ -28,7 +30,7 @@ const LoginPage: React.FC = () => {
                     <MDBBtn outline color="success" onClick={handleCancel} className="me-2">
                       Отменить
                     </MDBBtn>
-                    <MDBBtn color="success" type="submit" className="">
+                    <MDBBtn color="success" onClick={handleEntry} className="">
                       Войти
                     </MDBBtn>
                   </div>
@@ -37,7 +39,7 @@ const LoginPage: React.FC = () => {
         </MDBRow>
       </div>
     </div>
-);
-      };
+  );
+};
 
-      export default LoginPage;
+export default LoginPage;

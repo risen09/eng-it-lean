@@ -66,6 +66,11 @@ export const App = () => {
           </MDBNavbarNav>
         </MDBCollapse>
         <div className="btn-nav">
+          <MDBBtn color="success" tag={Link} to="registration">
+            Регистрация
+          </MDBBtn>
+        </div>
+        <div className="btn-nav">
           <MDBBtn color="success" tag={Link} to="entry">
             Вход
           </MDBBtn>

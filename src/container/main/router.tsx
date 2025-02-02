@@ -7,6 +7,7 @@ import HomePage from '../home';
 import DictionaryPage from '../dictionary';
 import LoginPage from '../entry';
 import RegistrationPage from '../registration';
+import AccountPage from '../account';
 import UnitPage from '../unit';
 import GenerateUnitPage from '../generate-unit';
 import UnitsPage from '../units-list';
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path: getNavigationsValue('eng-it-lean.dictionaries'),
         element: <DictionariesPage />
+      },
+      {
+        path: getNavigationsValue('eng-it-lean.account'),
+        element: <AccountPage />
       }
     ]
   }
