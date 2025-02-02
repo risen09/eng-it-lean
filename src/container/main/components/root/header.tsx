@@ -19,7 +19,7 @@ import {
 export const App = () => {
   const pagesV1 = [
     { id: 1, title: 'Главная', navigation: 'eng-it-lean.main' },
-    { id: 2, title: 'Словари', navigation: 'eng-it-lean.main' },
+    { id: 2, title: 'Словари', navigation: 'eng-it-lean.dictionaries' },
     { id: 3, title: 'Материалы', navigation: 'eng-it-lean.units' },
     { id: 4, title: 'ИИ-учитель', navigation: 'eng-it-lean.generate-unit' },
     { id: 5, title: 'Контакты', navigation: 'eng-it-lean.main' }

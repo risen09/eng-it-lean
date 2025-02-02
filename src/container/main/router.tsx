@@ -10,6 +10,7 @@ import RegistrationPage from '../registration';
 import UnitPage from '../unit';
 import GenerateUnitPage from '../generate-unit';
 import UnitsPage from '../units-list';
+import DictionariesPage from '../dictionaries';
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: getNavigationsValue('eng-it-lean.units'),
         element: <UnitsPage />
+      },
+      {
+        path: getNavigationsValue('eng-it-lean.dictionaries'),
+        element: <DictionariesPage />
       }
     ]
   }
