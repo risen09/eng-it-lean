@@ -95,7 +95,7 @@ export default function GenerateUnitPage() {
   return (
     <>
       <div className="container my-2 py-5">
-        <MDBTypography tag="h2" variant="h2" className="text-center">
+      <MDBTypography tag="h2" className="text-muted mb-5 text-center">
           Генерация нового урока
         </MDBTypography>
         <MDBRow tag="form" onSubmit={handleSubmit} className="">
@@ -118,7 +118,7 @@ export default function GenerateUnitPage() {
                 id="input"
                 label="Введите тему урока"
               />
-              <MDBBtn outline type="submit" className="" disabled={inputIsEmpty} color="success">
+              <MDBBtn outline type="submit" className="w-25" disabled={inputIsEmpty} color="success">
                 Сгенерировать
               </MDBBtn>
             </MDBInputGroup>
@@ -127,7 +127,7 @@ export default function GenerateUnitPage() {
         </MDBRow>
         <MDBRow>
           <MDBCol size={2} />
-          <MDBCol size={8}>
+          <MDBCol size={6}>
             <div className="form-text">Powered by GigaChat</div>
           </MDBCol>
           <MDBCol size={2} />
@@ -156,7 +156,7 @@ export default function GenerateUnitPage() {
         <MDBRow>
           <MDBCol size={4} />
           <MDBCol size={4} className="text-center">
-            <MDBBtn type="button" disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
+            <MDBBtn type="button" className='w-75' disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
               Сохранить
             </MDBBtn>
           </MDBCol>
