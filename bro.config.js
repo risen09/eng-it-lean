@@ -18,6 +18,7 @@ module.exports = {
     'eng-it-lean.account': '/eng-it-lean/account',
     'eng-it-lean.generate-unit': '/eng-it-lean/generate-unit',
     'eng-it-lean.units': '/eng-it-lean/units',
+    'eng-it-lean.dictionaries': '/eng-it-lean/dictionaries',
   },
   features: {
     sandbox: {
