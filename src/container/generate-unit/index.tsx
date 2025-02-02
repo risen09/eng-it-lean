@@ -5,8 +5,10 @@ import { useCompletion } from 'ai/react';
 import { getConfigValue } from '@brojs/cli';
 import {
   MDBBtn,
+  MDBCheckbox,
   MDBCol,
   MDBInput,
+  MDBInputGroup,
   MDBModal,
   MDBModalBody,
   MDBModalContent,
@@ -81,24 +83,52 @@ export default function GenerateUnitPage() {
   };
 
   const [isEditorOpen, setIsEditorOpen] = React.useState(false);
-  const toggleEditor = () => setIsEditorOpen(!isEditorOpen);
+  const toggleEditor = () => {
+    setIsEditorOpen(!isEditorOpen);
+    if (isEditorOpen) {
+      ref.current?.focus();
+      ref.current?.setMarkdown(completion);
+    }
+  };
   const ref = React.useRef<MDXEditorMethods>(null);
 
   return (
     <>
       <div className="container my-2 py-5">
-        <MDBTypography tag="h2" variant="h2">
+        <MDBTypography tag="h2" variant="h2" className="text-center">
           Генерация нового урока
         </MDBTypography>
-        <MDBRow tag="form" onSubmit={handleSubmit} className="g-3 align-items-center">
+        <MDBRow tag="form" onSubmit={handleSubmit} className="">
           <MDBCol size={2} />
-          <MDBCol size={6}>
-            <MDBInput value={input} name="prompt" onChange={handleInputChange} id="input" label="Введите тему урока" />
+          <MDBCol size={8}>
+            <MDBInputGroup
+              textBefore={
+                <MDBCheckbox
+                  label="Редактировать"
+                  disabled={completionIsEmpty}
+                  checked={isEditorOpen}
+                  onChange={() => toggleEditor()}
+                />
+              }
+            >
+              <MDBInput
+                value={input}
+                name="prompt"
+                onChange={handleInputChange}
+                id="input"
+                label="Введите тему урока"
+              />
+              <MDBBtn outline type="submit" className="" disabled={inputIsEmpty} color="success">
+                Сгенерировать
+              </MDBBtn>
+            </MDBInputGroup>
           </MDBCol>
-          <MDBCol size={2}>
-            <MDBBtn type="submit" disabled={inputIsEmpty} color="success">
-              Сгенерировать
-            </MDBBtn>
+          <MDBCol size={2} />
+        </MDBRow>
+        <MDBRow>
+          <MDBCol size={2} />
+          <MDBCol size={8}>
+            <div className="form-text">Powered by GigaChat</div>
           </MDBCol>
           <MDBCol size={2} />
         </MDBRow>
@@ -107,7 +137,7 @@ export default function GenerateUnitPage() {
             <span className="visually-hidden">Loading...</span>
           </MDBSpinner>
         ) : null}
-        <MDBRow className='my-4'>
+        <MDBRow className="my-4">
           {isEditorOpen && (
             <MDBCol md={6}>
               <Editor
@@ -124,29 +154,13 @@ export default function GenerateUnitPage() {
           </MDBCol>
         </MDBRow>
         <MDBRow>
-          <MDBCol size={2} />
-          <MDBCol size={4} className="text-center">
-            <MDBBtn
-              type="button"
-              disabled={completionIsEmpty}
-              color="secondary"
-              onClick={() => {
-                toggleEditor();
-                if (isEditorOpen) {
-                  ref.current?.focus();
-                  ref.current?.setMarkdown(completion);
-                }
-              }}
-            >
-              Редактировать
-            </MDBBtn>
-          </MDBCol>
+          <MDBCol size={4} />
           <MDBCol size={4} className="text-center">
             <MDBBtn type="button" disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
               Сохранить
             </MDBBtn>
           </MDBCol>
-          <MDBCol size={2} />
+          <MDBCol size={4} />
         </MDBRow>
 
         <MDBModal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
