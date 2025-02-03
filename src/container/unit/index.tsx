@@ -18,10 +18,11 @@ const UnitPage = (): React.ReactElement => {
       {error && <div>Error</div>}
       <div className="container my-2 py-5">
         <MDBRow>
-          <MDBCol className="text-center" md={11}>
+          <MDBCol md={2} />
+          <MDBCol className="text-center" md={8}>
             <MDBTypography variant="h1">{unit?.name}</MDBTypography>
           </MDBCol>
-          <MDBCol className="text-center" md={1}>
+          <MDBCol className="text-center" md={2}>
             <LinkContainer
               to={`${getNavigationsValue('eng-it-lean.edit-unit')}`}
               state={{
