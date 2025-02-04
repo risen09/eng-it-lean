@@ -1,6 +1,6 @@
 export interface Unit {
   id: number;
-  fileName: string;
+  author: number;
   name: string;
   content?: string;
 }

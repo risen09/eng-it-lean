@@ -7,11 +7,13 @@ import { MDBBtn, MDBCol, MDBIcon, MDBRow, MDBTypography } from 'mdb-react-ui-kit
 import { useParams } from 'react-router-dom';
 import { getFeatures, getNavigationsValue } from '@brojs/cli';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useCookies } from 'react-cookie';
 
 const UnitPage = (): React.ReactElement => {
   const { id } = useParams();
   const { data: unit, isLoading, error } = useGetUnitQuery(parseInt(id));
-  const canEdit = getFeatures('eng-it-lean')?.['unit.edit'];
+  const [ cookies ] = useCookies(['auth_token']);
+  const canEdit = getFeatures('eng-it-lean')?.['unit.edit'] && cookies.auth_token && unit?.author == cookies.auth_token;
 
   return (
     <>
