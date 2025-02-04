@@ -22,8 +22,8 @@ module.exports = {
     'eng-it-lean.edit-unit': '/eng-it-lean/edit-unit',
   },
   features: {
-    sandbox: {
-      // add your features here in the format [featureName]: { value: string }
+    'eng-it-lean': {
+      'unit.edit': true,
     }
   },
   config: {

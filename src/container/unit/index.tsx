@@ -5,12 +5,13 @@ import { Main } from './index.style';
 import MarkdownStyled from '../../components/markdown';
 import { MDBBtn, MDBCol, MDBIcon, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
 import { useParams } from 'react-router-dom';
-import { getNavigationsValue } from '@brojs/cli';
+import { getFeatures, getNavigationsValue } from '@brojs/cli';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const UnitPage = (): React.ReactElement => {
   const { id } = useParams();
   const { data: unit, isLoading, error } = useGetUnitQuery(parseInt(id));
+  const canEdit = getFeatures('eng-it-lean')?.['unit.edit'];
 
   return (
     <>
@@ -23,7 +24,7 @@ const UnitPage = (): React.ReactElement => {
             <MDBTypography variant="h1">{unit?.name}</MDBTypography>
           </MDBCol>
           <MDBCol className="text-center" md={2}>
-            <LinkContainer
+            { canEdit && (<LinkContainer
               to={`${getNavigationsValue('eng-it-lean.edit-unit')}`}
               state={{
                 fromUnit: {
@@ -35,6 +36,7 @@ const UnitPage = (): React.ReactElement => {
                 <MDBIcon icon="edit" />
               </MDBBtn>
             </LinkContainer>
+            )}
           </MDBCol>
         </MDBRow>
         <MDBRow>
