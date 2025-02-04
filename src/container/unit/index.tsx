@@ -20,9 +20,9 @@ const UnitPage = (): React.ReactElement => {
             <MarkdownStyled>{unit?.content}</MarkdownStyled>
           </MDBCol>
         </MDBRow>
-        </div>
-      </>
-      );
-      };
+      </div>
+    </>
+  );
+};
 
-      export default UnitPage;
+export default UnitPage;

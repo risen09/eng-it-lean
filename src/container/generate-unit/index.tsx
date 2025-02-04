@@ -114,7 +114,7 @@ export default function GenerateUnitPage() {
             </MDBModalContent>
           </MDBModalDialog>
         </MDBModal>
-        </div>
-      </>
-      );
-      }
+      </div>
+    </>
+  );
+}

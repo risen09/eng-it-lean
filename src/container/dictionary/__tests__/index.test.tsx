@@ -86,18 +86,18 @@ describe('DictionaryPage', () => {
       definition: '',
       synonyms: [],
       examples: []
-    }
+    };
     const modalTermInput = screen.getByRole('textbox', { name: /term/i });
     expect(modalTermInput).toBeInTheDocument();
     await user.type(modalTermInput, data.word);
 
     const modalTranslationInput = screen.getByRole('textbox', { name: /term/i });
     expect(modalTranslationInput).toBeInTheDocument();
-    await user.type(modalTranslationInput,data.translation);
+    await user.type(modalTranslationInput, data.translation);
 
     const mockedPutWord = mockPutWord(data);
     const mockedSubmit = jest.fn();
-    const submitButton = screen.getByText("Добавить", { exact: true });
+    const submitButton = screen.getByText('Добавить', { exact: true });
     screen.getByRole('form', { name: 'word-form' }).onsubmit = mockedSubmit;
     await user.click(submitButton);
     expect(mockedSubmit).toHaveBeenCalled();

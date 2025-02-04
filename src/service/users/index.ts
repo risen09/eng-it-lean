@@ -9,16 +9,16 @@ class UserService {
   }
 
   async getUser(id: number) {
-    const response = await network.get<GetUserResponse>(`/users/${id}`);
+    const response = await network.get<GetUserResponse>(`/users/account?public_id=${id}`);
     return response.data;
   }
 
-  async postUsers(user: User){
+  async postUsers(user: User) {
     const response = await network.post<GetUserResponse>('/users', user);
     return response.data;
   }
 
-  async postLogin(user: GetLoginRequest){
+  async postLogin(user: GetLoginRequest) {
     const response = await network.post<GetLoginResponse>('/users/login', user);
     return response.data;
   }

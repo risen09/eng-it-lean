@@ -70,7 +70,7 @@ export const App = () => {
             Регистрация
           </MDBBtn>
         </div>
-        <div className="btn-nav">
+        <div className="btn-nav mx-2">
           <MDBBtn color="success" tag={Link} to="entry">
             Вход
           </MDBBtn>

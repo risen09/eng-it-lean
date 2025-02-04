@@ -26,7 +26,7 @@ import { generateText } from 'ai';
 
 const { text } = await generateText({
   model: mistral('mistral-large-latest'),
-  prompt: 'Write a vegetarian lasagna recipe for 4 people.',
+  prompt: 'Write a vegetarian lasagna recipe for 4 people.'
 });
 ```
 

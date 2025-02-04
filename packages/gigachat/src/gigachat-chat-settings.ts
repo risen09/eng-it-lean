@@ -9,7 +9,7 @@ export type GigachatChatModelId =
   | (string & {});
 
 export interface GigachatChatSettings {
-  stream?: boolean,
-  repetition_penalty?: number,
-  update_interval?: number,
+  stream?: boolean;
+  repetition_penalty?: number;
+  update_interval?: number;
 }

@@ -1,20 +1,33 @@
+import { getNavigationsValue } from '@brojs/cli';
+import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
 import React, { useState, useEffect } from 'react';
-
-const avatars = [
-  'https://via.placeholder.com/100/ff7f7f/333333?text=Avatar+1',
-  'https://via.placeholder.com/100/7f7fff/333333?text=Avatar+2',
-  'https://via.placeholder.com/100/7fff7f/333333?text=Avatar+3',
-];
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { useGetUserQuery, usePostUsersMutation } from '../../store/api';
+import { useCookies } from 'react-cookie';
 
 function AccountPage() {
-  const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
+  const navigate = useNavigate();
   const [reminders, setReminders] = useState(() => {
-    // Загружаем напоминания из localStorage при первой загрузке
     const savedReminders = localStorage.getItem('reminders');
     return savedReminders ? JSON.parse(savedReminders) : [];
   });
   const [reminderText, setReminderText] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  const [cookies] = useCookies(["auth_token"]);
+  const {data: user} = useGetUserQuery(cookies.auth_token);
+  const { register, handleSubmit, setValue} = useForm();
+
+  useEffect(() => {
+    if (user) {
+      setValue("email", user?.email);
+      setValue("password", "");
+      setValue("nickname", user?.nickname);
+      setValue("age", user?.age);
+      setValue("about", user?.about);
+    }
+  }, [user]);
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -24,7 +37,6 @@ function AccountPage() {
   }, []);
 
   useEffect(() => {
-    // Сохраняем напоминания в localStorage каждый раз, когда они обновляются
     localStorage.setItem('reminders', JSON.stringify(reminders));
   }, [reminders]);
 
@@ -40,24 +52,89 @@ function AccountPage() {
     setReminders(updatedReminders);
   };
 
-  return (
-    <div className="container">
-      <h1>Личный кабинет пользователя</h1>
-      <div className="avatar-container">
-        <h2>Выберите аватар:</h2>
-        {avatars.map((avatar, index) => (
-          <img
-            key={index}
-            src={avatar}
-            alt={`Avatar ${index + 1}`}
-            onClick={() => setSelectedAvatar(avatar)}
-            className={`avatar ${selectedAvatar === avatar ? 'selected' : ''}`}
-          />
-        ))}
-      </div>
+  const handleCancel = (): void => {
+    navigate(getNavigationsValue('eng-it-lean.main'));
+  };
 
+  const [postUsers, isLoading] = usePostUsersMutation();
+
+  const handleSave = async (data) => {
+    postUsers({
+          id: Date.now(),
+          public_id: Date.now(),
+          email: data.email,
+          password: data.password,
+          age: data.age,
+          nickname: data.nickname,
+          about: data.about,
+    })
+  };
+
+  return (
+    <div className="container my-2 py-3">
+      <MDBRow className="align-items-center">
+        <MDBCol md="5" className="text-center">
+          <img src={'avatar.jpg'} alt="Learning Illustration" className="img-fluid rounded" width="75%" height="75%" />
+        </MDBCol>
+        <MDBCol md="6" className="pe-md-5 border-end ms-5">
+          <MDBTypography tag="p" className="text-muted mb-5 fs-6">
+            <form>
+              <div className="container-fluid justify-content-center my-0 py-3">
+                <label className="form-label">Электронная почта</label>
+                <MDBInput
+                  id="form1"
+                  type="email"
+                  required
+                  {...register('email')}
+                  className="my-0 py-2"
+                />
+                <label className="form-label">Никнейм</label>
+                <MDBInput
+                  id="form4"
+                  type="string"
+                  required
+                  {...register('nickname')}
+                  className="my-0 py-2"
+                />
+                <label className="form-label">Возраст</label>
+                <MDBInput
+                  id="form5"
+                  type="number"
+                  required
+                  {...register('age')}
+                  className="my-0 py-2"
+                />
+                <label className="form-label">Пароль</label>
+                <MDBInput
+                  id="form2"
+                  type="password"
+                  required
+                  {...register('password')}
+                  className="my-0 py-2"
+                />
+                <label className="form-label">О себе</label>
+                <MDBInput
+                  id="form6"
+                  type="about"
+                  required
+                  {...register('about')}
+                  className="my-0 py-2"
+                />
+              </div>
+              <div className="container-fluid d-flex justify-content-center my-0 py-2"></div>
+            </form>
+          </MDBTypography>
+          <MDBBtn color="success" onClick={handleSubmit(handleSave)} className="">
+            Сохранить изменения
+          </MDBBtn>
+        </MDBCol>
+      </MDBRow>
+    </div>
+    /*
+    <div className="container">
+      <h1 style={{ textAlign: 'center' }}>Личный кабинет</h1>
       <div className="reminder-container">
-        <h2>Добавьте заметку:</h2>
+        <h2 style={{ fontSize: '16px' }}>Добавить заметку:</h2>
         <input
           type="text"
           value={reminderText}
@@ -76,15 +153,17 @@ function AccountPage() {
       </div>
 
       <div className="clock-container">
-        <h2>Текущее время:</h2>
+        <h2 style={{ fontSize: '16px' }}>Текущее время:</h2>
         <p>{currentTime.toLocaleString()}</p>
       </div>
 
-      <div className="selected-avatar">
-        <h3>Ваш выбранный аватар:</h3>
-        <img src={selectedAvatar} alt="Selected Avatar" />
+      <div className="btn-nav d-flex justify-content-center py-2">
+        <MDBBtn color="success" onClick={handleCancel} to="main">
+          Выйти
+        </MDBBtn>
       </div>
     </div>
+    */
   );
 }
 

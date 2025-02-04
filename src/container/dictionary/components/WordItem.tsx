@@ -45,9 +45,7 @@ const WordItem = ({ word }: { word: Word }): React.ReactElement => {
               synonyms:
               <br />
               {word.synonyms.map((synonym, index) => (
-                <div key={index}>
-                  {synonym}
-                </div>
+                <div key={index}>{synonym}</div>
               ))}
               <br />
               examples:

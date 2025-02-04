@@ -18,23 +18,25 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
       case 'user': {
         messages.push({
           role: 'user',
-          content: content.map((part) => {
-            switch (part.type) {
-              case 'text': {
-                return part.text;
+          content: content
+            .map((part) => {
+              switch (part.type) {
+                case 'text': {
+                  return part.text;
+                }
+                case 'image': {
+                  throw new UnsupportedFunctionalityError({
+                    functionality: 'Images should be added in "attachments" object'
+                  });
+                }
+                case 'file': {
+                  throw new UnsupportedFunctionalityError({
+                    functionality: 'File content parts in user messages'
+                  });
+                }
               }
-              case 'image': {
-                throw new UnsupportedFunctionalityError({
-                  functionality: 'Images should be added in "attachments" object'
-                });
-              }
-              case 'file': {
-                throw new UnsupportedFunctionalityError({
-                  functionality: 'File content parts in user messages'
-                });
-              }
-            }
-          }).join('')
+            })
+            .join('')
         });
         break;
       }
@@ -77,7 +79,7 @@ export function convertToGigachatChatMessages(prompt: LanguageModelV1Prompt): Gi
           messages.push({
             role: 'function',
             name: toolResponse.toolName,
-            content: JSON.stringify(toolResponse.result),
+            content: JSON.stringify(toolResponse.result)
           });
         }
         break;

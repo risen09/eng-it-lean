@@ -44,7 +44,7 @@ describe('doGenerate', () => {
             tool_calls: null,
             data_for_context: [{}]
           },
-          finish_reason: 'stop',
+          finish_reason: 'stop'
         }
       ],
       usage
@@ -95,12 +95,12 @@ describe('doGenerate', () => {
             function_call: {
               name: 'weather_forecast',
               arguments: {
-                'location': "Москва",
-                'format': 'celcius'
+                location: 'Москва',
+                format: 'celcius'
               }
             }
           },
-          finish_reason: 'function_calls',
+          finish_reason: 'function_calls'
         }
       ],
       usage: { prompt_tokens: 150, total_tokens: 185, completion_tokens: 35 }
@@ -136,7 +136,7 @@ describe('doGenerate', () => {
 
     expect(usage).toStrictEqual({
       promptTokens: 20,
-      completionTokens: 5,
+      completionTokens: 5
     });
   });
 

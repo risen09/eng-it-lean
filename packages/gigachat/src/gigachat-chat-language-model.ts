@@ -188,14 +188,16 @@ export class GigachatChatLanguageModel implements LanguageModelV1 {
 
     return {
       text,
-      toolCalls: choice.message.function_call ? [
-        {
-          toolCallType: 'function',
-          toolCallId: choice.message.function_call.name,
-          toolName: choice.message.function_call.name,
-          args: JSON.stringify(choice.message.function_call.arguments),
-        }
-      ] : [],
+      toolCalls: choice.message.function_call
+        ? [
+            {
+              toolCallType: 'function',
+              toolCallId: choice.message.function_call.name,
+              toolName: choice.message.function_call.name,
+              args: JSON.stringify(choice.message.function_call.arguments)
+            }
+          ]
+        : [],
       finishReason: mapGigachatFinishReason(choice.finish_reason),
       usage: {
         promptTokens: response.usage.prompt_tokens,
@@ -345,10 +347,12 @@ const gigachatChatResponseSchema = z.object({
         content: z.string().nullable(),
         created: z.number().nullish(),
         name: z.string().nullish(),
-        function_call: z.object({
-          name: z.string(),
-          arguments: z.record(z.any())
-        }).nullish(),
+        function_call: z
+          .object({
+            name: z.string(),
+            arguments: z.record(z.any())
+          })
+          .nullish(),
         data_for_context: z.array(z.object({})).nullish()
       }),
       index: z.number(),
@@ -375,10 +379,12 @@ const gigachatChatChunkSchema = z.object({
         role: z.enum(['assistant']).optional(),
         content: z.string().nullish(),
         functions_state_id: z.string().nullish(),
-        function_call: z.object({
-          name: z.string(),
-          arguments: z.object({})
-        }).nullish(),
+        function_call: z
+          .object({
+            name: z.string(),
+            arguments: z.object({})
+          })
+          .nullish()
       }),
       finish_reason: z.string().nullish(),
       index: z.number()

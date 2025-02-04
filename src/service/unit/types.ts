@@ -11,4 +11,4 @@ export type PutUnitRequest = {
   id?: number;
   name: string;
   content: string;
-}
+};

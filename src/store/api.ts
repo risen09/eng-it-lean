@@ -66,11 +66,14 @@ export const api = createApi({
     getUsers: builder.query<GetUserListResponse, number>({
       queryFn: createQueryFromPromise(() => userService.getUsers())
     }),
+    getUser: builder.query<User, number>({
+      queryFn: createQueryFromPromise((id: number) => userService.getUser(id))
+    }),
     postUsers: builder.mutation<GetUserListResponse, User>({
       queryFn: createQueryFromPromise((user: User) => userService.postUsers(user))
     }),
     postLogin: builder.mutation<GetLoginResponse, { email: string; password: string }>({
-       queryFn: createQueryFromPromise((user: { email: string; password: string }) => userService.postLogin(user))
+      queryFn: createQueryFromPromise((user: { email: string; password: string }) => userService.postLogin(user))
     })
   })
 });
@@ -87,5 +90,6 @@ export const {
   useGetUnitQuery,
   usePutUnitMutation,
   usePostUsersMutation,
-  usePostLoginMutation
+  usePostLoginMutation,
+  useGetUserQuery
 } = api;
