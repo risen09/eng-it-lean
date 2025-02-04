@@ -12,27 +12,27 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
       components={{
         h1(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h3" className='text-center' {...rest} />;
+          return <MDBTypography tag="h3" variant="h3" className='text-center' {...rest} />;
         },
         h2(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h4" {...rest} />;
+          return <MDBTypography tag="h4" variant="h4" {...rest} />;
         },
         h3(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h5" {...rest} />;
+          return <MDBTypography tag="h5" variant="h5" {...rest} />;
         },
         h4(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h6" {...rest} />;
+          return <MDBTypography tag="h6" variant="h6" {...rest} />;
         },
         h5(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h6" {...rest} />;
+          return <MDBTypography tag="h6" variant="h6" {...rest} />;
         },
         h6(props) {
           const { node, ...rest } = props;
-          return <MDBTypography variant="h6" {...rest} />;
+          return <MDBTypography tag="h6" variant="h6" {...rest} />;
         },
         p(props) {
           return <MDBTypography {...props} />;

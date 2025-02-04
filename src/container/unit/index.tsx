@@ -21,7 +21,7 @@ const UnitPage = (): React.ReactElement => {
         <MDBRow>
           <MDBCol md={2} />
           <MDBCol className="text-center" md={8}>
-            <MDBTypography variant="h1">{unit?.name}</MDBTypography>
+            <MDBTypography tag="h1" variant="h1">{unit?.name}</MDBTypography>
           </MDBCol>
           <MDBCol className="text-center" md={2}>
             { canEdit && (<LinkContainer
@@ -33,7 +33,7 @@ const UnitPage = (): React.ReactElement => {
               }}
             >
               <MDBBtn color="white">
-                <MDBIcon icon="edit" />
+                <MDBIcon tag="span" icon="edit" />
               </MDBBtn>
             </LinkContainer>
             )}

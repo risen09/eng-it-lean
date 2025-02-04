@@ -20,6 +20,14 @@ jest.mock<typeof import('@brojs/cli')>('@brojs/cli', () => {
     ...originalBrojsCli,
     getNavigationValue: () => {
       return 'eng-it-lean';
+    },
+    getFeatures: () => {
+      return {
+        'eng-it-lean': {
+          value: 'true',
+          key: 'unit.edit'
+        }
+      }
     }
   };
 });
