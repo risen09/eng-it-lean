@@ -1,6 +1,8 @@
+import { User } from "../users/types";
+
 export interface Unit {
   id: number;
-  author: number;
+  author: User;
   name: string;
   content?: string;
 }
