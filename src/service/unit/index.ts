@@ -17,6 +17,11 @@ class UnitService {
     return response.data;
   }
 
+  async postUnit(unit: Unit) {
+    const response = await network.post<GetUnitResponse>(`/units/${unit.id}`, unit);
+    return response.data;
+  }
+
   async deleteUnit(id: number) {
     const response = await network.delete(`/units/${id}`);
     return response.data;

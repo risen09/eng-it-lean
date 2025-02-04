@@ -4,9 +4,35 @@ const router = require('express').Router();
 
 module.exports = router;
 
-const data = require('./data/units.json');
+const data = require('./units.json');
 router.get('/', (req, res) => {
   res.send(data);
+});
+
+router.post('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const updatedUnit = req.body;
+
+  if (!updatedUnit) {
+    return res.status(400).send('No unit to be added');
+  }
+
+  if (!data) {
+    return res.status(500).send('No data to be updated');
+  }
+
+  const index = data.findIndex((unit) => unit.id === id);
+
+  if (index < 0) {
+    return res.status(404).send('Not found');
+  }
+
+  data.splice(index, 1);
+
+  data.push(updatedUnit);
+
+  fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
+  res.status(200).send(data); 
 });
 
 router.put('/', (req, res) => {
@@ -52,12 +78,12 @@ router.get('/:id', (req, res) => {
     return res.status(404).send('Not found');
   }
 
-  const unitFilepath = path.join(__dirname, 'data', `${unit.filename}.md`);
-  const unitContent = fs.readFileSync(unitFilepath, 'utf-8');
+  // const unitFilepath = path.join(__dirname, 'data', `${unit.filename}.md`);
+  // const unitContent = fs.readFileSync(unitFilepath, 'utf-8');
 
-  if (!unitContent) {
-    return res.status(404).send('Not found');
-  }
+  // if (!unitContent) {
+  //   return res.status(404).send('Not found');
+  // }
 
-  res.send({ ...unit, content: unitContent });
+  res.send(unit);
 });

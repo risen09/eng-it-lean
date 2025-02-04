@@ -1,4 +1,4 @@
-import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBBtn, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
 import React from 'react';
 import { useGetUnitsQuery } from '../../store/api';
 import { LinkContainer } from 'react-router-bootstrap';

@@ -1,4 +1,4 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`assistant messages > should add prefix true to trailing assistant messages 1`] = `
 [
@@ -15,6 +15,21 @@ exports[`assistant messages > should add prefix true to trailing assistant messa
 ]
 `;
 
+exports[`assistant messages should add prefix true to trailing assistant messages 1`] = `
+[
+  {
+    "content": "Hello",
+    "role": "user",
+  },
+  {
+    "content": "Hello!",
+    "function_call": undefined,
+    "prefix": true,
+    "role": "assistant",
+  },
+]
+`;
+
 exports[`tool calls > should stringify arguments to tool calls 1`] = `
 [
   {
@@ -27,6 +42,27 @@ exports[`tool calls > should stringify arguments to tool calls 1`] = `
       },
       "name": "tool-1",
     },
+  },
+  {
+    "content": "{"key":"result-value"}",
+    "name": "tool-1",
+    "role": "function",
+  },
+]
+`;
+
+exports[`tool calls should stringify arguments to tool calls 1`] = `
+[
+  {
+    "content": "",
+    "function_call": {
+      "arguments": {
+        "key": "arg-value",
+      },
+      "name": "tool-1",
+    },
+    "prefix": undefined,
+    "role": "assistant",
   },
   {
     "content": "{"key":"result-value"}",

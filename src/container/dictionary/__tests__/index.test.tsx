@@ -9,14 +9,7 @@ import {
   spyedGetDictionaryWords
 } from '../../../__tests__/mocks/api/dictionaries/get-dictionary-words';
 import { mockPutWord } from '../../../__tests__/mocks/api/words/put-word';
-
-const renderWithRouter = (ui, { route = '/' } = {}) => {
-  window.history.pushState({}, 'Test page', route);
-
-  return {
-    ...render(ui, { wrapper: Wrapper })
-  };
-};
+import { renderWithRouter } from '../../../__tests__/utils';
 
 describe('DictionaryPage', () => {
   test('renders', async () => {
