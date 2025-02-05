@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useGetUnitsQuery, useGetUserQuery, useSaveUserMutation } from '../../store/api';
 import { useCookies } from 'react-cookie';
 import { LinkContainer } from 'react-router-bootstrap';
+import  avatar from './images/avatar.jpg';
 
 function AccountPage() {
   const navigate = useNavigate();
@@ -87,7 +88,7 @@ function AccountPage() {
     <div className="container my-2 py-3">
       <MDBRow className="align-items-center">
         <MDBCol md="5" className="text-center">
-          <img src={'avatar.jpg'} alt="Learning Illustration" className="img-fluid rounded" width="75%" height="75%" />
+          <img src={avatar} alt="Learning Illustration" className="img-fluid rounded" width="75%" height="75%" />
         </MDBCol>
         <MDBCol md="6" className="pe-md-5 border-end ms-5">
           <MDBTypography tag="p" className="text-muted mb-5 fs-6">

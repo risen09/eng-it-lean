@@ -15,15 +15,9 @@ router.post('/', (req, res) => {
 
   console.log(updatedData);
 
-  fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(updatedData), (err) => {
-    if (err) {
-      console.error('Ошибка при записи данных в файл users.json', err);
-      res.status(500).send('Ошибка при записи данных в файл users.json');
-    } else {
-      console.log('Данные успешно записаны в файл users.json');
-      res.status(200).send('Данные успешно записаны в файл users.json');
-    }
-  });
+  fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(updatedData));
+  
+  res.send(updatedData);
 });
 
 router.post('/login', (req, res) => {
