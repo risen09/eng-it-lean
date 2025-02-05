@@ -6,10 +6,10 @@ import { getNavigationsValue } from '@brojs/cli';
 import { getConfigValue } from '@brojs/cli';
 import { useGetDictionariesQuery } from '../../store/api';
 import mainKurs from './images/main.jpg';
-import mainBanner from './images/imgbanner2.jpg';
 import imgBlock1 from './images/block1.jpg';
 import imgBlock2 from './images/block2.jpg';
 import bannerblock1 from './images/bannerblock1.jpg';
+import bannerblock2 from './images/bannerblock2.jpg';
 import {
   MDBCarousel,
   MDBCarouselItem,
@@ -113,13 +113,13 @@ const CustomCarousel = () => {
         <MDBCarouselItem itemId={2} className="mb-5 mt-5">
           <MDBCarouselCaption className="md-auto mt-auto mb-auto">
             <MDBTypography tag="h2" className="text-muted fw-bold mb-5">
-              Словари
+              Интерактивный словарь
             </MDBTypography>
             <MDBTypography tag="p" className="text-muted mb-5 fs-6">
-              Наш ИИ-учитель – это персональный наставник, <br />
-              который адаптируется к вашему уровню знаний, <br />
-              обучает в удобном темпе и делает процесс <br />
-              изучения языка увлекательным
+              Запоминайте и тренируйте новые слова <br />
+              легко и эффективно. Добавляйте слова <br />
+              в свой личный список, изучайте <br />
+              их в удобном формате <br />
             </MDBTypography>
             <MDBBtn
               tag={Link}
@@ -130,7 +130,7 @@ const CustomCarousel = () => {
               Начать обучение
             </MDBBtn>
           </MDBCarouselCaption>
-          <img src={bannerblock1} className="d-block w-50 ms-auto me-5 h-100 ps-5 pe-5" alt="..." />
+          <img src={bannerblock2} className="d-block w-50 ms-auto me-5 h-100 ps-5 pe-5" alt="..." />
         </MDBCarouselItem>
       </StyledCarousel>
     </div>
@@ -147,11 +147,12 @@ const HomePage = (): React.ReactElement => {
         <MDBRow className="align-items-center">
           <MDBCol md="5" className="pe-md-5 border-end ms-5">
             <MDBTypography tag="h2" className="fw-bold mb-5">
-              Интерактивный словарь
+              Начни обучение
             </MDBTypography>
             <MDBTypography tag="p" className="text-muted mb-5 fs-6">
-              Запоминайте и тренируйте новые слова легко и эффективно <br />
-              Добавляйте слова в свой личный список, изучайте их в удобном формате <br />
+              Изучайте английский с нами. С нуля! <br />
+              Практики, словари, видеоуроки и многое другое <br />
+              Встроенный помощник
             </MDBTypography>
             <MDBBtn
               tag={Link}
