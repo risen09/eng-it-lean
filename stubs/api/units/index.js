@@ -118,9 +118,7 @@ router.get('/:id', (req, res) => {
   }
 
   const user = users.find((user) => user.public_id == unit.author);
-  if (!user) {
-    return res.status(404).send('User not found');
-  }
+  console.log(user)
 
   res.send({...unit, author: user});
 });
