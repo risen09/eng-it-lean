@@ -23,14 +23,14 @@ const DictionariesPage = (): React.ReactElement => {
       <MDBTypography tag="h2" className="text-center mb-4">
         Словари
       </MDBTypography>
-      <MDBRow className="g-2 justify-content-center">
+      <MDBRow className="">
         {error && <MDBCol md="12">Что-то пошло не так</MDBCol>}
 
         {isLoading && <MDBCol md="12">Загрузка...</MDBCol>}
         {dictionaries
           ?.map((dictionary) => (
             <MDBCol md="4">
-              <MDBCard style={{ width: '18rem' }} className="rounded-4 shadow-sm">
+              <MDBCard style={{ width: '18rem' }} className="m-2 rounded-4 shadow-sm">
                 <MDBRipple rippleColor="light" rippleTag="div" className="bg-image hover-overlay">
                   <MDBCardImage
                     src={require('./images/' + dictionary.imageFilename)}
