@@ -95,6 +95,7 @@ export const {
   useGetUnitsQuery,
   useGetUnitQuery,
   usePutUnitMutation,
+  usePostUnitMutation,
   usePostUsersMutation,
   usePostLoginMutation,
   useSaveUserMutation,

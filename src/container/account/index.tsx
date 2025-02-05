@@ -1,10 +1,21 @@
-import { getNavigationsValue } from '@brojs/cli';
-import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
+import { getNavigationsValue, getNavigationValue } from '@brojs/cli';
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCol,
+  MDBInput,
+  MDBRow,
+  MDBSpinner,
+  MDBTypography
+} from 'mdb-react-ui-kit';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { useGetUserQuery, usePostUsersMutation, useSaveUserMutation } from '../../store/api';
+import { useGetUnitsQuery, useGetUserQuery, useSaveUserMutation } from '../../store/api';
 import { useCookies } from 'react-cookie';
+import { LinkContainer } from 'react-router-bootstrap';
 
 function AccountPage() {
   const navigate = useNavigate();
@@ -18,6 +29,8 @@ function AccountPage() {
   const [cookies] = useCookies(['auth_token']);
   const { data: user } = useGetUserQuery(cookies.auth_token);
   const { register, handleSubmit, setValue } = useForm();
+
+  const { data: units, isLoading: isLoadingUnits, error } = useGetUnitsQuery();
 
   useEffect(() => {
     if (user) {
@@ -98,6 +111,27 @@ function AccountPage() {
             Сохранить изменения
           </MDBBtn>
         </MDBCol>
+      </MDBRow>
+      <MDBRow className="align-items-center my-5">
+        <MDBTypography tag="h2" className="text-muted">
+          Ваши материалы
+        </MDBTypography>
+        {isLoadingUnits && <MDBSpinner />}
+        {units &&
+          units
+            .filter((unit) => unit.author.id === user?.public_id)
+            .map((unit) => (
+              <MDBCol xl={4} lg={6} className="mb-4">
+                <MDBCard key={unit.id}>
+                  <MDBCardBody>
+                    <MDBCardTitle className="text-muted ">{unit.name}</MDBCardTitle>
+                    <LinkContainer to={`${getNavigationValue('eng-it-lean.unit').replace(':id', unit.id.toString())}`}>
+                      <MDBBtn color="success">Изучить</MDBBtn>
+                    </LinkContainer>
+                  </MDBCardBody>
+                </MDBCard>
+              </MDBCol>
+            ))}
       </MDBRow>
     </div>
     /*

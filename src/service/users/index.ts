@@ -14,7 +14,7 @@ class UserService {
   }
 
   async postUsers(user: User) {
-    const response = await network.post<GetUserResponse>('/users', user);
+    const response = await network.post<GetUserListResponse>('/users', user);
     return response.data;
   }
 

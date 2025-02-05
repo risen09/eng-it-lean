@@ -7,7 +7,16 @@ module.exports = router;
 const data = require('./units.json');
 const users = require('../users/users.json');
 router.get('/', (req, res) => {
-  res.send(data);
+  // for every data set author from users and save it to authoredData variable
+  const authoredData = data.map((unit) => {
+    const user = users.find((user) => user.public_id == unit.author);
+    if (user) {
+      unit.author = user;
+    }
+    return unit;
+  });
+
+  res.send(authoredData);
 });
 
 router.post('/:id', (req, res) => {
@@ -79,14 +88,12 @@ router.get('/:id', (req, res) => {
   const unit = data.find((unit) => unit.id === id);
 
   if (!unit) {
-    return res.status(404).send('Not found');
+    return res.status(404).send('Unit not found');
   }
-
-  console.log(unit.author);
 
   const user = users.find((user) => user.public_id == unit.author);
   if (!user) {
-    return res.status(404).send('Not found');
+    return res.status(404).send('User not found');
   }
 
   res.send({...unit, author: user});
