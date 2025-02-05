@@ -1,4 +1,3 @@
-import './index.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../../components/card';
@@ -34,56 +33,52 @@ import styled from '@emotion/styled';
 
 const StyledCarousel = styled(MDBCarousel)`
   position: relative;
-    .carousel-indicators [data-mdb-target] {
-        background-color: #9FA6B2; /* Серый цвет по умолчанию */
-        opacity: 0.5;
-    }
-    .carousel-control-next-icon,
-    .carousel-control-prev-icon {
-        color: #14A44D; /* Зелёный цвет */
-    }
-    
-    .custom-carousel .carousel-control-prev,
-    .custom-carousel .carousel-control-next {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: auto;
-    }
-    .carousel-indicators .active {
-        background-color: #14A44D;
-        opacity: 1;
-    }
+  .carousel-indicators [data-mdb-target] {
+    background-color: #9FA6B2; /* Серый цвет по умолчанию */
+    opacity: 0.5;
+  }
+  .carousel-control-next-icon,
+  .carousel-control-prev-icon {
+    color: #14A44D; /* Зелёный цвет */
+  }
+
+  .custom-carousel .carousel-control-prev,
+  .custom-carousel .carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+  }
+  .carousel-indicators .active {
+    background-color: #14A44D;
+    opacity: 1;
+  }
   .carousel-control-prev {
     left: -5%;
   }
-
   .carousel-control-next {
     right: -5%;
   }
-
   .carousel-caption {
-      position: absolute;
+    position: absolute;
     left: 7%;
     width: 50%;
     top: 50%;
-      transform: translateY(-60%);
+    transform: translateY(-60%);
     text-align: left;
   }
   .carousel-item {
-      position: relative;
-      height: 500px; /* Высота для десктопа */
-      max-height: 80vh;
+    position: relative;
+    height: 500px;
+    max-height: 80vh;
 
-      /* Для телефонов (до 768px) уменьшаем высоту */
-      @media (max-width: 768px) {
-          height: 300px; /* Меньшая высота на телефонах */
-      }
+    @media (max-width: 768px) {
+      height: 300px;
+    }
 
-      /* Для очень маленьких экранов (до 480px) */
-      @media (max-width: 480px) {
-          height: 250px;
-      }
+    @media (max-width: 480px) {
+      height: 250px;
+    }
   }
 `;
 
@@ -92,45 +87,53 @@ const CustomCarousel = () => {
     <div className="container py-0">
       <StyledCarousel showIndicators showControls>
         <MDBCarouselItem itemId={1} className="mb-5 mt-5">
-            <MDBCarouselCaption className="md-auto mt-auto mb-auto">
-              <MDBTypography tag="h2" className="text-muted fw-bold mb-5">
-                Начать обучение
-              </MDBTypography>
-              <MDBTypography tag="p" className="text-muted mb-5 fs-6">
-                Изучайте английский с нами. С нуля! <br />
-                Практики, словари, видеоуроки и многое другое <br />
-                Встроенный помощник
-              </MDBTypography>
-              <MDBBtn
-                tag={Link}
-                to={getNavigationsValue('eng-it-lean.units')}
-                color="success"
-                className="btn-sm w-50 px-4 py-2 fw-bold shadow rounded-2 text-center d-inline-block fs-8"
-              >
-                Начать обучение
-              </MDBBtn>
-            </MDBCarouselCaption>
-            <img
-              src={bannerblock1}
-              className="d-block w-50 ms-auto me-5 h-100 ps-5 pe-5"
-              alt="..."
-            />
-        </MDBCarouselItem>
-        <MDBCarouselItem itemId={2} className="">
-          <MDBCarouselCaption>
-            <h5 style={{ color: '#9FA6B2', fontWeight: 'bold' }}>First slide label</h5>
-            <p style={{ color: '#9FA6B2' }}>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+          <MDBCarouselCaption className="md-auto mt-auto mb-auto">
+            <MDBTypography tag="h2" className="text-muted fw-bold mb-5">
+              ИИ-учитель
+            </MDBTypography>
+            <MDBTypography tag="p" className="text-muted mb-5 fs-6">
+              Наш ИИ-учитель – это персональный наставник, <br />
+              который адаптируется к вашему уровню знаний, <br />
+              обучает в удобном темпе и делает процесс <br />
+              изучения языка увлекательным
+            </MDBTypography>
+            <MDBBtn
+              tag={Link}
+              to={getNavigationsValue('eng-it-lean.units')}
+              color="success"
+              className="btn-sm w-50 px-4 py-2 fw-bold shadow rounded-2 text-center d-inline-block fs-8"
+            >
+              Начать обучение
+            </MDBBtn>
           </MDBCarouselCaption>
-          <img
-            src="https://mdbootstrap.com/img/Photos/Slides/img%20(15).jpg"
-            className="d-block w-50 rounded ms-auto me-5"
-            alt="..."
-          />
+          <img src={bannerblock1} className="d-block w-50 ms-auto me-5 h-100 ps-5 pe-5" alt="..." />
+        </MDBCarouselItem>
+        <MDBCarouselItem itemId={2} className="mb-5 mt-5">
+          <MDBCarouselCaption className="md-auto mt-auto mb-auto">
+            <MDBTypography tag="h2" className="text-muted fw-bold mb-5">
+              Словари
+            </MDBTypography>
+            <MDBTypography tag="p" className="text-muted mb-5 fs-6">
+              Наш ИИ-учитель – это персональный наставник, <br />
+              который адаптируется к вашему уровню знаний, <br />
+              обучает в удобном темпе и делает процесс <br />
+              изучения языка увлекательным
+            </MDBTypography>
+            <MDBBtn
+              tag={Link}
+              to={getNavigationsValue('eng-it-lean.units')}
+              color="success"
+              className="btn-sm w-50 px-4 py-2 fw-bold shadow rounded-2 text-center d-inline-block fs-8"
+            >
+              Начать обучение
+            </MDBBtn>
+          </MDBCarouselCaption>
+          <img src={bannerblock1} className="d-block w-50 ms-auto me-5 h-100 ps-5 pe-5" alt="..." />
         </MDBCarouselItem>
       </StyledCarousel>
     </div>
   );
-}
+};
 
 const HomePage = (): React.ReactElement => {
   const { data: dictionaries, isLoading, error } = useGetDictionariesQuery(undefined);
@@ -142,12 +145,11 @@ const HomePage = (): React.ReactElement => {
         <MDBRow className="align-items-center">
           <MDBCol md="5" className="pe-md-5 border-end ms-5">
             <MDBTypography tag="h2" className="fw-bold mb-5">
-              Начать обучение
+              Интерактивный словарь
             </MDBTypography>
             <MDBTypography tag="p" className="text-muted mb-5 fs-6">
-              Изучайте английский с нами. С нуля! <br />
-              Практики, словари, видеоуроки и многое другое <br />
-              Встроенный помощник
+              Запоминайте и тренируйте новые слова легко и эффективно <br />
+              Добавляйте слова в свой личный список, изучайте их в удобном формате <br />
             </MDBTypography>
             <MDBBtn
               tag={Link}

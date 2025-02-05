@@ -23,6 +23,8 @@ export const HeaderNav: React.FC<CustomLinkProps> = ({
     padding: '5px 10px',
     borderRadius: '4px',
     transition: 'all 0.3s ease',
+    fontSize: '24px',
+    margin: '10px',
     ...style // Пользовательские стили
   };
 

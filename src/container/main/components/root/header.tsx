@@ -22,7 +22,7 @@ export const App = () => {
     { id: 2, title: 'Словари', navigation: 'eng-it-lean.dictionaries' },
     { id: 3, title: 'Материалы', navigation: 'eng-it-lean.units' },
     { id: 4, title: 'ИИ-учитель', navigation: 'eng-it-lean.generate-unit' },
-    { id: 5, title: 'Контакты', navigation: 'eng-it-lean.main' }
+    { id: 5, title: 'О проекте', navigation: 'eng-it-lean.about' }
   ];
   const [openBasic, setOpenBasic] = useState(false);
 
@@ -50,7 +50,7 @@ export const App = () => {
               </div>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <MDBNavbarLink active aria-current="page" href="#">
+              <MDBNavbarLink active aria-current="page" href="#" className="mt-2 ms-2">
                 {pagesV1.map((page) => (
                   <HeaderNav
                     key={page.id}
@@ -65,8 +65,8 @@ export const App = () => {
             </MDBNavbarItem>
           </MDBNavbarNav>
         </MDBCollapse>
-        <div className="btn-nav">
-          <MDBBtn color="success" tag={Link} to="entry">
+        <div className="">
+          <MDBBtn color="success" tag={Link} to="entry" className="mt-1">
             Вход
           </MDBBtn>
         </div>
