@@ -44,9 +44,10 @@ const UnitPage = (): React.ReactElement => {
             )}
           </MDBCol>
         </MDBRow>
+        { unit?.author && (
         <MDBTypography tag="p" className="text-center text-muted mb-5 fs-6">
-          Автор: {unit?.author.nickname}
-        </MDBTypography>
+          Автор: {unit?.author?.nickname}
+        </MDBTypography> )}
         <MDBRow>
           <MDBCol>
             <MarkdownStyled>{unit?.content}</MarkdownStyled>
