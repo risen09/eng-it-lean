@@ -25,16 +25,12 @@ const UnitsPage = (): React.ReactElement => {
               Практики, словари, видеоуроки и многое другое <br />
               Встроенный помощник
             </MDBTypography>
-            <MDBBtn
-              tag={Link}
-              to={getNavigationsValue('eng-it-lean.generate-unit')}
-              color="success"
-            >
+            <MDBBtn tag={Link} to={getNavigationsValue('eng-it-lean.generate-unit')} color="success">
               Сгенерировать урок
             </MDBBtn>
           </MDBCol>
           <MDBCol md="6" className="text-center">
-          <img src={mainKurs} alt="Learning Illustration" className="img-fluid rounded" width="75%" height="75%" />
+            <img src={mainKurs} alt="Learning Illustration" className="img-fluid rounded" width="75%" height="75%" />
           </MDBCol>
         </MDBRow>
         <MDBRow>
@@ -47,7 +43,7 @@ const UnitsPage = (): React.ReactElement => {
               <MDBCol xl={4} lg={6} className="mb-4">
                 <MDBCard key={unit.id}>
                   <MDBCardBody>
-                    <MDBCardTitle className='text-muted '>{unit.name}</MDBCardTitle>
+                    <MDBCardTitle className="text-muted ">{unit.name}</MDBCardTitle>
                     <LinkContainer to={`${getNavigationValue('eng-it-lean.unit').replace(':id', unit.id.toString())}`}>
                       <MDBBtn color="success">Изучить</MDBBtn>
                     </LinkContainer>

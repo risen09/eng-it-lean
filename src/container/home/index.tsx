@@ -34,7 +34,7 @@ import styled from '@emotion/styled';
 const StyledCarousel = styled(MDBCarousel)`
   position: relative;
   .carousel-indicators [data-mdb-target] {
-    background-color: #9FA6B2; /* Серый цвет по умолчанию */
+    background-color: #9fa6b2; /* Серый цвет по умолчанию */
     opacity: 0.5;
   }
   .carousel-control-next-icon,
@@ -50,7 +50,7 @@ const StyledCarousel = styled(MDBCarousel)`
     width: auto;
   }
   .carousel-indicators .active {
-    background-color: #14A44D;
+    background-color: #14a44d;
     opacity: 1;
   }
   .carousel-control-prev {
@@ -69,13 +69,15 @@ const StyledCarousel = styled(MDBCarousel)`
   }
   .carousel-item {
     position: relative;
-    height: 500px;
+    height: 500px; /* Высота для десктопа */
     max-height: 80vh;
 
+    /* Для телефонов (до 768px) уменьшаем высоту */
     @media (max-width: 768px) {
-      height: 300px;
+      height: 300px; /* Меньшая высота на телефонах */
     }
 
+    /* Для очень маленьких экранов (до 480px) */
     @media (max-width: 480px) {
       height: 250px;
     }

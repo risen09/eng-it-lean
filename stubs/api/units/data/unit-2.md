@@ -41,7 +41,8 @@ Documentation for a program typically includes the following sections:
 
 **Description**: This is a simple Python script that calculates the average value of a list of numbers.
 
-**Code Block**: 
+**Code Block**:
+
 ```python
 def calculate_average(numbers):
     """Calculate the average value of a list of numbers"""

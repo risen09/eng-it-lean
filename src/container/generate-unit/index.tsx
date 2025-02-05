@@ -45,6 +45,7 @@ import {
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import Editor from '../../components/editor';
+import { useCookies } from 'react-cookie';
 
 export default function GenerateUnitPage() {
   const {
@@ -70,9 +71,11 @@ export default function GenerateUnitPage() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const toggleOpen = () => setIsModalOpen(!isModalOpen);
 
+  const [cookies] = useCookies(['auth_token'])
   const [putUnit, { isLoading }] = usePutUnitMutation();
   const handleCreate = () => {
     putUnit({
+      author: cookies.auth_token,
       name: input,
       content: completion
     }).then(() => {

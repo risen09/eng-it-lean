@@ -37,21 +37,23 @@ const gigachat = gigachatProvider.createGigachat({
       headers: options.headers,
       httpsAgent: agent,
       data: options.body
-    }).then((response) => {
-      return new Response(response.data, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers,
-        body: response.data
+    })
+      .then((response) => {
+        return new Response(response.data, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
+          body: response.data
+        });
+      })
+      .catch((error) => {
+        return new Response(error.message, {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          headers: error.response.headers,
+          body: error.response.data
+        });
       });
-    }).catch((error) => {
-      return new Response(error.message, {
-        status: error.response.status,
-        statusText: error.response.statusText,
-        headers: error.response.headers,
-        body: error.response.data
-      });
-    });
   }
 });
 

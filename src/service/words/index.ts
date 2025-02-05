@@ -1,5 +1,5 @@
-import { network } from "../network";
-import { Word } from "./types";
+import { network } from '../network';
+import { Word } from './types';
 
 class WordsService {
   async getWords() {

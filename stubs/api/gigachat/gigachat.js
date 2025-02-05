@@ -1,21 +1,23 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = (mod) => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 
 // src/index.ts
 var index_exports = {};
@@ -26,57 +28,59 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 
 // src/gigachat-provider.ts
-var import_provider_utils4 = require("@ai-sdk/provider-utils");
+var import_provider_utils4 = require('@ai-sdk/provider-utils');
 
 // src/gigachat-chat-language-model.ts
-var import_provider_utils2 = require("@ai-sdk/provider-utils");
-var import_zod2 = require("zod");
+var import_provider_utils2 = require('@ai-sdk/provider-utils');
+var import_zod2 = require('zod');
 
 // src/convert-to-gigachat-chat-messages.ts
-var import_provider = require("@ai-sdk/provider");
+var import_provider = require('@ai-sdk/provider');
 function convertToGigachatChatMessages(prompt) {
   const messages = [];
   for (let i = 0; i < prompt.length; i++) {
     const { role, content } = prompt[i];
     const isLastMessage = i === prompt.length - 1;
     switch (role) {
-      case "system": {
-        messages.push({ role: "system", content });
+      case 'system': {
+        messages.push({ role: 'system', content });
         break;
       }
-      case "user": {
+      case 'user': {
         messages.push({
-          role: "user",
-          content: content.map((part) => {
-            switch (part.type) {
-              case "text": {
-                return part.text;
+          role: 'user',
+          content: content
+            .map((part) => {
+              switch (part.type) {
+                case 'text': {
+                  return part.text;
+                }
+                case 'image': {
+                  throw new import_provider.UnsupportedFunctionalityError({
+                    functionality: 'Images should be added in "attachments" object'
+                  });
+                }
+                case 'file': {
+                  throw new import_provider.UnsupportedFunctionalityError({
+                    functionality: 'File content parts in user messages'
+                  });
+                }
               }
-              case "image": {
-                throw new import_provider.UnsupportedFunctionalityError({
-                  functionality: 'Images should be added in "attachments" object'
-                });
-              }
-              case "file": {
-                throw new import_provider.UnsupportedFunctionalityError({
-                  functionality: "File content parts in user messages"
-                });
-              }
-            }
-          }).join("")
+            })
+            .join('')
         });
         break;
       }
-      case "assistant": {
-        let text = "";
+      case 'assistant': {
+        let text = '';
         let functionCall;
         for (const part of content) {
           switch (part.type) {
-            case "text": {
+            case 'text': {
               text += part.text;
               break;
             }
-            case "tool-call": {
+            case 'tool-call': {
               functionCall = {
                 name: part.toolName,
                 arguments: part.args
@@ -90,17 +94,17 @@ function convertToGigachatChatMessages(prompt) {
           }
         }
         messages.push({
-          role: "assistant",
+          role: 'assistant',
           content: text,
           prefix: isLastMessage ? true : void 0,
           function_call: functionCall
         });
         break;
       }
-      case "tool": {
+      case 'tool': {
         for (const toolResponse of content) {
           messages.push({
-            role: "function",
+            role: 'function',
             name: toolResponse.toolName,
             content: JSON.stringify(toolResponse.result)
           });
@@ -119,25 +123,25 @@ function convertToGigachatChatMessages(prompt) {
 // src/map-gigachat-finish-reason.ts
 function mapGigachatFinishReason(finishReason) {
   switch (finishReason) {
-    case "stop":
-      return "stop";
-    case "length":
-    case "model_length":
-      return "length";
-    case "function_call":
-      return "tool-calls";
-    case "error":
-      return "error";
+    case 'stop':
+      return 'stop';
+    case 'length':
+    case 'model_length':
+      return 'length';
+    case 'function_call':
+      return 'tool-calls';
+    case 'error':
+      return 'error';
     default:
-      return "unknown";
+      return 'unknown';
   }
 }
 
 // src/gigachat-error.ts
-var import_provider_utils = require("@ai-sdk/provider-utils");
-var import_zod = require("zod");
+var import_provider_utils = require('@ai-sdk/provider-utils');
+var import_zod = require('zod');
 var gigachatErrorDataSchema = import_zod.z.object({
-  object: import_zod.z.literal("error"),
+  object: import_zod.z.literal('error'),
   message: import_zod.z.string(),
   type: import_zod.z.string(),
   param: import_zod.z.string().nullable(),
@@ -149,10 +153,7 @@ var gigachatFailedResponseHandler = (0, import_provider_utils.createJsonErrorRes
 });
 
 // src/get-response-metadata.ts
-function getResponseMetadata({
-  model,
-  created
-}) {
+function getResponseMetadata({ model, created }) {
   return {
     modelId: model != null ? model : void 0,
     timestamp: created != null ? new Date(created * 1e3) : void 0
@@ -160,7 +161,7 @@ function getResponseMetadata({
 }
 
 // src/gigachat-prepare-tools.ts
-var import_provider2 = require("@ai-sdk/provider");
+var import_provider2 = require('@ai-sdk/provider');
 function prepareTools(mode) {
   var _a;
   const tools = ((_a = mode.tools) == null ? void 0 : _a.length) ? mode.tools : void 0;
@@ -170,11 +171,11 @@ function prepareTools(mode) {
   }
   const gigachatTools = [];
   for (const tool of tools) {
-    if (tool.type === "provider-defined") {
-      toolWarnings.push({ type: "unsupported-tool", tool });
+    if (tool.type === 'provider-defined') {
+      toolWarnings.push({ type: 'unsupported-tool', tool });
     } else {
       gigachatTools.push({
-        type: "function",
+        type: 'function',
         function: {
           name: tool.name,
           description: tool.description,
@@ -189,17 +190,17 @@ function prepareTools(mode) {
   }
   const type = toolChoice.type;
   switch (type) {
-    case "auto":
-    case "none":
+    case 'auto':
+    case 'none':
       return { tools: gigachatTools, tool_choice: type, toolWarnings };
-    case "required":
-      return { tools: gigachatTools, tool_choice: "any", toolWarnings };
+    case 'required':
+      return { tools: gigachatTools, tool_choice: 'any', toolWarnings };
     // gigachat does not support tool mode directly,
     // so we filter the tools and force the tool choice through 'any'
-    case "tool":
+    case 'tool':
       return {
         tools: gigachatTools.filter((tool) => tool.function.name === toolChoice.toolName),
-        tool_choice: "any",
+        tool_choice: 'any',
         toolWarnings
       };
     default: {
@@ -214,8 +215,8 @@ function prepareTools(mode) {
 // src/gigachat-chat-language-model.ts
 var GigachatChatLanguageModel = class {
   constructor(modelId, settings, config) {
-    this.specificationVersion = "v1";
-    this.defaultObjectGenerationMode = "json";
+    this.specificationVersion = 'v1';
+    this.defaultObjectGenerationMode = 'json';
     this.supportsImageUrls = false;
     this.modelId = modelId;
     this.settings = settings;
@@ -241,33 +242,33 @@ var GigachatChatLanguageModel = class {
     const warnings = [];
     if (topK != null) {
       warnings.push({
-        type: "unsupported-setting",
-        setting: "topK"
+        type: 'unsupported-setting',
+        setting: 'topK'
       });
     }
     if (frequencyPenalty != null) {
       warnings.push({
-        type: "unsupported-setting",
-        setting: "frequencyPenalty"
+        type: 'unsupported-setting',
+        setting: 'frequencyPenalty'
       });
     }
     if (presencePenalty != null) {
       warnings.push({
-        type: "unsupported-setting",
-        setting: "presencePenalty"
+        type: 'unsupported-setting',
+        setting: 'presencePenalty'
       });
     }
     if (stopSequences != null) {
       warnings.push({
-        type: "unsupported-setting",
-        setting: "stopSequences"
+        type: 'unsupported-setting',
+        setting: 'stopSequences'
       });
     }
-    if (responseFormat != null && responseFormat.type === "json" && responseFormat.schema != null) {
+    if (responseFormat != null && responseFormat.type === 'json' && responseFormat.schema != null) {
       warnings.push({
-        type: "unsupported-setting",
-        setting: "responseFormat",
-        details: "JSON response format schema is not supported"
+        type: 'unsupported-setting',
+        setting: 'responseFormat',
+        details: 'JSON response format schema is not supported'
       });
     }
     const baseArgs = {
@@ -282,33 +283,34 @@ var GigachatChatLanguageModel = class {
       temperature,
       top_p: topP,
       // response format:
-      response_format: (responseFormat == null ? void 0 : responseFormat.type) === "json" ? { type: "json_object" } : void 0,
+      response_format:
+        (responseFormat == null ? void 0 : responseFormat.type) === 'json' ? { type: 'json_object' } : void 0,
       // messages:
       messages: convertToGigachatChatMessages(prompt)
     };
     switch (type) {
-      case "regular": {
+      case 'regular': {
         const { tools, tool_choice, toolWarnings } = prepareTools(mode);
         return {
           args: { ...baseArgs, tools, tool_choice },
           warnings: [...warnings, ...toolWarnings]
         };
       }
-      case "object-json": {
+      case 'object-json': {
         return {
           args: {
             ...baseArgs,
-            response_format: { type: "json_object" }
+            response_format: { type: 'json_object' }
           },
           warnings
         };
       }
-      case "object-tool": {
+      case 'object-tool': {
         return {
           args: {
             ...baseArgs,
-            tool_choice: "any",
-            tools: [{ type: "function", function: mode.tool }]
+            tool_choice: 'any',
+            tools: [{ type: 'function', function: mode.tool }]
           },
           warnings
         };
@@ -335,19 +337,21 @@ var GigachatChatLanguageModel = class {
     const choice = response.choices[0];
     let text = (_a = choice.message.content) != null ? _a : void 0;
     const lastMessage = rawPrompt[rawPrompt.length - 1];
-    if (lastMessage.role === "assistant" && (text == null ? void 0 : text.startsWith(lastMessage.content))) {
+    if (lastMessage.role === 'assistant' && (text == null ? void 0 : text.startsWith(lastMessage.content))) {
       text = text.slice(lastMessage.content.length);
     }
     return {
       text,
-      toolCalls: choice.message.function_call ? [
-        {
-          toolCallType: "function",
-          toolCallId: choice.message.function_call.name,
-          toolName: choice.message.function_call.name,
-          args: JSON.stringify(choice.message.function_call.arguments)
-        }
-      ] : [],
+      toolCalls: choice.message.function_call
+        ? [
+            {
+              toolCallType: 'function',
+              toolCallId: choice.message.function_call.name,
+              toolName: choice.message.function_call.name,
+              args: JSON.stringify(choice.message.function_call.arguments)
+            }
+          ]
+        : [],
       finishReason: mapGigachatFinishReason(choice.finish_reason),
       usage: {
         promptTokens: response.usage.prompt_tokens,
@@ -373,7 +377,7 @@ var GigachatChatLanguageModel = class {
       fetch: this.config.fetch
     });
     const { messages: rawPrompt, ...rawSettings } = args;
-    let finishReason = "unknown";
+    let finishReason = 'unknown';
     let usage = {
       promptTokens: Number.NaN,
       completionTokens: Number.NaN
@@ -385,14 +389,14 @@ var GigachatChatLanguageModel = class {
         new TransformStream({
           transform(chunk, controller) {
             if (!chunk.success) {
-              controller.enqueue({ type: "error", error: chunk.error });
+              controller.enqueue({ type: 'error', error: chunk.error });
               return;
             }
             chunkNumber++;
             const value = chunk.value;
             if (chunkNumber === 1) {
               controller.enqueue({
-                type: "response-metadata",
+                type: 'response-metadata',
                 ...getResponseMetadata(value)
               });
             }
@@ -412,7 +416,7 @@ var GigachatChatLanguageModel = class {
             const delta = choice.delta;
             if (chunkNumber <= 2) {
               const lastMessage = rawPrompt[rawPrompt.length - 1];
-              if (lastMessage.role === "assistant" && delta.content === lastMessage.content.trimEnd()) {
+              if (lastMessage.role === 'assistant' && delta.content === lastMessage.content.trimEnd()) {
                 if (delta.content.length < lastMessage.content.length) {
                   trimLeadingSpace = true;
                 }
@@ -421,22 +425,22 @@ var GigachatChatLanguageModel = class {
             }
             if (delta.content != null) {
               controller.enqueue({
-                type: "text-delta",
+                type: 'text-delta',
                 textDelta: trimLeadingSpace ? delta.content.trimStart() : delta.content
               });
               trimLeadingSpace = false;
             }
             if (delta.function_call != null) {
               controller.enqueue({
-                type: "tool-call-delta",
-                toolCallType: "function",
+                type: 'tool-call-delta',
+                toolCallType: 'function',
                 toolCallId: delta.function_call.name,
                 toolName: delta.function_call.name,
                 argsTextDelta: JSON.stringify(delta.function_call.arguments)
               });
               controller.enqueue({
-                type: "tool-call",
-                toolCallType: "function",
+                type: 'tool-call',
+                toolCallType: 'function',
                 toolCallId: delta.function_call.name,
                 toolName: delta.function_call.name,
                 args: JSON.stringify(delta.function_call.arguments)
@@ -444,7 +448,7 @@ var GigachatChatLanguageModel = class {
             }
           },
           flush(controller) {
-            controller.enqueue({ type: "finish", finishReason, usage });
+            controller.enqueue({ type: 'finish', finishReason, usage });
           }
         })
       ),
@@ -461,21 +465,23 @@ var gigachatChatResponseSchema = import_zod2.z.object({
   choices: import_zod2.z.array(
     import_zod2.z.object({
       message: import_zod2.z.object({
-        role: import_zod2.z.literal("assistant"),
+        role: import_zod2.z.literal('assistant'),
         content: import_zod2.z.string().nullable(),
         created: import_zod2.z.number().nullish(),
         name: import_zod2.z.string().nullish(),
-        function_call: import_zod2.z.object({
-          name: import_zod2.z.string(),
-          arguments: import_zod2.z.record(import_zod2.z.any())
-        }).nullish(),
+        function_call: import_zod2.z
+          .object({
+            name: import_zod2.z.string(),
+            arguments: import_zod2.z.record(import_zod2.z.any())
+          })
+          .nullish(),
         data_for_context: import_zod2.z.array(import_zod2.z.object({})).nullish()
       }),
       index: import_zod2.z.number(),
       finish_reason: import_zod2.z.string().nullish()
     })
   ),
-  object: import_zod2.z.literal("chat.completion"),
+  object: import_zod2.z.literal('chat.completion'),
   usage: import_zod2.z.object({
     prompt_tokens: import_zod2.z.number(),
     completion_tokens: import_zod2.z.number(),
@@ -485,35 +491,39 @@ var gigachatChatResponseSchema = import_zod2.z.object({
 var gigachatChatChunkSchema = import_zod2.z.object({
   created: import_zod2.z.number().nullish(),
   model: import_zod2.z.string().nullish(),
-  object: import_zod2.z.literal("chat.completion"),
+  object: import_zod2.z.literal('chat.completion'),
   choices: import_zod2.z.array(
     import_zod2.z.object({
       delta: import_zod2.z.object({
-        role: import_zod2.z.enum(["assistant"]).optional(),
+        role: import_zod2.z.enum(['assistant']).optional(),
         content: import_zod2.z.string().nullish(),
         functions_state_id: import_zod2.z.string().nullish(),
-        function_call: import_zod2.z.object({
-          name: import_zod2.z.string(),
-          arguments: import_zod2.z.object({})
-        }).nullish()
+        function_call: import_zod2.z
+          .object({
+            name: import_zod2.z.string(),
+            arguments: import_zod2.z.object({})
+          })
+          .nullish()
       }),
       finish_reason: import_zod2.z.string().nullish(),
       index: import_zod2.z.number()
     })
   ),
-  usage: import_zod2.z.object({
-    prompt_tokens: import_zod2.z.number(),
-    completion_tokens: import_zod2.z.number()
-  }).nullish()
+  usage: import_zod2.z
+    .object({
+      prompt_tokens: import_zod2.z.number(),
+      completion_tokens: import_zod2.z.number()
+    })
+    .nullish()
 });
 
 // src/gigachat-embedding-model.ts
-var import_provider3 = require("@ai-sdk/provider");
-var import_provider_utils3 = require("@ai-sdk/provider-utils");
-var import_zod3 = require("zod");
+var import_provider3 = require('@ai-sdk/provider');
+var import_provider_utils3 = require('@ai-sdk/provider-utils');
+var import_zod3 = require('zod');
 var GigachatEmbeddingModel = class {
   constructor(modelId, settings, config) {
-    this.specificationVersion = "v1";
+    this.specificationVersion = 'v1';
     this.modelId = modelId;
     this.settings = settings;
     this.config = config;
@@ -529,11 +539,7 @@ var GigachatEmbeddingModel = class {
     var _a;
     return (_a = this.settings.supportsParallelCalls) != null ? _a : false;
   }
-  async doEmbed({
-    values,
-    abortSignal,
-    headers
-  }) {
+  async doEmbed({ values, abortSignal, headers }) {
     if (values.length > this.maxEmbeddingsPerCall) {
       throw new import_provider3.TooManyEmbeddingValuesForCallError({
         provider: this.provider,
@@ -548,10 +554,12 @@ var GigachatEmbeddingModel = class {
       body: {
         model: this.modelId,
         input: values,
-        encoding_format: "float"
+        encoding_format: 'float'
       },
       failedResponseHandler: gigachatFailedResponseHandler,
-      successfulResponseHandler: (0, import_provider_utils3.createJsonResponseHandler)(GigachatTextEmbeddingResponseSchema),
+      successfulResponseHandler: (0, import_provider_utils3.createJsonResponseHandler)(
+        GigachatTextEmbeddingResponseSchema
+      ),
       abortSignal,
       fetch: this.config.fetch
     });
@@ -570,31 +578,36 @@ var GigachatTextEmbeddingResponseSchema = import_zod3.z.object({
 // src/gigachat-provider.ts
 function createGigachat(options = {}) {
   var _a;
-  const baseURL = (_a = (0, import_provider_utils4.withoutTrailingSlash)(options.baseURL)) != null ? _a : "https://gigachat.devices.sberbank.ru/api/v1";
+  const baseURL =
+    (_a = (0, import_provider_utils4.withoutTrailingSlash)(options.baseURL)) != null
+      ? _a
+      : 'https://gigachat.devices.sberbank.ru/api/v1';
   const getAccessToken = () => ({});
   const getHeaders = () => ({
     Authorization: `Bearer ${(0, import_provider_utils4.loadApiKey)({
       apiKey: options.apiKey,
-      environmentVariableName: "GIGACHAT_ACCESS_TOKEN",
-      description: "GigaChat"
+      environmentVariableName: 'GIGACHAT_ACCESS_TOKEN',
+      description: 'GigaChat'
     })}`,
     ...options.headers
   });
-  const createChatModel = (modelId, settings = {}) => new GigachatChatLanguageModel(modelId, settings, {
-    provider: "gigachat.chat",
-    baseURL,
-    headers: getHeaders,
-    fetch: options.fetch
-  });
-  const createEmbeddingModel = (modelId, settings = {}) => new GigachatEmbeddingModel(modelId, settings, {
-    provider: "gigachat.embedding",
-    baseURL,
-    headers: getHeaders,
-    fetch: options.fetch
-  });
-  const provider = function(modelId, settings) {
+  const createChatModel = (modelId, settings = {}) =>
+    new GigachatChatLanguageModel(modelId, settings, {
+      provider: 'gigachat.chat',
+      baseURL,
+      headers: getHeaders,
+      fetch: options.fetch
+    });
+  const createEmbeddingModel = (modelId, settings = {}) =>
+    new GigachatEmbeddingModel(modelId, settings, {
+      provider: 'gigachat.embedding',
+      baseURL,
+      headers: getHeaders,
+      fetch: options.fetch
+    });
+  const provider = function (modelId, settings) {
     if (new.target) {
-      throw new Error("Gigachat function cannot be called with the new keyword.");
+      throw new Error('Gigachat function cannot be called with the new keyword.');
     }
     return createChatModel(modelId, settings);
   };
@@ -607,8 +620,9 @@ function createGigachat(options = {}) {
 }
 var gigachat = createGigachat();
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  createGigachat,
-  gigachat
-});
+0 &&
+  (module.exports = {
+    createGigachat,
+    gigachat
+  });
 //# sourceMappingURL=index.js.map

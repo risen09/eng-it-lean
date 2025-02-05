@@ -1,4 +1,4 @@
-import { Word } from "../words/types";
+import { Word } from '../words/types';
 
 export interface Dictionary {
   id: number;
@@ -7,7 +7,6 @@ export interface Dictionary {
   link: string;
   words: Array<Word>;
 }
-
 
 export type GetDictionaryResponse = Dictionary;
 export type GetDictionariesResponse = Array<Dictionary>;

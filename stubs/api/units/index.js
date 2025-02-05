@@ -5,8 +5,44 @@ const router = require('express').Router();
 module.exports = router;
 
 const data = require('./units.json');
+const users = require('../users/users.json');
 router.get('/', (req, res) => {
-  res.send(data);
+  // for every data set author from users and save it to authoredData variable
+  const authoredData = data.map((unit) => {
+    const user = users.find((user) => user.public_id == unit.author);
+    if (user) {
+      unit.author = user;
+    }
+    return unit;
+  });
+
+  res.send(authoredData);
+});
+
+router.post('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const updatedUnit = req.body;
+
+  if (!updatedUnit) {
+    return res.status(400).send('No unit to be added');
+  }
+
+  if (!data) {
+    return res.status(500).send('No data to be updated');
+  }
+
+  const index = data.findIndex((unit) => unit.id === id);
+
+  if (index < 0) {
+    return res.status(404).send('Not found');
+  }
+
+  data.splice(index, 1);
+
+  data.push(updatedUnit);
+
+  fs.writeFileSync(path.join(__dirname, 'units.json'), JSON.stringify(data));
+  res.status(200).send(data); 
 });
 
 router.post('/:id', (req, res) => {
@@ -38,9 +74,12 @@ router.post('/:id', (req, res) => {
 router.put('/', (req, res) => {
   const newUnit = req.body;
 
-  console.log(newUnit);
   if (!newUnit) {
     return res.status(400).send('No new unit to be added');
+  }
+
+  if (!newUnit.author) {
+    return res.status(400).send('User is not logged in!');
   }
 
   if (!data) {
@@ -48,12 +87,12 @@ router.put('/', (req, res) => {
   }
 
   const newId = data.length + 1;
-  const filename = newUnit.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-  fs.writeFileSync(path.join(__dirname, 'data', `${filename}.md`), newUnit.content);
+  // const filename = newUnit.name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  // fs.writeFileSync(path.join(__dirname, 'data', `${filename}.md`), newUnit.content);
 
-  data.push({ id: newId, filename: filename, name: newUnit.name });
+  data.push({ ...unit, id: newId });
 
-  fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
+  fs.writeFileSync(path.join(__dirname, 'units.json'), JSON.stringify(data));
   res.status(200).send(data);
 });
 
@@ -66,7 +105,7 @@ router.delete('/:id', (req, res) => {
   }
 
   data.splice(index, 1);
-  fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
+  fs.writeFileSync(path.join(__dirname, 'units.json'), JSON.stringify(data));
   res.send({ message: `Unit with ID ${id} deleted` });
 });
 
@@ -75,15 +114,11 @@ router.get('/:id', (req, res) => {
   const unit = data.find((unit) => unit.id === id);
 
   if (!unit) {
-    return res.status(404).send('Not found');
+    return res.status(404).send('Unit not found');
   }
 
-  // const unitFilepath = path.join(__dirname, 'data', `${unit.filename}.md`);
-  // const unitContent = fs.readFileSync(unitFilepath, 'utf-8');
+  const user = users.find((user) => user.public_id == unit.author);
+  console.log(user)
 
-  // if (!unitContent) {
-  //   return res.status(404).send('Not found');
-  // }
-
-  res.send(unit);
+  res.send({...unit, author: user});
 });

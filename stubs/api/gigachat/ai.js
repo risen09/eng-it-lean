@@ -1,21 +1,23 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name14 in all)
-    __defProp(target, name14, { get: all[name14], enumerable: true });
+  for (var name14 in all) __defProp(target, name14, { get: all[name14], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = (mod) => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 
 // streams/index.ts
 var streams_exports = {};
@@ -81,14 +83,14 @@ __export(streams_exports, {
 module.exports = __toCommonJS(streams_exports);
 
 // core/index.ts
-var import_provider_utils12 = require("@ai-sdk/provider-utils");
-var import_ui_utils9 = require("@ai-sdk/ui-utils");
+var import_provider_utils12 = require('@ai-sdk/provider-utils');
+var import_ui_utils9 = require('@ai-sdk/ui-utils');
 
 // core/data-stream/create-data-stream.ts
-var import_ui_utils = require("@ai-sdk/ui-utils");
+var import_ui_utils = require('@ai-sdk/ui-utils');
 function createDataStream({
   execute,
-  onError = () => "An error occurred."
+  onError = () => 'An error occurred.'
   // mask error messages for safety by default
 }) {
   let controller;
@@ -101,16 +103,15 @@ function createDataStream({
   function safeEnqueue(data) {
     try {
       controller.enqueue(data);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
   try {
     const result = execute({
       writeData(data) {
-        safeEnqueue((0, import_ui_utils.formatDataStreamPart)("data", [data]));
+        safeEnqueue((0, import_ui_utils.formatDataStreamPart)('data', [data]));
       },
       writeMessageAnnotation(annotation) {
-        safeEnqueue((0, import_ui_utils.formatDataStreamPart)("message_annotations", [annotation]));
+        safeEnqueue((0, import_ui_utils.formatDataStreamPart)('message_annotations', [annotation]));
       },
       merge(streamArg) {
         ongoingStreamPromises.push(
@@ -118,12 +119,11 @@ function createDataStream({
             const reader = streamArg.getReader();
             while (true) {
               const { done, value } = await reader.read();
-              if (done)
-                break;
+              if (done) break;
               safeEnqueue(value);
             }
           })().catch((error) => {
-            safeEnqueue((0, import_ui_utils.formatDataStreamPart)("error", onError(error)));
+            safeEnqueue((0, import_ui_utils.formatDataStreamPart)('error', onError(error)));
           })
         );
       },
@@ -132,12 +132,12 @@ function createDataStream({
     if (result) {
       ongoingStreamPromises.push(
         result.catch((error) => {
-          safeEnqueue((0, import_ui_utils.formatDataStreamPart)("error", onError(error)));
+          safeEnqueue((0, import_ui_utils.formatDataStreamPart)('error', onError(error)));
         })
       );
     }
   } catch (error) {
-    safeEnqueue((0, import_ui_utils.formatDataStreamPart)("error", onError(error)));
+    safeEnqueue((0, import_ui_utils.formatDataStreamPart)('error', onError(error)));
   }
   const waitForStreams = new Promise(async (resolve) => {
     while (ongoingStreamPromises.length > 0) {
@@ -148,84 +148,61 @@ function createDataStream({
   waitForStreams.finally(() => {
     try {
       controller.close();
-    } catch (error) {
-    }
+    } catch (error) {}
   });
   return stream;
 }
 
 // core/util/prepare-response-headers.ts
-function prepareResponseHeaders(headers, {
-  contentType,
-  dataStreamVersion
-}) {
+function prepareResponseHeaders(headers, { contentType, dataStreamVersion }) {
   const responseHeaders = new Headers(headers != null ? headers : {});
-  if (!responseHeaders.has("Content-Type")) {
-    responseHeaders.set("Content-Type", contentType);
+  if (!responseHeaders.has('Content-Type')) {
+    responseHeaders.set('Content-Type', contentType);
   }
   if (dataStreamVersion !== void 0) {
-    responseHeaders.set("X-Vercel-AI-Data-Stream", dataStreamVersion);
+    responseHeaders.set('X-Vercel-AI-Data-Stream', dataStreamVersion);
   }
   return responseHeaders;
 }
 
 // core/data-stream/create-data-stream-response.ts
-function createDataStreamResponse({
-  status,
-  statusText,
-  headers,
-  execute,
-  onError
-}) {
-  return new Response(
-    createDataStream({ execute, onError }).pipeThrough(new TextEncoderStream()),
-    {
-      status,
-      statusText,
-      headers: prepareResponseHeaders(headers, {
-        contentType: "text/plain; charset=utf-8",
-        dataStreamVersion: "v1"
-      })
-    }
-  );
+function createDataStreamResponse({ status, statusText, headers, execute, onError }) {
+  return new Response(createDataStream({ execute, onError }).pipeThrough(new TextEncoderStream()), {
+    status,
+    statusText,
+    headers: prepareResponseHeaders(headers, {
+      contentType: 'text/plain; charset=utf-8',
+      dataStreamVersion: 'v1'
+    })
+  });
 }
 
 // core/util/prepare-outgoing-http-headers.ts
-function prepareOutgoingHttpHeaders(headers, {
-  contentType,
-  dataStreamVersion
-}) {
+function prepareOutgoingHttpHeaders(headers, { contentType, dataStreamVersion }) {
   const outgoingHeaders = {};
   if (headers != null) {
     for (const [key, value] of Object.entries(headers)) {
       outgoingHeaders[key] = value;
     }
   }
-  if (outgoingHeaders["Content-Type"] == null) {
-    outgoingHeaders["Content-Type"] = contentType;
+  if (outgoingHeaders['Content-Type'] == null) {
+    outgoingHeaders['Content-Type'] = contentType;
   }
   if (dataStreamVersion !== void 0) {
-    outgoingHeaders["X-Vercel-AI-Data-Stream"] = dataStreamVersion;
+    outgoingHeaders['X-Vercel-AI-Data-Stream'] = dataStreamVersion;
   }
   return outgoingHeaders;
 }
 
 // core/util/write-to-server-response.ts
-function writeToServerResponse({
-  response,
-  status,
-  statusText,
-  headers,
-  stream
-}) {
+function writeToServerResponse({ response, status, statusText, headers, stream }) {
   response.writeHead(status != null ? status : 200, statusText, headers);
   const reader = stream.getReader();
   const read = async () => {
     try {
       while (true) {
         const { done, value } = await reader.read();
-        if (done)
-          break;
+        if (done) break;
         response.write(value);
       }
     } catch (error) {
@@ -238,39 +215,27 @@ function writeToServerResponse({
 }
 
 // core/data-stream/pipe-data-stream-to-response.ts
-function pipeDataStreamToResponse(response, {
-  status,
-  statusText,
-  headers,
-  execute,
-  onError
-}) {
+function pipeDataStreamToResponse(response, { status, statusText, headers, execute, onError }) {
   writeToServerResponse({
     response,
     status,
     statusText,
     headers: prepareOutgoingHttpHeaders(headers, {
-      contentType: "text/plain; charset=utf-8",
-      dataStreamVersion: "v1"
+      contentType: 'text/plain; charset=utf-8',
+      dataStreamVersion: 'v1'
     }),
-    stream: createDataStream({ execute, onError }).pipeThrough(
-      new TextEncoderStream()
-    )
+    stream: createDataStream({ execute, onError }).pipeThrough(new TextEncoderStream())
   });
 }
 
 // errors/invalid-argument-error.ts
-var import_provider = require("@ai-sdk/provider");
-var name = "AI_InvalidArgumentError";
+var import_provider = require('@ai-sdk/provider');
+var name = 'AI_InvalidArgumentError';
 var marker = `vercel.ai.error.${name}`;
 var symbol = Symbol.for(marker);
 var _a;
 var InvalidArgumentError = class extends import_provider.AISDKError {
-  constructor({
-    parameter,
-    value,
-    message
-  }) {
+  constructor({ parameter, value, message }) {
     super({
       name,
       message: `Invalid argument for parameter ${parameter}: ${message}`
@@ -286,8 +251,8 @@ var InvalidArgumentError = class extends import_provider.AISDKError {
 _a = symbol;
 
 // util/retry-with-exponential-backoff.ts
-var import_provider3 = require("@ai-sdk/provider");
-var import_provider_utils = require("@ai-sdk/provider-utils");
+var import_provider3 = require('@ai-sdk/provider');
+var import_provider_utils = require('@ai-sdk/provider-utils');
 
 // util/delay.ts
 async function delay(delayInMs) {
@@ -295,17 +260,13 @@ async function delay(delayInMs) {
 }
 
 // util/retry-error.ts
-var import_provider2 = require("@ai-sdk/provider");
-var name2 = "AI_RetryError";
+var import_provider2 = require('@ai-sdk/provider');
+var name2 = 'AI_RetryError';
 var marker2 = `vercel.ai.error.${name2}`;
 var symbol2 = Symbol.for(marker2);
 var _a2;
 var RetryError = class extends import_provider2.AISDKError {
-  constructor({
-    message,
-    reason,
-    errors
-  }) {
+  constructor({ message, reason, errors }) {
     super({ name: name2, message });
     this[_a2] = true;
     this.reason = reason;
@@ -319,20 +280,15 @@ var RetryError = class extends import_provider2.AISDKError {
 _a2 = symbol2;
 
 // util/retry-with-exponential-backoff.ts
-var retryWithExponentialBackoff = ({
-  maxRetries = 2,
-  initialDelayInMs = 2e3,
-  backoffFactor = 2
-} = {}) => async (f) => _retryWithExponentialBackoff(f, {
-  maxRetries,
-  delayInMs: initialDelayInMs,
-  backoffFactor
-});
-async function _retryWithExponentialBackoff(f, {
-  maxRetries,
-  delayInMs,
-  backoffFactor
-}, errors = []) {
+var retryWithExponentialBackoff =
+  ({ maxRetries = 2, initialDelayInMs = 2e3, backoffFactor = 2 } = {}) =>
+  async (f) =>
+    _retryWithExponentialBackoff(f, {
+      maxRetries,
+      delayInMs: initialDelayInMs,
+      backoffFactor
+    });
+async function _retryWithExponentialBackoff(f, { maxRetries, delayInMs, backoffFactor }, errors = []) {
   try {
     return await f();
   } catch (error) {
@@ -348,11 +304,16 @@ async function _retryWithExponentialBackoff(f, {
     if (tryNumber > maxRetries) {
       throw new RetryError({
         message: `Failed after ${tryNumber} attempts. Last error: ${errorMessage}`,
-        reason: "maxRetriesExceeded",
+        reason: 'maxRetriesExceeded',
         errors: newErrors
       });
     }
-    if (error instanceof Error && import_provider3.APICallError.isInstance(error) && error.isRetryable === true && tryNumber <= maxRetries) {
+    if (
+      error instanceof Error &&
+      import_provider3.APICallError.isInstance(error) &&
+      error.isRetryable === true &&
+      tryNumber <= maxRetries
+    ) {
       await delay(delayInMs);
       return _retryWithExponentialBackoff(
         f,
@@ -365,29 +326,27 @@ async function _retryWithExponentialBackoff(f, {
     }
     throw new RetryError({
       message: `Failed after ${tryNumber} attempts with non-retryable error: '${errorMessage}'`,
-      reason: "errorNotRetryable",
+      reason: 'errorNotRetryable',
       errors: newErrors
     });
   }
 }
 
 // core/prompt/prepare-retries.ts
-function prepareRetries({
-  maxRetries
-}) {
+function prepareRetries({ maxRetries }) {
   if (maxRetries != null) {
     if (!Number.isInteger(maxRetries)) {
       throw new InvalidArgumentError({
-        parameter: "maxRetries",
+        parameter: 'maxRetries',
         value: maxRetries,
-        message: "maxRetries must be an integer"
+        message: 'maxRetries must be an integer'
       });
     }
     if (maxRetries < 0) {
       throw new InvalidArgumentError({
-        parameter: "maxRetries",
+        parameter: 'maxRetries',
         value: maxRetries,
-        message: "maxRetries must be >= 0"
+        message: 'maxRetries must be >= 0'
       });
     }
   }
@@ -399,31 +358,23 @@ function prepareRetries({
 }
 
 // core/telemetry/assemble-operation-name.ts
-function assembleOperationName({
-  operationId,
-  telemetry
-}) {
+function assembleOperationName({ operationId, telemetry }) {
   return {
     // standardized operation and resource name:
-    "operation.name": `${operationId}${(telemetry == null ? void 0 : telemetry.functionId) != null ? ` ${telemetry.functionId}` : ""}`,
-    "resource.name": telemetry == null ? void 0 : telemetry.functionId,
+    'operation.name': `${operationId}${(telemetry == null ? void 0 : telemetry.functionId) != null ? ` ${telemetry.functionId}` : ''}`,
+    'resource.name': telemetry == null ? void 0 : telemetry.functionId,
     // detailed, AI SDK specific data:
-    "ai.operationId": operationId,
-    "ai.telemetry.functionId": telemetry == null ? void 0 : telemetry.functionId
+    'ai.operationId': operationId,
+    'ai.telemetry.functionId': telemetry == null ? void 0 : telemetry.functionId
   };
 }
 
 // core/telemetry/get-base-telemetry-attributes.ts
-function getBaseTelemetryAttributes({
-  model,
-  settings,
-  telemetry,
-  headers
-}) {
+function getBaseTelemetryAttributes({ model, settings, telemetry, headers }) {
   var _a14;
   return {
-    "ai.model.provider": model.provider,
-    "ai.model.id": model.modelId,
+    'ai.model.provider': model.provider,
+    'ai.model.id': model.modelId,
     // settings:
     ...Object.entries(settings).reduce((attributes, [key, value]) => {
       attributes[`ai.settings.${key}`] = value;
@@ -448,7 +399,7 @@ function getBaseTelemetryAttributes({
 }
 
 // core/telemetry/get-tracer.ts
-var import_api = require("@opentelemetry/api");
+var import_api = require('@opentelemetry/api');
 
 // core/telemetry/noop-tracer.ts
 var noopTracer = {
@@ -456,13 +407,13 @@ var noopTracer = {
     return noopSpan;
   },
   startActiveSpan(name14, arg1, arg2, arg3) {
-    if (typeof arg1 === "function") {
+    if (typeof arg1 === 'function') {
       return arg1(noopSpan);
     }
-    if (typeof arg2 === "function") {
+    if (typeof arg2 === 'function') {
       return arg2(noopSpan);
     }
-    if (typeof arg3 === "function") {
+    if (typeof arg3 === 'function') {
       return arg3(noopSpan);
     }
   }
@@ -503,34 +454,25 @@ var noopSpan = {
   }
 };
 var noopSpanContext = {
-  traceId: "",
-  spanId: "",
+  traceId: '',
+  spanId: '',
   traceFlags: 0
 };
 
 // core/telemetry/get-tracer.ts
-function getTracer({
-  isEnabled = false,
-  tracer
-} = {}) {
+function getTracer({ isEnabled = false, tracer } = {}) {
   if (!isEnabled) {
     return noopTracer;
   }
   if (tracer) {
     return tracer;
   }
-  return import_api.trace.getTracer("ai");
+  return import_api.trace.getTracer('ai');
 }
 
 // core/telemetry/record-span.ts
-var import_api2 = require("@opentelemetry/api");
-function recordSpan({
-  name: name14,
-  tracer,
-  attributes,
-  fn,
-  endWhenDone = true
-}) {
+var import_api2 = require('@opentelemetry/api');
+function recordSpan({ name: name14, tracer, attributes, fn, endWhenDone = true }) {
   return tracer.startActiveSpan(name14, { attributes }, async (span) => {
     try {
       const result = await fn(span);
@@ -562,10 +504,7 @@ function recordSpan({
 }
 
 // core/telemetry/select-telemetry-attributes.ts
-function selectTelemetryAttributes({
-  telemetry,
-  attributes
-}) {
+function selectTelemetryAttributes({ telemetry, attributes }) {
   if ((telemetry == null ? void 0 : telemetry.isEnabled) !== true) {
     return {};
   }
@@ -573,14 +512,14 @@ function selectTelemetryAttributes({
     if (value === void 0) {
       return attributes2;
     }
-    if (typeof value === "object" && "input" in value && typeof value.input === "function") {
+    if (typeof value === 'object' && 'input' in value && typeof value.input === 'function') {
       if ((telemetry == null ? void 0 : telemetry.recordInputs) === false) {
         return attributes2;
       }
       const result = value.input();
       return result === void 0 ? attributes2 : { ...attributes2, [key]: result };
     }
-    if (typeof value === "object" && "output" in value && typeof value.output === "function") {
+    if (typeof value === 'object' && 'output' in value && typeof value.output === 'function') {
       if ((telemetry == null ? void 0 : telemetry.recordOutputs) === false) {
         return attributes2;
       }
@@ -609,72 +548,68 @@ async function embed({
   });
   const tracer = getTracer(telemetry);
   return recordSpan({
-    name: "ai.embed",
+    name: 'ai.embed',
     attributes: selectTelemetryAttributes({
       telemetry,
       attributes: {
-        ...assembleOperationName({ operationId: "ai.embed", telemetry }),
+        ...assembleOperationName({ operationId: 'ai.embed', telemetry }),
         ...baseTelemetryAttributes,
-        "ai.value": { input: () => JSON.stringify(value) }
+        'ai.value': { input: () => JSON.stringify(value) }
       }
     }),
     tracer,
     fn: async (span) => {
-      const { embedding, usage, rawResponse } = await retry(
-        () => (
-          // nested spans to align with the embedMany telemetry data:
-          recordSpan({
-            name: "ai.embed.doEmbed",
-            attributes: selectTelemetryAttributes({
-              telemetry,
-              attributes: {
-                ...assembleOperationName({
-                  operationId: "ai.embed.doEmbed",
-                  telemetry
-                }),
-                ...baseTelemetryAttributes,
-                // specific settings that only make sense on the outer level:
-                "ai.values": { input: () => [JSON.stringify(value)] }
-              }
-            }),
-            tracer,
-            fn: async (doEmbedSpan) => {
-              var _a14;
-              const modelResponse = await model.doEmbed({
-                values: [value],
-                abortSignal,
-                headers
-              });
-              const embedding2 = modelResponse.embeddings[0];
-              const usage2 = (_a14 = modelResponse.usage) != null ? _a14 : { tokens: NaN };
-              doEmbedSpan.setAttributes(
-                selectTelemetryAttributes({
-                  telemetry,
-                  attributes: {
-                    "ai.embeddings": {
-                      output: () => modelResponse.embeddings.map(
-                        (embedding3) => JSON.stringify(embedding3)
-                      )
-                    },
-                    "ai.usage.tokens": usage2.tokens
-                  }
-                })
-              );
-              return {
-                embedding: embedding2,
-                usage: usage2,
-                rawResponse: modelResponse.rawResponse
-              };
+      const { embedding, usage, rawResponse } = await retry(() =>
+        // nested spans to align with the embedMany telemetry data:
+        recordSpan({
+          name: 'ai.embed.doEmbed',
+          attributes: selectTelemetryAttributes({
+            telemetry,
+            attributes: {
+              ...assembleOperationName({
+                operationId: 'ai.embed.doEmbed',
+                telemetry
+              }),
+              ...baseTelemetryAttributes,
+              // specific settings that only make sense on the outer level:
+              'ai.values': { input: () => [JSON.stringify(value)] }
             }
-          })
-        )
+          }),
+          tracer,
+          fn: async (doEmbedSpan) => {
+            var _a14;
+            const modelResponse = await model.doEmbed({
+              values: [value],
+              abortSignal,
+              headers
+            });
+            const embedding2 = modelResponse.embeddings[0];
+            const usage2 = (_a14 = modelResponse.usage) != null ? _a14 : { tokens: NaN };
+            doEmbedSpan.setAttributes(
+              selectTelemetryAttributes({
+                telemetry,
+                attributes: {
+                  'ai.embeddings': {
+                    output: () => modelResponse.embeddings.map((embedding3) => JSON.stringify(embedding3))
+                  },
+                  'ai.usage.tokens': usage2.tokens
+                }
+              })
+            );
+            return {
+              embedding: embedding2,
+              usage: usage2,
+              rawResponse: modelResponse.rawResponse
+            };
+          }
+        })
       );
       span.setAttributes(
         selectTelemetryAttributes({
           telemetry,
           attributes: {
-            "ai.embedding": { output: () => JSON.stringify(embedding) },
-            "ai.usage.tokens": usage.tokens
+            'ai.embedding': { output: () => JSON.stringify(embedding) },
+            'ai.usage.tokens': usage.tokens
           }
         })
       );
@@ -694,7 +629,7 @@ var DefaultEmbedResult = class {
 // core/util/split-array.ts
 function splitArray(array, chunkSize) {
   if (chunkSize <= 0) {
-    throw new Error("chunkSize must be greater than 0");
+    throw new Error('chunkSize must be greater than 0');
   }
   const result = [];
   for (let i = 0; i < array.length; i += chunkSize) {
@@ -721,14 +656,14 @@ async function embedMany({
   });
   const tracer = getTracer(telemetry);
   return recordSpan({
-    name: "ai.embedMany",
+    name: 'ai.embedMany',
     attributes: selectTelemetryAttributes({
       telemetry,
       attributes: {
-        ...assembleOperationName({ operationId: "ai.embedMany", telemetry }),
+        ...assembleOperationName({ operationId: 'ai.embedMany', telemetry }),
         ...baseTelemetryAttributes,
         // specific settings that only make sense on the outer level:
-        "ai.values": {
+        'ai.values': {
           input: () => values.map((value) => JSON.stringify(value))
         }
       }
@@ -739,17 +674,17 @@ async function embedMany({
       if (maxEmbeddingsPerCall == null) {
         const { embeddings: embeddings2, usage } = await retry(() => {
           return recordSpan({
-            name: "ai.embedMany.doEmbed",
+            name: 'ai.embedMany.doEmbed',
             attributes: selectTelemetryAttributes({
               telemetry,
               attributes: {
                 ...assembleOperationName({
-                  operationId: "ai.embedMany.doEmbed",
+                  operationId: 'ai.embedMany.doEmbed',
                   telemetry
                 }),
                 ...baseTelemetryAttributes,
                 // specific settings that only make sense on the outer level:
-                "ai.values": {
+                'ai.values': {
                   input: () => values.map((value) => JSON.stringify(value))
                 }
               }
@@ -768,10 +703,10 @@ async function embedMany({
                 selectTelemetryAttributes({
                   telemetry,
                   attributes: {
-                    "ai.embeddings": {
+                    'ai.embeddings': {
                       output: () => embeddings3.map((embedding) => JSON.stringify(embedding))
                     },
-                    "ai.usage.tokens": usage2.tokens
+                    'ai.usage.tokens': usage2.tokens
                   }
                 })
               );
@@ -783,10 +718,10 @@ async function embedMany({
           selectTelemetryAttributes({
             telemetry,
             attributes: {
-              "ai.embeddings": {
+              'ai.embeddings': {
                 output: () => embeddings2.map((embedding) => JSON.stringify(embedding))
               },
-              "ai.usage.tokens": usage.tokens
+              'ai.usage.tokens': usage.tokens
             }
           })
         );
@@ -798,17 +733,17 @@ async function embedMany({
       for (const chunk of valueChunks) {
         const { embeddings: responseEmbeddings, usage } = await retry(() => {
           return recordSpan({
-            name: "ai.embedMany.doEmbed",
+            name: 'ai.embedMany.doEmbed',
             attributes: selectTelemetryAttributes({
               telemetry,
               attributes: {
                 ...assembleOperationName({
-                  operationId: "ai.embedMany.doEmbed",
+                  operationId: 'ai.embedMany.doEmbed',
                   telemetry
                 }),
                 ...baseTelemetryAttributes,
                 // specific settings that only make sense on the outer level:
-                "ai.values": {
+                'ai.values': {
                   input: () => chunk.map((value) => JSON.stringify(value))
                 }
               }
@@ -827,10 +762,10 @@ async function embedMany({
                 selectTelemetryAttributes({
                   telemetry,
                   attributes: {
-                    "ai.embeddings": {
+                    'ai.embeddings': {
                       output: () => embeddings2.map((embedding) => JSON.stringify(embedding))
                     },
-                    "ai.usage.tokens": usage2.tokens
+                    'ai.usage.tokens': usage2.tokens
                   }
                 })
               );
@@ -845,10 +780,10 @@ async function embedMany({
         selectTelemetryAttributes({
           telemetry,
           attributes: {
-            "ai.embeddings": {
+            'ai.embeddings': {
               output: () => embeddings.map((embedding) => JSON.stringify(embedding))
             },
-            "ai.usage.tokens": tokens
+            'ai.usage.tokens': tokens
           }
         })
       );
@@ -869,7 +804,7 @@ var DefaultEmbedManyResult = class {
 };
 
 // core/generate-image/generate-image.ts
-var import_provider_utils2 = require("@ai-sdk/provider-utils");
+var import_provider_utils2 = require('@ai-sdk/provider-utils');
 async function generateImage({
   model,
   prompt,
@@ -894,9 +829,9 @@ async function generateImage({
     return remainder === 0 ? maxImagesPerCall : remainder;
   });
   const results = await Promise.all(
-    callImageCounts.map(
-      async (callImageCount) => retry(
-        () => model.doGenerate({
+    callImageCounts.map(async (callImageCount) =>
+      retry(() =>
+        model.doGenerate({
           prompt,
           n: callImageCount,
           abortSignal,
@@ -912,9 +847,7 @@ async function generateImage({
   const images = [];
   const warnings = [];
   for (const result of results) {
-    images.push(
-      ...result.images.map((image) => new DefaultGeneratedImage({ image }))
-    );
+    images.push(...result.images.map((image) => new DefaultGeneratedImage({ image })));
     warnings.push(...result.warnings);
   }
   return new DefaultGenerateImageResult({ images, warnings });
@@ -951,22 +884,16 @@ var DefaultGeneratedImage = class {
 };
 
 // core/generate-object/generate-object.ts
-var import_provider_utils6 = require("@ai-sdk/provider-utils");
+var import_provider_utils6 = require('@ai-sdk/provider-utils');
 
 // errors/no-object-generated-error.ts
-var import_provider4 = require("@ai-sdk/provider");
-var name3 = "AI_NoObjectGeneratedError";
+var import_provider4 = require('@ai-sdk/provider');
+var name3 = 'AI_NoObjectGeneratedError';
 var marker3 = `vercel.ai.error.${name3}`;
 var symbol3 = Symbol.for(marker3);
 var _a3;
 var NoObjectGeneratedError = class extends import_provider4.AISDKError {
-  constructor({
-    message = "No object generated.",
-    cause,
-    text: text2,
-    response,
-    usage
-  }) {
+  constructor({ message = 'No object generated.', cause, text: text2, response, usage }) {
     super({ name: name3, message, cause });
     this[_a3] = true;
     this.text = text2;
@@ -980,8 +907,8 @@ var NoObjectGeneratedError = class extends import_provider4.AISDKError {
 _a3 = symbol3;
 
 // util/download-error.ts
-var import_provider5 = require("@ai-sdk/provider");
-var name4 = "AI_DownloadError";
+var import_provider5 = require('@ai-sdk/provider');
+var name4 = 'AI_DownloadError';
 var marker4 = `vercel.ai.error.${name4}`;
 var symbol4 = Symbol.for(marker4);
 var _a4;
@@ -991,7 +918,9 @@ var DownloadError = class extends import_provider5.AISDKError {
     statusCode,
     statusText,
     cause,
-    message = cause == null ? `Failed to download ${url}: ${statusCode} ${statusText}` : `Failed to download ${url}: ${cause}`
+    message = cause == null
+      ? `Failed to download ${url}: ${statusCode} ${statusText}`
+      : `Failed to download ${url}: ${cause}`
   }) {
     super({ name: name4, message, cause });
     this[_a4] = true;
@@ -1006,10 +935,7 @@ var DownloadError = class extends import_provider5.AISDKError {
 _a4 = symbol4;
 
 // util/download.ts
-async function download({
-  url,
-  fetchImplementation = fetch
-}) {
+async function download({ url, fetchImplementation = fetch }) {
   var _a14;
   const urlText = url.toString();
   try {
@@ -1023,7 +949,7 @@ async function download({
     }
     return {
       data: new Uint8Array(await response.arrayBuffer()),
-      mimeType: (_a14 = response.headers.get("content-type")) != null ? _a14 : void 0
+      mimeType: (_a14 = response.headers.get('content-type')) != null ? _a14 : void 0
     };
   } catch (error) {
     if (DownloadError.isInstance(error)) {
@@ -1035,10 +961,10 @@ async function download({
 
 // core/util/detect-image-mimetype.ts
 var mimeTypeSignatures = [
-  { mimeType: "image/gif", bytes: [71, 73, 70] },
-  { mimeType: "image/png", bytes: [137, 80, 78, 71] },
-  { mimeType: "image/jpeg", bytes: [255, 216] },
-  { mimeType: "image/webp", bytes: [82, 73, 70, 70] }
+  { mimeType: 'image/gif', bytes: [71, 73, 70] },
+  { mimeType: 'image/png', bytes: [137, 80, 78, 71] },
+  { mimeType: 'image/jpeg', bytes: [255, 216] },
+  { mimeType: 'image/webp', bytes: [82, 73, 70, 70] }
 ];
 function detectImageMimeType(image) {
   for (const { bytes, mimeType } of mimeTypeSignatures) {
@@ -1050,11 +976,11 @@ function detectImageMimeType(image) {
 }
 
 // core/prompt/data-content.ts
-var import_provider_utils3 = require("@ai-sdk/provider-utils");
+var import_provider_utils3 = require('@ai-sdk/provider-utils');
 
 // core/prompt/invalid-data-content-error.ts
-var import_provider6 = require("@ai-sdk/provider");
-var name5 = "AI_InvalidDataContentError";
+var import_provider6 = require('@ai-sdk/provider');
+var name5 = 'AI_InvalidDataContentError';
 var marker5 = `vercel.ai.error.${name5}`;
 var symbol5 = Symbol.for(marker5);
 var _a5;
@@ -1075,7 +1001,7 @@ var InvalidDataContentError = class extends import_provider6.AISDKError {
 _a5 = symbol5;
 
 // core/prompt/data-content.ts
-var import_zod = require("zod");
+var import_zod = require('zod');
 var dataContentSchema = import_zod.z.union([
   import_zod.z.string(),
   import_zod.z.instanceof(Uint8Array),
@@ -1086,11 +1012,11 @@ var dataContentSchema = import_zod.z.union([
       var _a14, _b;
       return (_b = (_a14 = globalThis.Buffer) == null ? void 0 : _a14.isBuffer(value)) != null ? _b : false;
     },
-    { message: "Must be a Buffer" }
+    { message: 'Must be a Buffer' }
   )
 ]);
 function convertDataContentToBase64String(content) {
-  if (typeof content === "string") {
+  if (typeof content === 'string') {
     return content;
   }
   if (content instanceof ArrayBuffer) {
@@ -1102,12 +1028,12 @@ function convertDataContentToUint8Array(content) {
   if (content instanceof Uint8Array) {
     return content;
   }
-  if (typeof content === "string") {
+  if (typeof content === 'string') {
     try {
       return (0, import_provider_utils3.convertBase64ToUint8Array)(content);
     } catch (error) {
       throw new InvalidDataContentError({
-        message: "Invalid data content. Content string is not a base64-encoded media.",
+        message: 'Invalid data content. Content string is not a base64-encoded media.',
         content,
         cause: error
       });
@@ -1122,13 +1048,13 @@ function convertUint8ArrayToText(uint8Array) {
   try {
     return new TextDecoder().decode(uint8Array);
   } catch (error) {
-    throw new Error("Error decoding Uint8Array to text");
+    throw new Error('Error decoding Uint8Array to text');
   }
 }
 
 // core/prompt/invalid-message-role-error.ts
-var import_provider7 = require("@ai-sdk/provider");
-var name6 = "AI_InvalidMessageRoleError";
+var import_provider7 = require('@ai-sdk/provider');
+var name6 = 'AI_InvalidMessageRoleError';
 var marker6 = `vercel.ai.error.${name6}`;
 var symbol6 = Symbol.for(marker6);
 var _a6;
@@ -1150,9 +1076,9 @@ _a6 = symbol6;
 // core/prompt/split-data-url.ts
 function splitDataUrl(dataUrl) {
   try {
-    const [header, base64Content] = dataUrl.split(",");
+    const [header, base64Content] = dataUrl.split(',');
     return {
-      mimeType: header.split(";")[0].split(":")[1],
+      mimeType: header.split(';')[0].split(':')[1],
       base64Content
     };
   } catch (error) {
@@ -1177,64 +1103,66 @@ async function convertToLanguageModelPrompt({
     modelSupportsUrl
   );
   return [
-    ...prompt.system != null ? [{ role: "system", content: prompt.system }] : [],
-    ...prompt.messages.map(
-      (message) => convertToLanguageModelMessage(message, downloadedAssets)
-    )
+    ...(prompt.system != null ? [{ role: 'system', content: prompt.system }] : []),
+    ...prompt.messages.map((message) => convertToLanguageModelMessage(message, downloadedAssets))
   ];
 }
 function convertToLanguageModelMessage(message, downloadedAssets) {
   const role = message.role;
   switch (role) {
-    case "system": {
+    case 'system': {
       return {
-        role: "system",
+        role: 'system',
         content: message.content,
         providerMetadata: message.experimental_providerMetadata
       };
     }
-    case "user": {
-      if (typeof message.content === "string") {
+    case 'user': {
+      if (typeof message.content === 'string') {
         return {
-          role: "user",
-          content: [{ type: "text", text: message.content }],
+          role: 'user',
+          content: [{ type: 'text', text: message.content }],
           providerMetadata: message.experimental_providerMetadata
         };
       }
       return {
-        role: "user",
-        content: message.content.map((part) => convertPartToLanguageModelPart(part, downloadedAssets)).filter((part) => part.type !== "text" || part.text !== ""),
+        role: 'user',
+        content: message.content
+          .map((part) => convertPartToLanguageModelPart(part, downloadedAssets))
+          .filter((part) => part.type !== 'text' || part.text !== ''),
         providerMetadata: message.experimental_providerMetadata
       };
     }
-    case "assistant": {
-      if (typeof message.content === "string") {
+    case 'assistant': {
+      if (typeof message.content === 'string') {
         return {
-          role: "assistant",
-          content: [{ type: "text", text: message.content }],
+          role: 'assistant',
+          content: [{ type: 'text', text: message.content }],
           providerMetadata: message.experimental_providerMetadata
         };
       }
       return {
-        role: "assistant",
-        content: message.content.filter(
-          // remove empty text parts:
-          (part) => part.type !== "text" || part.text !== ""
-        ).map((part) => {
-          const { experimental_providerMetadata, ...rest } = part;
-          return {
-            ...rest,
-            providerMetadata: experimental_providerMetadata
-          };
-        }),
+        role: 'assistant',
+        content: message.content
+          .filter(
+            // remove empty text parts:
+            (part) => part.type !== 'text' || part.text !== ''
+          )
+          .map((part) => {
+            const { experimental_providerMetadata, ...rest } = part;
+            return {
+              ...rest,
+              providerMetadata: experimental_providerMetadata
+            };
+          }),
         providerMetadata: message.experimental_providerMetadata
       };
     }
-    case "tool": {
+    case 'tool': {
       return {
-        role: "tool",
+        role: 'tool',
         content: message.content.map((part) => ({
-          type: "tool-result",
+          type: 'tool-result',
           toolCallId: part.toolCallId,
           toolName: part.toolName,
           result: part.result,
@@ -1252,33 +1180,33 @@ function convertToLanguageModelMessage(message, downloadedAssets) {
   }
 }
 async function downloadAssets(messages, downloadImplementation, modelSupportsImageUrls, modelSupportsUrl) {
-  const urls = messages.filter((message) => message.role === "user").map((message) => message.content).filter(
-    (content) => Array.isArray(content)
-  ).flat().filter(
-    (part) => part.type === "image" || part.type === "file"
-  ).filter(
-    (part) => !(part.type === "image" && modelSupportsImageUrls === true)
-  ).map((part) => part.type === "image" ? part.image : part.data).map(
-    (part) => (
+  const urls = messages
+    .filter((message) => message.role === 'user')
+    .map((message) => message.content)
+    .filter((content) => Array.isArray(content))
+    .flat()
+    .filter((part) => part.type === 'image' || part.type === 'file')
+    .filter((part) => !(part.type === 'image' && modelSupportsImageUrls === true))
+    .map((part) => (part.type === 'image' ? part.image : part.data))
+    .map((part) =>
       // support string urls:
-      typeof part === "string" && (part.startsWith("http:") || part.startsWith("https:")) ? new URL(part) : part
+      typeof part === 'string' && (part.startsWith('http:') || part.startsWith('https:')) ? new URL(part) : part
     )
-  ).filter((image) => image instanceof URL).filter((url) => !modelSupportsUrl(url));
+    .filter((image) => image instanceof URL)
+    .filter((url) => !modelSupportsUrl(url));
   const downloadedImages = await Promise.all(
     urls.map(async (url) => ({
       url,
       data: await downloadImplementation({ url })
     }))
   );
-  return Object.fromEntries(
-    downloadedImages.map(({ url, data }) => [url.toString(), data])
-  );
+  return Object.fromEntries(downloadedImages.map(({ url, data }) => [url.toString(), data]));
 }
 function convertPartToLanguageModelPart(part, downloadedAssets) {
   var _a14;
-  if (part.type === "text") {
+  if (part.type === 'text') {
     return {
-      type: "text",
+      type: 'text',
       text: part.text,
       providerMetadata: part.experimental_providerMetadata
     };
@@ -1289,25 +1217,23 @@ function convertPartToLanguageModelPart(part, downloadedAssets) {
   let normalizedData;
   const type = part.type;
   switch (type) {
-    case "image":
+    case 'image':
       data = part.image;
       break;
-    case "file":
+    case 'file':
       data = part.data;
       break;
     default:
       throw new Error(`Unsupported part type: ${type}`);
   }
   try {
-    content = typeof data === "string" ? new URL(data) : data;
+    content = typeof data === 'string' ? new URL(data) : data;
   } catch (error) {
     content = data;
   }
   if (content instanceof URL) {
-    if (content.protocol === "data:") {
-      const { mimeType: dataUrlMimeType, base64Content } = splitDataUrl(
-        content.toString()
-      );
+    if (content.protocol === 'data:') {
+      const { mimeType: dataUrlMimeType, base64Content } = splitDataUrl(content.toString());
       if (dataUrlMimeType == null || base64Content == null) {
         throw new Error(`Invalid data URL format in part ${type}`);
       }
@@ -1317,7 +1243,7 @@ function convertPartToLanguageModelPart(part, downloadedAssets) {
       const downloadedFile = downloadedAssets[content.toString()];
       if (downloadedFile) {
         normalizedData = downloadedFile.data;
-        mimeType != null ? mimeType : mimeType = downloadedFile.mimeType;
+        mimeType != null ? mimeType : (mimeType = downloadedFile.mimeType);
       } else {
         normalizedData = content;
       }
@@ -1326,23 +1252,23 @@ function convertPartToLanguageModelPart(part, downloadedAssets) {
     normalizedData = convertDataContentToUint8Array(content);
   }
   switch (type) {
-    case "image": {
+    case 'image': {
       if (normalizedData instanceof Uint8Array) {
         mimeType = (_a14 = detectImageMimeType(normalizedData)) != null ? _a14 : mimeType;
       }
       return {
-        type: "image",
+        type: 'image',
         image: normalizedData,
         mimeType,
         providerMetadata: part.experimental_providerMetadata
       };
     }
-    case "file": {
+    case 'file': {
       if (mimeType == null) {
         throw new Error(`Mime type is missing for file part`);
       }
       return {
-        type: "file",
+        type: 'file',
         data: normalizedData instanceof Uint8Array ? convertDataContentToBase64String(normalizedData) : normalizedData,
         mimeType,
         providerMetadata: part.experimental_providerMetadata
@@ -1365,70 +1291,70 @@ function prepareCallSettings({
   if (maxTokens != null) {
     if (!Number.isInteger(maxTokens)) {
       throw new InvalidArgumentError({
-        parameter: "maxTokens",
+        parameter: 'maxTokens',
         value: maxTokens,
-        message: "maxTokens must be an integer"
+        message: 'maxTokens must be an integer'
       });
     }
     if (maxTokens < 1) {
       throw new InvalidArgumentError({
-        parameter: "maxTokens",
+        parameter: 'maxTokens',
         value: maxTokens,
-        message: "maxTokens must be >= 1"
+        message: 'maxTokens must be >= 1'
       });
     }
   }
   if (temperature != null) {
-    if (typeof temperature !== "number") {
+    if (typeof temperature !== 'number') {
       throw new InvalidArgumentError({
-        parameter: "temperature",
+        parameter: 'temperature',
         value: temperature,
-        message: "temperature must be a number"
+        message: 'temperature must be a number'
       });
     }
   }
   if (topP != null) {
-    if (typeof topP !== "number") {
+    if (typeof topP !== 'number') {
       throw new InvalidArgumentError({
-        parameter: "topP",
+        parameter: 'topP',
         value: topP,
-        message: "topP must be a number"
+        message: 'topP must be a number'
       });
     }
   }
   if (topK != null) {
-    if (typeof topK !== "number") {
+    if (typeof topK !== 'number') {
       throw new InvalidArgumentError({
-        parameter: "topK",
+        parameter: 'topK',
         value: topK,
-        message: "topK must be a number"
+        message: 'topK must be a number'
       });
     }
   }
   if (presencePenalty != null) {
-    if (typeof presencePenalty !== "number") {
+    if (typeof presencePenalty !== 'number') {
       throw new InvalidArgumentError({
-        parameter: "presencePenalty",
+        parameter: 'presencePenalty',
         value: presencePenalty,
-        message: "presencePenalty must be a number"
+        message: 'presencePenalty must be a number'
       });
     }
   }
   if (frequencyPenalty != null) {
-    if (typeof frequencyPenalty !== "number") {
+    if (typeof frequencyPenalty !== 'number') {
       throw new InvalidArgumentError({
-        parameter: "frequencyPenalty",
+        parameter: 'frequencyPenalty',
         value: frequencyPenalty,
-        message: "frequencyPenalty must be a number"
+        message: 'frequencyPenalty must be a number'
       });
     }
   }
   if (seed != null) {
     if (!Number.isInteger(seed)) {
       throw new InvalidArgumentError({
-        parameter: "seed",
+        parameter: 'seed',
         value: seed,
-        message: "seed must be an integer"
+        message: 'seed must be an integer'
       });
     }
   }
@@ -1445,20 +1371,20 @@ function prepareCallSettings({
 }
 
 // core/prompt/standardize-prompt.ts
-var import_provider9 = require("@ai-sdk/provider");
-var import_provider_utils4 = require("@ai-sdk/provider-utils");
-var import_zod7 = require("zod");
+var import_provider9 = require('@ai-sdk/provider');
+var import_provider_utils4 = require('@ai-sdk/provider-utils');
+var import_zod7 = require('zod');
 
 // core/prompt/message.ts
-var import_zod6 = require("zod");
+var import_zod6 = require('zod');
 
 // core/types/provider-metadata.ts
-var import_zod3 = require("zod");
+var import_zod3 = require('zod');
 
 // core/types/json-value.ts
-var import_zod2 = require("zod");
-var jsonValueSchema = import_zod2.z.lazy(
-  () => import_zod2.z.union([
+var import_zod2 = require('zod');
+var jsonValueSchema = import_zod2.z.lazy(() =>
+  import_zod2.z.union([
     import_zod2.z.null(),
     import_zod2.z.string(),
     import_zod2.z.number(),
@@ -1475,15 +1401,15 @@ var providerMetadataSchema = import_zod3.z.record(
 );
 
 // core/prompt/content-part.ts
-var import_zod5 = require("zod");
+var import_zod5 = require('zod');
 
 // core/prompt/tool-result-content.ts
-var import_zod4 = require("zod");
+var import_zod4 = require('zod');
 var toolResultContentSchema = import_zod4.z.array(
   import_zod4.z.union([
-    import_zod4.z.object({ type: import_zod4.z.literal("text"), text: import_zod4.z.string() }),
+    import_zod4.z.object({ type: import_zod4.z.literal('text'), text: import_zod4.z.string() }),
     import_zod4.z.object({
-      type: import_zod4.z.literal("image"),
+      type: import_zod4.z.literal('image'),
       data: import_zod4.z.string(),
       mimeType: import_zod4.z.string().optional()
     })
@@ -1492,30 +1418,30 @@ var toolResultContentSchema = import_zod4.z.array(
 
 // core/prompt/content-part.ts
 var textPartSchema = import_zod5.z.object({
-  type: import_zod5.z.literal("text"),
+  type: import_zod5.z.literal('text'),
   text: import_zod5.z.string(),
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
 var imagePartSchema = import_zod5.z.object({
-  type: import_zod5.z.literal("image"),
+  type: import_zod5.z.literal('image'),
   image: import_zod5.z.union([dataContentSchema, import_zod5.z.instanceof(URL)]),
   mimeType: import_zod5.z.string().optional(),
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
 var filePartSchema = import_zod5.z.object({
-  type: import_zod5.z.literal("file"),
+  type: import_zod5.z.literal('file'),
   data: import_zod5.z.union([dataContentSchema, import_zod5.z.instanceof(URL)]),
   mimeType: import_zod5.z.string(),
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
 var toolCallPartSchema = import_zod5.z.object({
-  type: import_zod5.z.literal("tool-call"),
+  type: import_zod5.z.literal('tool-call'),
   toolCallId: import_zod5.z.string(),
   toolName: import_zod5.z.string(),
   args: import_zod5.z.unknown()
 });
 var toolResultPartSchema = import_zod5.z.object({
-  type: import_zod5.z.literal("tool-result"),
+  type: import_zod5.z.literal('tool-result'),
   toolCallId: import_zod5.z.string(),
   toolName: import_zod5.z.string(),
   result: import_zod5.z.unknown(),
@@ -1526,12 +1452,12 @@ var toolResultPartSchema = import_zod5.z.object({
 
 // core/prompt/message.ts
 var coreSystemMessageSchema = import_zod6.z.object({
-  role: import_zod6.z.literal("system"),
+  role: import_zod6.z.literal('system'),
   content: import_zod6.z.string(),
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
 var coreUserMessageSchema = import_zod6.z.object({
-  role: import_zod6.z.literal("user"),
+  role: import_zod6.z.literal('user'),
   content: import_zod6.z.union([
     import_zod6.z.string(),
     import_zod6.z.array(import_zod6.z.union([textPartSchema, imagePartSchema, filePartSchema]))
@@ -1539,7 +1465,7 @@ var coreUserMessageSchema = import_zod6.z.object({
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
 var coreAssistantMessageSchema = import_zod6.z.object({
-  role: import_zod6.z.literal("assistant"),
+  role: import_zod6.z.literal('assistant'),
   content: import_zod6.z.union([
     import_zod6.z.string(),
     import_zod6.z.array(import_zod6.z.union([textPartSchema, toolCallPartSchema]))
@@ -1547,7 +1473,7 @@ var coreAssistantMessageSchema = import_zod6.z.object({
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
 var coreToolMessageSchema = import_zod6.z.object({
-  role: import_zod6.z.literal("tool"),
+  role: import_zod6.z.literal('tool'),
   content: import_zod6.z.array(toolResultPartSchema),
   experimental_providerMetadata: providerMetadataSchema.optional()
 });
@@ -1561,35 +1487,49 @@ var coreMessageSchema = import_zod6.z.union([
 // core/prompt/detect-prompt-type.ts
 function detectPromptType(prompt) {
   if (!Array.isArray(prompt)) {
-    return "other";
+    return 'other';
   }
   if (prompt.length === 0) {
-    return "messages";
+    return 'messages';
   }
   const characteristics = prompt.map(detectSingleMessageCharacteristics);
-  if (characteristics.some((c) => c === "has-ui-specific-parts")) {
-    return "ui-messages";
-  } else if (characteristics.every(
-    (c) => c === "has-core-specific-parts" || c === "message"
-  )) {
-    return "messages";
+  if (characteristics.some((c) => c === 'has-ui-specific-parts')) {
+    return 'ui-messages';
+  } else if (characteristics.every((c) => c === 'has-core-specific-parts' || c === 'message')) {
+    return 'messages';
   } else {
-    return "other";
+    return 'other';
   }
 }
 function detectSingleMessageCharacteristics(message) {
-  if (typeof message === "object" && message !== null && (message.role === "function" || // UI-only role
-  message.role === "data" || // UI-only role
-  "toolInvocations" in message || // UI-specific field
-  "experimental_attachments" in message)) {
-    return "has-ui-specific-parts";
-  } else if (typeof message === "object" && message !== null && "content" in message && (Array.isArray(message.content) || // Core messages can have array content
-  "experimental_providerMetadata" in message)) {
-    return "has-core-specific-parts";
-  } else if (typeof message === "object" && message !== null && "role" in message && "content" in message && typeof message.content === "string" && ["system", "user", "assistant", "tool"].includes(message.role)) {
-    return "message";
+  if (
+    typeof message === 'object' &&
+    message !== null &&
+    (message.role === 'function' || // UI-only role
+      message.role === 'data' || // UI-only role
+      'toolInvocations' in message || // UI-specific field
+      'experimental_attachments' in message)
+  ) {
+    return 'has-ui-specific-parts';
+  } else if (
+    typeof message === 'object' &&
+    message !== null &&
+    'content' in message &&
+    (Array.isArray(message.content) || // Core messages can have array content
+      'experimental_providerMetadata' in message)
+  ) {
+    return 'has-core-specific-parts';
+  } else if (
+    typeof message === 'object' &&
+    message !== null &&
+    'role' in message &&
+    'content' in message &&
+    typeof message.content === 'string' &&
+    ['system', 'user', 'assistant', 'tool'].includes(message.role)
+  ) {
+    return 'message';
   } else {
-    return "other";
+    return 'other';
   }
 }
 
@@ -1605,57 +1545,51 @@ function attachmentsToParts(attachments) {
       throw new Error(`Invalid URL: ${attachment.url}`);
     }
     switch (url.protocol) {
-      case "http:":
-      case "https:": {
-        if ((_a14 = attachment.contentType) == null ? void 0 : _a14.startsWith("image/")) {
-          parts.push({ type: "image", image: url });
+      case 'http:':
+      case 'https:': {
+        if ((_a14 = attachment.contentType) == null ? void 0 : _a14.startsWith('image/')) {
+          parts.push({ type: 'image', image: url });
         } else {
           if (!attachment.contentType) {
-            throw new Error(
-              "If the attachment is not an image, it must specify a content type"
-            );
+            throw new Error('If the attachment is not an image, it must specify a content type');
           }
           parts.push({
-            type: "file",
+            type: 'file',
             data: url,
             mimeType: attachment.contentType
           });
         }
         break;
       }
-      case "data:": {
+      case 'data:': {
         let header;
         let base64Content;
         let mimeType;
         try {
-          [header, base64Content] = attachment.url.split(",");
-          mimeType = header.split(";")[0].split(":")[1];
+          [header, base64Content] = attachment.url.split(',');
+          mimeType = header.split(';')[0].split(':')[1];
         } catch (error) {
           throw new Error(`Error processing data URL: ${attachment.url}`);
         }
         if (mimeType == null || base64Content == null) {
           throw new Error(`Invalid data URL format: ${attachment.url}`);
         }
-        if ((_b = attachment.contentType) == null ? void 0 : _b.startsWith("image/")) {
+        if ((_b = attachment.contentType) == null ? void 0 : _b.startsWith('image/')) {
           parts.push({
-            type: "image",
+            type: 'image',
             image: convertDataContentToUint8Array(base64Content)
           });
-        } else if ((_c = attachment.contentType) == null ? void 0 : _c.startsWith("text/")) {
+        } else if ((_c = attachment.contentType) == null ? void 0 : _c.startsWith('text/')) {
           parts.push({
-            type: "text",
-            text: convertUint8ArrayToText(
-              convertDataContentToUint8Array(base64Content)
-            )
+            type: 'text',
+            text: convertUint8ArrayToText(convertDataContentToUint8Array(base64Content))
           });
         } else {
           if (!attachment.contentType) {
-            throw new Error(
-              "If the attachment is not an image or text, it must specify a content type"
-            );
+            throw new Error('If the attachment is not an image or text, it must specify a content type');
           }
           parts.push({
-            type: "file",
+            type: 'file',
             data: base64Content,
             mimeType: attachment.contentType
           });
@@ -1671,16 +1605,13 @@ function attachmentsToParts(attachments) {
 }
 
 // core/prompt/message-conversion-error.ts
-var import_provider8 = require("@ai-sdk/provider");
-var name7 = "AI_MessageConversionError";
+var import_provider8 = require('@ai-sdk/provider');
+var name7 = 'AI_MessageConversionError';
 var marker7 = `vercel.ai.error.${name7}`;
 var symbol7 = Symbol.for(marker7);
 var _a7;
 var MessageConversionError = class extends import_provider8.AISDKError {
-  constructor({
-    originalMessage,
-    message
-  }) {
+  constructor({ originalMessage, message }) {
     super({ name: name7, message });
     this[_a7] = true;
     this.originalMessage = originalMessage;
@@ -1699,70 +1630,69 @@ function convertToCoreMessages(messages, options) {
   for (const message of messages) {
     const { role, content, toolInvocations, experimental_attachments } = message;
     switch (role) {
-      case "system": {
+      case 'system': {
         coreMessages.push({
-          role: "system",
+          role: 'system',
           content
         });
         break;
       }
-      case "user": {
+      case 'user': {
         coreMessages.push({
-          role: "user",
-          content: experimental_attachments ? [
-            { type: "text", text: content },
-            ...attachmentsToParts(experimental_attachments)
-          ] : content
+          role: 'user',
+          content: experimental_attachments
+            ? [{ type: 'text', text: content }, ...attachmentsToParts(experimental_attachments)]
+            : content
         });
         break;
       }
-      case "assistant": {
+      case 'assistant': {
         if (toolInvocations == null || toolInvocations.length === 0) {
-          coreMessages.push({ role: "assistant", content });
+          coreMessages.push({ role: 'assistant', content });
           break;
         }
         coreMessages.push({
-          role: "assistant",
+          role: 'assistant',
           content: [
-            { type: "text", text: content },
-            ...toolInvocations.map(
-              ({ toolCallId, toolName, args }) => ({
-                type: "tool-call",
-                toolCallId,
-                toolName,
-                args
-              })
-            )
+            { type: 'text', text: content },
+            ...toolInvocations.map(({ toolCallId, toolName, args }) => ({
+              type: 'tool-call',
+              toolCallId,
+              toolName,
+              args
+            }))
           ]
         });
         coreMessages.push({
-          role: "tool",
+          role: 'tool',
           content: toolInvocations.map((toolInvocation) => {
-            if (!("result" in toolInvocation)) {
+            if (!('result' in toolInvocation)) {
               throw new MessageConversionError({
                 originalMessage: message,
-                message: "ToolInvocation must have a result: " + JSON.stringify(toolInvocation)
+                message: 'ToolInvocation must have a result: ' + JSON.stringify(toolInvocation)
               });
             }
             const { toolCallId, toolName, result } = toolInvocation;
             const tool2 = tools[toolName];
-            return (tool2 == null ? void 0 : tool2.experimental_toToolResultContent) != null ? {
-              type: "tool-result",
-              toolCallId,
-              toolName,
-              result: tool2.experimental_toToolResultContent(result),
-              experimental_content: tool2.experimental_toToolResultContent(result)
-            } : {
-              type: "tool-result",
-              toolCallId,
-              toolName,
-              result
-            };
+            return (tool2 == null ? void 0 : tool2.experimental_toToolResultContent) != null
+              ? {
+                  type: 'tool-result',
+                  toolCallId,
+                  toolName,
+                  result: tool2.experimental_toToolResultContent(result),
+                  experimental_content: tool2.experimental_toToolResultContent(result)
+                }
+              : {
+                  type: 'tool-result',
+                  toolCallId,
+                  toolName,
+                  result
+                };
           })
         });
         break;
       }
-      case "data": {
+      case 'data': {
         break;
       }
       default: {
@@ -1778,41 +1708,38 @@ function convertToCoreMessages(messages, options) {
 }
 
 // core/prompt/standardize-prompt.ts
-function standardizePrompt({
-  prompt,
-  tools
-}) {
+function standardizePrompt({ prompt, tools }) {
   if (prompt.prompt == null && prompt.messages == null) {
     throw new import_provider9.InvalidPromptError({
       prompt,
-      message: "prompt or messages must be defined"
+      message: 'prompt or messages must be defined'
     });
   }
   if (prompt.prompt != null && prompt.messages != null) {
     throw new import_provider9.InvalidPromptError({
       prompt,
-      message: "prompt and messages cannot be defined at the same time"
+      message: 'prompt and messages cannot be defined at the same time'
     });
   }
-  if (prompt.system != null && typeof prompt.system !== "string") {
+  if (prompt.system != null && typeof prompt.system !== 'string') {
     throw new import_provider9.InvalidPromptError({
       prompt,
-      message: "system must be a string"
+      message: 'system must be a string'
     });
   }
   if (prompt.prompt != null) {
-    if (typeof prompt.prompt !== "string") {
+    if (typeof prompt.prompt !== 'string') {
       throw new import_provider9.InvalidPromptError({
         prompt,
-        message: "prompt must be a string"
+        message: 'prompt must be a string'
       });
     }
     return {
-      type: "prompt",
+      type: 'prompt',
       system: prompt.system,
       messages: [
         {
-          role: "user",
+          role: 'user',
           content: prompt.prompt
         }
       ]
@@ -1820,15 +1747,18 @@ function standardizePrompt({
   }
   if (prompt.messages != null) {
     const promptType = detectPromptType(prompt.messages);
-    if (promptType === "other") {
+    if (promptType === 'other') {
       throw new import_provider9.InvalidPromptError({
         prompt,
-        message: "messages must be an array of CoreMessage or UIMessage"
+        message: 'messages must be an array of CoreMessage or UIMessage'
       });
     }
-    const messages = promptType === "ui-messages" ? convertToCoreMessages(prompt.messages, {
-      tools
-    }) : prompt.messages;
+    const messages =
+      promptType === 'ui-messages'
+        ? convertToCoreMessages(prompt.messages, {
+            tools
+          })
+        : prompt.messages;
     const validationResult = (0, import_provider_utils4.safeValidateTypes)({
       value: messages,
       schema: import_zod7.z.array(coreMessageSchema)
@@ -1836,24 +1766,21 @@ function standardizePrompt({
     if (!validationResult.success) {
       throw new import_provider9.InvalidPromptError({
         prompt,
-        message: "messages must be an array of CoreMessage or UIMessage",
+        message: 'messages must be an array of CoreMessage or UIMessage',
         cause: validationResult.error
       });
     }
     return {
-      type: "messages",
+      type: 'messages',
       messages,
       system: prompt.system
     };
   }
-  throw new Error("unreachable");
+  throw new Error('unreachable');
 }
 
 // core/types/usage.ts
-function calculateLanguageModelUsage({
-  promptTokens,
-  completionTokens
-}) {
+function calculateLanguageModelUsage({ promptTokens, completionTokens }) {
   return {
     promptTokens,
     completionTokens,
@@ -1869,9 +1796,9 @@ function addLanguageModelUsage(usage1, usage2) {
 }
 
 // core/generate-object/inject-json-instruction.ts
-var DEFAULT_SCHEMA_PREFIX = "JSON schema:";
-var DEFAULT_SCHEMA_SUFFIX = "You MUST answer with a JSON object that matches the JSON schema above.";
-var DEFAULT_GENERIC_SUFFIX = "You MUST answer with JSON.";
+var DEFAULT_SCHEMA_PREFIX = 'JSON schema:';
+var DEFAULT_SCHEMA_SUFFIX = 'You MUST answer with a JSON object that matches the JSON schema above.';
+var DEFAULT_GENERIC_SUFFIX = 'You MUST answer with JSON.';
 function injectJsonInstruction({
   prompt,
   schema,
@@ -1880,18 +1807,20 @@ function injectJsonInstruction({
 }) {
   return [
     prompt != null && prompt.length > 0 ? prompt : void 0,
-    prompt != null && prompt.length > 0 ? "" : void 0,
+    prompt != null && prompt.length > 0 ? '' : void 0,
     // add a newline if prompt is not null
     schemaPrefix,
     schema != null ? JSON.stringify(schema) : void 0,
     schemaSuffix
-  ].filter((line) => line != null).join("\n");
+  ]
+    .filter((line) => line != null)
+    .join('\n');
 }
 
 // core/generate-object/output-strategy.ts
-var import_provider10 = require("@ai-sdk/provider");
-var import_provider_utils5 = require("@ai-sdk/provider-utils");
-var import_ui_utils2 = require("@ai-sdk/ui-utils");
+var import_provider10 = require('@ai-sdk/provider');
+var import_provider_utils5 = require('@ai-sdk/provider-utils');
+var import_ui_utils2 = require('@ai-sdk/ui-utils');
 
 // core/util/async-iterable-stream.ts
 function createAsyncIterableStream(source) {
@@ -1910,30 +1839,32 @@ function createAsyncIterableStream(source) {
 
 // core/generate-object/output-strategy.ts
 var noSchemaOutputStrategy = {
-  type: "no-schema",
+  type: 'no-schema',
   jsonSchema: void 0,
   validatePartialResult({ value, textDelta }) {
     return { success: true, value: { partial: value, textDelta } };
   },
   validateFinalResult(value, context) {
-    return value === void 0 ? {
-      success: false,
-      error: new NoObjectGeneratedError({
-        message: "No object generated: response did not match schema.",
-        text: context.text,
-        response: context.response,
-        usage: context.usage
-      })
-    } : { success: true, value };
+    return value === void 0
+      ? {
+          success: false,
+          error: new NoObjectGeneratedError({
+            message: 'No object generated: response did not match schema.',
+            text: context.text,
+            response: context.response,
+            usage: context.usage
+          })
+        }
+      : { success: true, value };
   },
   createElementStream() {
     throw new import_provider10.UnsupportedFunctionalityError({
-      functionality: "element streams in no-schema mode"
+      functionality: 'element streams in no-schema mode'
     });
   }
 };
 var objectOutputStrategy = (schema) => ({
-  type: "object",
+  type: 'object',
   jsonSchema: schema.jsonSchema,
   validatePartialResult({ value, textDelta }) {
     return {
@@ -1950,24 +1881,24 @@ var objectOutputStrategy = (schema) => ({
   },
   createElementStream() {
     throw new import_provider10.UnsupportedFunctionalityError({
-      functionality: "element streams in object mode"
+      functionality: 'element streams in object mode'
     });
   }
 });
 var arrayOutputStrategy = (schema) => {
   const { $schema, ...itemSchema } = schema.jsonSchema;
   return {
-    type: "enum",
+    type: 'enum',
     // wrap in object that contains array of elements, since most LLMs will not
     // be able to generate an array directly:
     // possible future optimization: use arrays directly when model supports grammar-guided generation
     jsonSchema: {
-      $schema: "https://json-schema.org/draft/2019-09/schema#",
-      type: "object",
+      $schema: 'https://json-schema.org/draft/2019-09/schema#',
+      type: 'object',
       properties: {
-        elements: { type: "array", items: itemSchema }
+        elements: { type: 'array', items: itemSchema }
       },
-      required: ["elements"],
+      required: ['elements'],
       additionalProperties: false
     },
     validatePartialResult({ value, latestObject, isFirstDelta, isFinalDelta }) {
@@ -1977,7 +1908,7 @@ var arrayOutputStrategy = (schema) => {
           success: false,
           error: new import_provider10.TypeValidationError({
             value,
-            cause: "value must be an object that contains an array of elements"
+            cause: 'value must be an object that contains an array of elements'
           })
         };
       }
@@ -1995,16 +1926,19 @@ var arrayOutputStrategy = (schema) => {
         resultArray.push(result.value);
       }
       const publishedElementCount = (_a14 = latestObject == null ? void 0 : latestObject.length) != null ? _a14 : 0;
-      let textDelta = "";
+      let textDelta = '';
       if (isFirstDelta) {
-        textDelta += "[";
+        textDelta += '[';
       }
       if (publishedElementCount > 0) {
-        textDelta += ",";
+        textDelta += ',';
       }
-      textDelta += resultArray.slice(publishedElementCount).map((element) => JSON.stringify(element)).join(",");
+      textDelta += resultArray
+        .slice(publishedElementCount)
+        .map((element) => JSON.stringify(element))
+        .join(',');
       if (isFinalDelta) {
-        textDelta += "]";
+        textDelta += ']';
       }
       return {
         success: true,
@@ -2020,7 +1954,7 @@ var arrayOutputStrategy = (schema) => {
           success: false,
           error: new import_provider10.TypeValidationError({
             value,
-            cause: "value must be an object that contains an array of elements"
+            cause: 'value must be an object that contains an array of elements'
           })
         };
       }
@@ -2040,24 +1974,22 @@ var arrayOutputStrategy = (schema) => {
           new TransformStream({
             transform(chunk, controller) {
               switch (chunk.type) {
-                case "object": {
+                case 'object': {
                   const array = chunk.object;
                   for (; publishedElements < array.length; publishedElements++) {
                     controller.enqueue(array[publishedElements]);
                   }
                   break;
                 }
-                case "text-delta":
-                case "finish":
+                case 'text-delta':
+                case 'finish':
                   break;
-                case "error":
+                case 'error':
                   controller.error(chunk.error);
                   break;
                 default: {
                   const _exhaustiveCheck = chunk;
-                  throw new Error(
-                    `Unsupported chunk type: ${_exhaustiveCheck}`
-                  );
+                  throw new Error(`Unsupported chunk type: ${_exhaustiveCheck}`);
                 }
               }
             }
@@ -2069,21 +2001,21 @@ var arrayOutputStrategy = (schema) => {
 };
 var enumOutputStrategy = (enumValues) => {
   return {
-    type: "enum",
+    type: 'enum',
     // wrap in object that contains result, since most LLMs will not
     // be able to generate an enum value directly:
     // possible future optimization: use enums directly when model supports top-level enums
     jsonSchema: {
-      $schema: "https://json-schema.org/draft/2019-09/schema#",
-      type: "object",
+      $schema: 'https://json-schema.org/draft/2019-09/schema#',
+      type: 'object',
       properties: {
-        result: { type: "string", enum: enumValues }
+        result: { type: 'string', enum: enumValues }
       },
-      required: ["result"],
+      required: ['result'],
       additionalProperties: false
     },
     validateFinalResult(value) {
-      if (!(0, import_provider10.isJSONObject)(value) || typeof value.result !== "string") {
+      if (!(0, import_provider10.isJSONObject)(value) || typeof value.result !== 'string') {
         return {
           success: false,
           error: new import_provider10.TypeValidationError({
@@ -2093,39 +2025,37 @@ var enumOutputStrategy = (enumValues) => {
         };
       }
       const result = value.result;
-      return enumValues.includes(result) ? { success: true, value: result } : {
-        success: false,
-        error: new import_provider10.TypeValidationError({
-          value,
-          cause: "value must be a string in the enum"
-        })
-      };
+      return enumValues.includes(result)
+        ? { success: true, value: result }
+        : {
+            success: false,
+            error: new import_provider10.TypeValidationError({
+              value,
+              cause: 'value must be a string in the enum'
+            })
+          };
     },
     validatePartialResult() {
       throw new import_provider10.UnsupportedFunctionalityError({
-        functionality: "partial results in enum mode"
+        functionality: 'partial results in enum mode'
       });
     },
     createElementStream() {
       throw new import_provider10.UnsupportedFunctionalityError({
-        functionality: "element streams in enum mode"
+        functionality: 'element streams in enum mode'
       });
     }
   };
 };
-function getOutputStrategy({
-  output,
-  schema,
-  enumValues
-}) {
+function getOutputStrategy({ output, schema, enumValues }) {
   switch (output) {
-    case "object":
+    case 'object':
       return objectOutputStrategy((0, import_ui_utils2.asSchema)(schema));
-    case "array":
+    case 'array':
       return arrayOutputStrategy((0, import_ui_utils2.asSchema)(schema));
-    case "enum":
+    case 'enum':
       return enumOutputStrategy(enumValues);
-    case "no-schema":
+    case 'no-schema':
       return noSchemaOutputStrategy;
     default: {
       const _exhaustiveCheck = output;
@@ -2135,125 +2065,118 @@ function getOutputStrategy({
 }
 
 // core/generate-object/validate-object-generation-input.ts
-function validateObjectGenerationInput({
-  output,
-  mode,
-  schema,
-  schemaName,
-  schemaDescription,
-  enumValues
-}) {
-  if (output != null && output !== "object" && output !== "array" && output !== "enum" && output !== "no-schema") {
+function validateObjectGenerationInput({ output, mode, schema, schemaName, schemaDescription, enumValues }) {
+  if (output != null && output !== 'object' && output !== 'array' && output !== 'enum' && output !== 'no-schema') {
     throw new InvalidArgumentError({
-      parameter: "output",
+      parameter: 'output',
       value: output,
-      message: "Invalid output type."
+      message: 'Invalid output type.'
     });
   }
-  if (output === "no-schema") {
-    if (mode === "auto" || mode === "tool") {
+  if (output === 'no-schema') {
+    if (mode === 'auto' || mode === 'tool') {
       throw new InvalidArgumentError({
-        parameter: "mode",
+        parameter: 'mode',
         value: mode,
         message: 'Mode must be "json" for no-schema output.'
       });
     }
     if (schema != null) {
       throw new InvalidArgumentError({
-        parameter: "schema",
+        parameter: 'schema',
         value: schema,
-        message: "Schema is not supported for no-schema output."
+        message: 'Schema is not supported for no-schema output.'
       });
     }
     if (schemaDescription != null) {
       throw new InvalidArgumentError({
-        parameter: "schemaDescription",
+        parameter: 'schemaDescription',
         value: schemaDescription,
-        message: "Schema description is not supported for no-schema output."
+        message: 'Schema description is not supported for no-schema output.'
       });
     }
     if (schemaName != null) {
       throw new InvalidArgumentError({
-        parameter: "schemaName",
+        parameter: 'schemaName',
         value: schemaName,
-        message: "Schema name is not supported for no-schema output."
+        message: 'Schema name is not supported for no-schema output.'
       });
     }
     if (enumValues != null) {
       throw new InvalidArgumentError({
-        parameter: "enumValues",
+        parameter: 'enumValues',
         value: enumValues,
-        message: "Enum values are not supported for no-schema output."
+        message: 'Enum values are not supported for no-schema output.'
       });
     }
   }
-  if (output === "object") {
+  if (output === 'object') {
     if (schema == null) {
       throw new InvalidArgumentError({
-        parameter: "schema",
+        parameter: 'schema',
         value: schema,
-        message: "Schema is required for object output."
+        message: 'Schema is required for object output.'
       });
     }
     if (enumValues != null) {
       throw new InvalidArgumentError({
-        parameter: "enumValues",
+        parameter: 'enumValues',
         value: enumValues,
-        message: "Enum values are not supported for object output."
+        message: 'Enum values are not supported for object output.'
       });
     }
   }
-  if (output === "array") {
+  if (output === 'array') {
     if (schema == null) {
       throw new InvalidArgumentError({
-        parameter: "schema",
+        parameter: 'schema',
         value: schema,
-        message: "Element schema is required for array output."
+        message: 'Element schema is required for array output.'
       });
     }
     if (enumValues != null) {
       throw new InvalidArgumentError({
-        parameter: "enumValues",
+        parameter: 'enumValues',
         value: enumValues,
-        message: "Enum values are not supported for array output."
+        message: 'Enum values are not supported for array output.'
       });
     }
   }
-  if (output === "enum") {
+  if (output === 'enum') {
     if (schema != null) {
       throw new InvalidArgumentError({
-        parameter: "schema",
+        parameter: 'schema',
         value: schema,
-        message: "Schema is not supported for enum output."
+        message: 'Schema is not supported for enum output.'
       });
     }
     if (schemaDescription != null) {
       throw new InvalidArgumentError({
-        parameter: "schemaDescription",
+        parameter: 'schemaDescription',
         value: schemaDescription,
-        message: "Schema description is not supported for enum output."
+        message: 'Schema description is not supported for enum output.'
       });
     }
     if (schemaName != null) {
       throw new InvalidArgumentError({
-        parameter: "schemaName",
+        parameter: 'schemaName',
         value: schemaName,
-        message: "Schema name is not supported for enum output."
+        message: 'Schema name is not supported for enum output.'
       });
     }
     if (enumValues == null) {
       throw new InvalidArgumentError({
-        parameter: "enumValues",
+        parameter: 'enumValues',
         value: enumValues,
-        message: "Enum values are required for enum output."
+        message: 'Enum values are required for enum output.'
       });
     }
     for (const value of enumValues) {
-      if (typeof value !== "string") {
+      if (typeof value !== 'string') {
         throw new InvalidArgumentError({
-          parameter: "enumValues",
+          parameter: 'enumValues',
           value,
-          message: "Enum values must be strings."
+          message: 'Enum values must be strings.'
         });
       }
     }
@@ -2261,7 +2184,7 @@ function validateObjectGenerationInput({
 }
 
 // core/generate-object/generate-object.ts
-var originalGenerateId = (0, import_provider_utils6.createIdGenerator)({ prefix: "aiobj", size: 24 });
+var originalGenerateId = (0, import_provider_utils6.createIdGenerator)({ prefix: 'aiobj', size: 24 });
 async function generateObject({
   model,
   enum: enumValues,
@@ -2270,7 +2193,7 @@ async function generateObject({
   schemaName,
   schemaDescription,
   mode,
-  output = "object",
+  output = 'object',
   system,
   prompt,
   messages,
@@ -2279,10 +2202,7 @@ async function generateObject({
   headers,
   experimental_telemetry: telemetry,
   experimental_providerMetadata: providerMetadata,
-  _internal: {
-    generateId: generateId3 = originalGenerateId,
-    currentDate = () => /* @__PURE__ */ new Date()
-  } = {},
+  _internal: { generateId: generateId3 = originalGenerateId, currentDate = () => /* @__PURE__ */ new Date() } = {},
   ...settings
 }) {
   validateObjectGenerationInput({
@@ -2299,8 +2219,8 @@ async function generateObject({
     schema: inputSchema,
     enumValues
   });
-  if (outputStrategy.type === "no-schema" && mode === void 0) {
-    mode = "json";
+  if (outputStrategy.type === 'no-schema' && mode === void 0) {
+    mode = 'json';
   }
   const baseTelemetryAttributes = getBaseTelemetryAttributes({
     model,
@@ -2310,30 +2230,31 @@ async function generateObject({
   });
   const tracer = getTracer(telemetry);
   return recordSpan({
-    name: "ai.generateObject",
+    name: 'ai.generateObject',
     attributes: selectTelemetryAttributes({
       telemetry,
       attributes: {
         ...assembleOperationName({
-          operationId: "ai.generateObject",
+          operationId: 'ai.generateObject',
           telemetry
         }),
         ...baseTelemetryAttributes,
         // specific settings that only make sense on the outer level:
-        "ai.prompt": {
+        'ai.prompt': {
           input: () => JSON.stringify({ system, prompt, messages })
         },
-        "ai.schema": outputStrategy.jsonSchema != null ? { input: () => JSON.stringify(outputStrategy.jsonSchema) } : void 0,
-        "ai.schema.name": schemaName,
-        "ai.schema.description": schemaDescription,
-        "ai.settings.output": outputStrategy.type,
-        "ai.settings.mode": mode
+        'ai.schema':
+          outputStrategy.jsonSchema != null ? { input: () => JSON.stringify(outputStrategy.jsonSchema) } : void 0,
+        'ai.schema.name': schemaName,
+        'ai.schema.description': schemaDescription,
+        'ai.settings.output': outputStrategy.type,
+        'ai.settings.mode': mode
       }
     }),
     tracer,
     fn: async (span) => {
       var _a14, _b;
-      if (mode === "auto" || mode == null) {
+      if (mode === 'auto' || mode == null) {
         mode = model.defaultObjectGenerationMode;
       }
       let result;
@@ -2346,13 +2267,18 @@ async function generateObject({
       let logprobs;
       let resultProviderMetadata;
       switch (mode) {
-        case "json": {
+        case 'json': {
           const standardizedPrompt = standardizePrompt({
             prompt: {
-              system: outputStrategy.jsonSchema == null ? injectJsonInstruction({ prompt: system }) : model.supportsStructuredOutputs ? system : injectJsonInstruction({
-                prompt: system,
-                schema: outputStrategy.jsonSchema
-              }),
+              system:
+                outputStrategy.jsonSchema == null
+                  ? injectJsonInstruction({ prompt: system })
+                  : model.supportsStructuredOutputs
+                    ? system
+                    : injectJsonInstruction({
+                        prompt: system,
+                        schema: outputStrategy.jsonSchema
+                      }),
               prompt,
               messages
             },
@@ -2363,33 +2289,33 @@ async function generateObject({
             modelSupportsImageUrls: model.supportsImageUrls,
             modelSupportsUrl: model.supportsUrl
           });
-          const generateResult = await retry(
-            () => recordSpan({
-              name: "ai.generateObject.doGenerate",
+          const generateResult = await retry(() =>
+            recordSpan({
+              name: 'ai.generateObject.doGenerate',
               attributes: selectTelemetryAttributes({
                 telemetry,
                 attributes: {
                   ...assembleOperationName({
-                    operationId: "ai.generateObject.doGenerate",
+                    operationId: 'ai.generateObject.doGenerate',
                     telemetry
                   }),
                   ...baseTelemetryAttributes,
-                  "ai.prompt.format": {
+                  'ai.prompt.format': {
                     input: () => standardizedPrompt.type
                   },
-                  "ai.prompt.messages": {
+                  'ai.prompt.messages': {
                     input: () => JSON.stringify(promptMessages)
                   },
-                  "ai.settings.mode": mode,
+                  'ai.settings.mode': mode,
                   // standardized gen-ai llm span attributes:
-                  "gen_ai.system": model.provider,
-                  "gen_ai.request.model": model.modelId,
-                  "gen_ai.request.frequency_penalty": settings.frequencyPenalty,
-                  "gen_ai.request.max_tokens": settings.maxTokens,
-                  "gen_ai.request.presence_penalty": settings.presencePenalty,
-                  "gen_ai.request.temperature": settings.temperature,
-                  "gen_ai.request.top_k": settings.topK,
-                  "gen_ai.request.top_p": settings.topP
+                  'gen_ai.system': model.provider,
+                  'gen_ai.request.model': model.modelId,
+                  'gen_ai.request.frequency_penalty': settings.frequencyPenalty,
+                  'gen_ai.request.max_tokens': settings.maxTokens,
+                  'gen_ai.request.presence_penalty': settings.presencePenalty,
+                  'gen_ai.request.temperature': settings.temperature,
+                  'gen_ai.request.top_k': settings.topK,
+                  'gen_ai.request.top_p': settings.topP
                 }
               }),
               tracer,
@@ -2397,7 +2323,7 @@ async function generateObject({
                 var _a15, _b2, _c, _d, _e, _f;
                 const result2 = await model.doGenerate({
                   mode: {
-                    type: "object-json",
+                    type: 'object-json',
                     schema: outputStrategy.jsonSchema,
                     name: schemaName,
                     description: schemaDescription
@@ -2411,12 +2337,13 @@ async function generateObject({
                 });
                 const responseData = {
                   id: (_b2 = (_a15 = result2.response) == null ? void 0 : _a15.id) != null ? _b2 : generateId3(),
-                  timestamp: (_d = (_c = result2.response) == null ? void 0 : _c.timestamp) != null ? _d : currentDate(),
+                  timestamp:
+                    (_d = (_c = result2.response) == null ? void 0 : _c.timestamp) != null ? _d : currentDate(),
                   modelId: (_f = (_e = result2.response) == null ? void 0 : _e.modelId) != null ? _f : model.modelId
                 };
                 if (result2.text === void 0) {
                   throw new NoObjectGeneratedError({
-                    message: "No object generated: the model did not return a response.",
+                    message: 'No object generated: the model did not return a response.',
                     response: responseData,
                     usage: calculateLanguageModelUsage(result2.usage)
                   });
@@ -2425,19 +2352,19 @@ async function generateObject({
                   selectTelemetryAttributes({
                     telemetry,
                     attributes: {
-                      "ai.response.finishReason": result2.finishReason,
-                      "ai.response.object": { output: () => result2.text },
-                      "ai.response.id": responseData.id,
-                      "ai.response.model": responseData.modelId,
-                      "ai.response.timestamp": responseData.timestamp.toISOString(),
-                      "ai.usage.promptTokens": result2.usage.promptTokens,
-                      "ai.usage.completionTokens": result2.usage.completionTokens,
+                      'ai.response.finishReason': result2.finishReason,
+                      'ai.response.object': { output: () => result2.text },
+                      'ai.response.id': responseData.id,
+                      'ai.response.model': responseData.modelId,
+                      'ai.response.timestamp': responseData.timestamp.toISOString(),
+                      'ai.usage.promptTokens': result2.usage.promptTokens,
+                      'ai.usage.completionTokens': result2.usage.completionTokens,
                       // standardized gen-ai llm span attributes:
-                      "gen_ai.response.finish_reasons": [result2.finishReason],
-                      "gen_ai.response.id": responseData.id,
-                      "gen_ai.response.model": responseData.modelId,
-                      "gen_ai.usage.prompt_tokens": result2.usage.promptTokens,
-                      "gen_ai.usage.completion_tokens": result2.usage.completionTokens
+                      'gen_ai.response.finish_reasons': [result2.finishReason],
+                      'gen_ai.response.id': responseData.id,
+                      'gen_ai.response.model': responseData.modelId,
+                      'gen_ai.usage.prompt_tokens': result2.usage.promptTokens,
+                      'gen_ai.usage.completion_tokens': result2.usage.completionTokens
                     }
                   })
                 );
@@ -2456,7 +2383,7 @@ async function generateObject({
           response = generateResult.responseData;
           break;
         }
-        case "tool": {
+        case 'tool': {
           const standardizedPrompt = standardizePrompt({
             prompt: { system, prompt, messages },
             tools: void 0
@@ -2467,33 +2394,33 @@ async function generateObject({
             modelSupportsUrl: model.supportsUrl
           });
           const inputFormat = standardizedPrompt.type;
-          const generateResult = await retry(
-            () => recordSpan({
-              name: "ai.generateObject.doGenerate",
+          const generateResult = await retry(() =>
+            recordSpan({
+              name: 'ai.generateObject.doGenerate',
               attributes: selectTelemetryAttributes({
                 telemetry,
                 attributes: {
                   ...assembleOperationName({
-                    operationId: "ai.generateObject.doGenerate",
+                    operationId: 'ai.generateObject.doGenerate',
                     telemetry
                   }),
                   ...baseTelemetryAttributes,
-                  "ai.prompt.format": {
+                  'ai.prompt.format': {
                     input: () => inputFormat
                   },
-                  "ai.prompt.messages": {
+                  'ai.prompt.messages': {
                     input: () => JSON.stringify(promptMessages)
                   },
-                  "ai.settings.mode": mode,
+                  'ai.settings.mode': mode,
                   // standardized gen-ai llm span attributes:
-                  "gen_ai.system": model.provider,
-                  "gen_ai.request.model": model.modelId,
-                  "gen_ai.request.frequency_penalty": settings.frequencyPenalty,
-                  "gen_ai.request.max_tokens": settings.maxTokens,
-                  "gen_ai.request.presence_penalty": settings.presencePenalty,
-                  "gen_ai.request.temperature": settings.temperature,
-                  "gen_ai.request.top_k": settings.topK,
-                  "gen_ai.request.top_p": settings.topP
+                  'gen_ai.system': model.provider,
+                  'gen_ai.request.model': model.modelId,
+                  'gen_ai.request.frequency_penalty': settings.frequencyPenalty,
+                  'gen_ai.request.max_tokens': settings.maxTokens,
+                  'gen_ai.request.presence_penalty': settings.presencePenalty,
+                  'gen_ai.request.temperature': settings.temperature,
+                  'gen_ai.request.top_k': settings.topK,
+                  'gen_ai.request.top_p': settings.topP
                 }
               }),
               tracer,
@@ -2501,11 +2428,11 @@ async function generateObject({
                 var _a15, _b2, _c, _d, _e, _f, _g, _h;
                 const result2 = await model.doGenerate({
                   mode: {
-                    type: "object-tool",
+                    type: 'object-tool',
                     tool: {
-                      type: "function",
-                      name: schemaName != null ? schemaName : "json",
-                      description: schemaDescription != null ? schemaDescription : "Respond with a JSON object.",
+                      type: 'function',
+                      name: schemaName != null ? schemaName : 'json',
+                      description: schemaDescription != null ? schemaDescription : 'Respond with a JSON object.',
                       parameters: outputStrategy.jsonSchema
                     }
                   },
@@ -2516,15 +2443,17 @@ async function generateObject({
                   abortSignal,
                   headers
                 });
-                const objectText = (_b2 = (_a15 = result2.toolCalls) == null ? void 0 : _a15[0]) == null ? void 0 : _b2.args;
+                const objectText =
+                  (_b2 = (_a15 = result2.toolCalls) == null ? void 0 : _a15[0]) == null ? void 0 : _b2.args;
                 const responseData = {
                   id: (_d = (_c = result2.response) == null ? void 0 : _c.id) != null ? _d : generateId3(),
-                  timestamp: (_f = (_e = result2.response) == null ? void 0 : _e.timestamp) != null ? _f : currentDate(),
+                  timestamp:
+                    (_f = (_e = result2.response) == null ? void 0 : _e.timestamp) != null ? _f : currentDate(),
                   modelId: (_h = (_g = result2.response) == null ? void 0 : _g.modelId) != null ? _h : model.modelId
                 };
                 if (objectText === void 0) {
                   throw new NoObjectGeneratedError({
-                    message: "No object generated: the tool was not called.",
+                    message: 'No object generated: the tool was not called.',
                     response: responseData,
                     usage: calculateLanguageModelUsage(result2.usage)
                   });
@@ -2533,19 +2462,19 @@ async function generateObject({
                   selectTelemetryAttributes({
                     telemetry,
                     attributes: {
-                      "ai.response.finishReason": result2.finishReason,
-                      "ai.response.object": { output: () => objectText },
-                      "ai.response.id": responseData.id,
-                      "ai.response.model": responseData.modelId,
-                      "ai.response.timestamp": responseData.timestamp.toISOString(),
-                      "ai.usage.promptTokens": result2.usage.promptTokens,
-                      "ai.usage.completionTokens": result2.usage.completionTokens,
+                      'ai.response.finishReason': result2.finishReason,
+                      'ai.response.object': { output: () => objectText },
+                      'ai.response.id': responseData.id,
+                      'ai.response.model': responseData.modelId,
+                      'ai.response.timestamp': responseData.timestamp.toISOString(),
+                      'ai.usage.promptTokens': result2.usage.promptTokens,
+                      'ai.usage.completionTokens': result2.usage.completionTokens,
                       // standardized gen-ai llm span attributes:
-                      "gen_ai.response.finish_reasons": [result2.finishReason],
-                      "gen_ai.response.id": responseData.id,
-                      "gen_ai.response.model": responseData.modelId,
-                      "gen_ai.usage.input_tokens": result2.usage.promptTokens,
-                      "gen_ai.usage.output_tokens": result2.usage.completionTokens
+                      'gen_ai.response.finish_reasons': [result2.finishReason],
+                      'gen_ai.response.id': responseData.id,
+                      'gen_ai.response.model': responseData.modelId,
+                      'gen_ai.usage.input_tokens': result2.usage.promptTokens,
+                      'gen_ai.usage.output_tokens': result2.usage.completionTokens
                     }
                   })
                 );
@@ -2565,9 +2494,7 @@ async function generateObject({
           break;
         }
         case void 0: {
-          throw new Error(
-            "Model does not have a default object generation mode."
-          );
+          throw new Error('Model does not have a default object generation mode.');
         }
         default: {
           const _exhaustiveCheck = mode;
@@ -2577,24 +2504,21 @@ async function generateObject({
       const parseResult = (0, import_provider_utils6.safeParseJSON)({ text: result });
       if (!parseResult.success) {
         throw new NoObjectGeneratedError({
-          message: "No object generated: could not parse the response.",
+          message: 'No object generated: could not parse the response.',
           cause: parseResult.error,
           text: result,
           response,
           usage: calculateLanguageModelUsage(usage)
         });
       }
-      const validationResult = outputStrategy.validateFinalResult(
-        parseResult.value,
-        {
-          text: result,
-          response,
-          usage: calculateLanguageModelUsage(usage)
-        }
-      );
+      const validationResult = outputStrategy.validateFinalResult(parseResult.value, {
+        text: result,
+        response,
+        usage: calculateLanguageModelUsage(usage)
+      });
       if (!validationResult.success) {
         throw new NoObjectGeneratedError({
-          message: "No object generated: response did not match schema.",
+          message: 'No object generated: response did not match schema.',
           cause: validationResult.error,
           text: result,
           response,
@@ -2605,12 +2529,12 @@ async function generateObject({
         selectTelemetryAttributes({
           telemetry,
           attributes: {
-            "ai.response.finishReason": finishReason,
-            "ai.response.object": {
+            'ai.response.finishReason': finishReason,
+            'ai.response.object': {
               output: () => JSON.stringify(validationResult.value)
             },
-            "ai.usage.promptTokens": usage.promptTokens,
-            "ai.usage.completionTokens": usage.completionTokens
+            'ai.usage.promptTokens': usage.promptTokens,
+            'ai.usage.completionTokens': usage.completionTokens
           }
         })
       );
@@ -2646,20 +2570,20 @@ var DefaultGenerateObjectResult = class {
     return new Response(JSON.stringify(this.object), {
       status: (_a14 = init == null ? void 0 : init.status) != null ? _a14 : 200,
       headers: prepareResponseHeaders(init == null ? void 0 : init.headers, {
-        contentType: "application/json; charset=utf-8"
+        contentType: 'application/json; charset=utf-8'
       })
     });
   }
 };
 
 // core/generate-object/stream-object.ts
-var import_provider_utils7 = require("@ai-sdk/provider-utils");
-var import_ui_utils3 = require("@ai-sdk/ui-utils");
+var import_provider_utils7 = require('@ai-sdk/provider-utils');
+var import_ui_utils3 = require('@ai-sdk/ui-utils');
 
 // util/delayed-promise.ts
 var DelayedPromise = class {
   constructor() {
-    this.status = { type: "pending" };
+    this.status = { type: 'pending' };
     this._resolve = void 0;
     this._reject = void 0;
   }
@@ -2668,9 +2592,9 @@ var DelayedPromise = class {
       return this.promise;
     }
     this.promise = new Promise((resolve, reject) => {
-      if (this.status.type === "resolved") {
+      if (this.status.type === 'resolved') {
         resolve(this.status.value);
-      } else if (this.status.type === "rejected") {
+      } else if (this.status.type === 'rejected') {
         reject(this.status.error);
       }
       this._resolve = resolve;
@@ -2680,14 +2604,14 @@ var DelayedPromise = class {
   }
   resolve(value) {
     var _a14;
-    this.status = { type: "resolved", value };
+    this.status = { type: 'resolved', value };
     if (this.promise) {
       (_a14 = this._resolve) == null ? void 0 : _a14.call(this, value);
     }
   }
   reject(error) {
     var _a14;
-    this.status = { type: "rejected", error };
+    this.status = { type: 'rejected', error };
     if (this.promise) {
       (_a14 = this._reject) == null ? void 0 : _a14.call(this, error);
     }
@@ -2761,7 +2685,7 @@ function createStitchableStream() {
     }),
     addStream: (innerStream) => {
       if (isClosed) {
-        throw new Error("Cannot add inner stream: outer stream is closed");
+        throw new Error('Cannot add inner stream: outer stream is closed');
       }
       innerStreamReaders.push(innerStream.getReader());
       waitForNewStream.resolve();
@@ -2794,18 +2718,20 @@ function createStitchableStream() {
 // core/util/now.ts
 function now() {
   var _a14, _b;
-  return (_b = (_a14 = globalThis == null ? void 0 : globalThis.performance) == null ? void 0 : _a14.now()) != null ? _b : Date.now();
+  return (_b = (_a14 = globalThis == null ? void 0 : globalThis.performance) == null ? void 0 : _a14.now()) != null
+    ? _b
+    : Date.now();
 }
 
 // core/generate-object/stream-object.ts
-var originalGenerateId2 = (0, import_provider_utils7.createIdGenerator)({ prefix: "aiobj", size: 24 });
+var originalGenerateId2 = (0, import_provider_utils7.createIdGenerator)({ prefix: 'aiobj', size: 24 });
 function streamObject({
   model,
   schema: inputSchema,
   schemaName,
   schemaDescription,
   mode,
-  output = "object",
+  output = 'object',
   system,
   prompt,
   messages,
@@ -2830,8 +2756,8 @@ function streamObject({
     schemaDescription
   });
   const outputStrategy = getOutputStrategy({ output, schema: inputSchema });
-  if (outputStrategy.type === "no-schema" && mode === void 0) {
-    mode = "json";
+  if (outputStrategy.type === 'no-schema' && mode === void 0) {
+    mode = 'json';
   }
   return new DefaultStreamObjectResult({
     model,
@@ -2894,42 +2820,48 @@ var DefaultStreamObjectResult = class {
     const tracer = getTracer(telemetry);
     const self = this;
     recordSpan({
-      name: "ai.streamObject",
+      name: 'ai.streamObject',
       attributes: selectTelemetryAttributes({
         telemetry,
         attributes: {
           ...assembleOperationName({
-            operationId: "ai.streamObject",
+            operationId: 'ai.streamObject',
             telemetry
           }),
           ...baseTelemetryAttributes,
           // specific settings that only make sense on the outer level:
-          "ai.prompt": {
+          'ai.prompt': {
             input: () => JSON.stringify({ system, prompt, messages })
           },
-          "ai.schema": outputStrategy.jsonSchema != null ? { input: () => JSON.stringify(outputStrategy.jsonSchema) } : void 0,
-          "ai.schema.name": schemaName,
-          "ai.schema.description": schemaDescription,
-          "ai.settings.output": outputStrategy.type,
-          "ai.settings.mode": mode
+          'ai.schema':
+            outputStrategy.jsonSchema != null ? { input: () => JSON.stringify(outputStrategy.jsonSchema) } : void 0,
+          'ai.schema.name': schemaName,
+          'ai.schema.description': schemaDescription,
+          'ai.settings.output': outputStrategy.type,
+          'ai.settings.mode': mode
         }
       }),
       tracer,
       endWhenDone: false,
       fn: async (rootSpan) => {
-        if (mode === "auto" || mode == null) {
+        if (mode === 'auto' || mode == null) {
           mode = model.defaultObjectGenerationMode;
         }
         let callOptions;
         let transformer;
         switch (mode) {
-          case "json": {
+          case 'json': {
             const standardizedPrompt = standardizePrompt({
               prompt: {
-                system: outputStrategy.jsonSchema == null ? injectJsonInstruction({ prompt: system }) : model.supportsStructuredOutputs ? system : injectJsonInstruction({
-                  prompt: system,
-                  schema: outputStrategy.jsonSchema
-                }),
+                system:
+                  outputStrategy.jsonSchema == null
+                    ? injectJsonInstruction({ prompt: system })
+                    : model.supportsStructuredOutputs
+                      ? system
+                      : injectJsonInstruction({
+                          prompt: system,
+                          schema: outputStrategy.jsonSchema
+                        }),
                 prompt,
                 messages
               },
@@ -2937,7 +2869,7 @@ var DefaultStreamObjectResult = class {
             });
             callOptions = {
               mode: {
-                type: "object-json",
+                type: 'object-json',
                 schema: outputStrategy.jsonSchema,
                 name: schemaName,
                 description: schemaDescription
@@ -2956,12 +2888,12 @@ var DefaultStreamObjectResult = class {
             transformer = {
               transform: (chunk, controller) => {
                 switch (chunk.type) {
-                  case "text-delta":
+                  case 'text-delta':
                     controller.enqueue(chunk.textDelta);
                     break;
-                  case "response-metadata":
-                  case "finish":
-                  case "error":
+                  case 'response-metadata':
+                  case 'finish':
+                  case 'error':
                     controller.enqueue(chunk);
                     break;
                 }
@@ -2969,18 +2901,18 @@ var DefaultStreamObjectResult = class {
             };
             break;
           }
-          case "tool": {
+          case 'tool': {
             const standardizedPrompt = standardizePrompt({
               prompt: { system, prompt, messages },
               tools: void 0
             });
             callOptions = {
               mode: {
-                type: "object-tool",
+                type: 'object-tool',
                 tool: {
-                  type: "function",
-                  name: schemaName != null ? schemaName : "json",
-                  description: schemaDescription != null ? schemaDescription : "Respond with a JSON object.",
+                  type: 'function',
+                  name: schemaName != null ? schemaName : 'json',
+                  description: schemaDescription != null ? schemaDescription : 'Respond with a JSON object.',
                   parameters: outputStrategy.jsonSchema
                 }
               },
@@ -2998,12 +2930,12 @@ var DefaultStreamObjectResult = class {
             transformer = {
               transform(chunk, controller) {
                 switch (chunk.type) {
-                  case "tool-call-delta":
+                  case 'tool-call-delta':
                     controller.enqueue(chunk.argsTextDelta);
                     break;
-                  case "response-metadata":
-                  case "finish":
-                  case "error":
+                  case 'response-metadata':
+                  case 'finish':
+                  case 'error':
                     controller.enqueue(chunk);
                     break;
                 }
@@ -3012,9 +2944,7 @@ var DefaultStreamObjectResult = class {
             break;
           }
           case void 0: {
-            throw new Error(
-              "Model does not have a default object generation mode."
-            );
+            throw new Error('Model does not have a default object generation mode.');
           }
           default: {
             const _exhaustiveCheck = mode;
@@ -3025,33 +2955,33 @@ var DefaultStreamObjectResult = class {
           result: { stream, warnings, rawResponse, request },
           doStreamSpan,
           startTimestampMs
-        } = await retry(
-          () => recordSpan({
-            name: "ai.streamObject.doStream",
+        } = await retry(() =>
+          recordSpan({
+            name: 'ai.streamObject.doStream',
             attributes: selectTelemetryAttributes({
               telemetry,
               attributes: {
                 ...assembleOperationName({
-                  operationId: "ai.streamObject.doStream",
+                  operationId: 'ai.streamObject.doStream',
                   telemetry
                 }),
                 ...baseTelemetryAttributes,
-                "ai.prompt.format": {
+                'ai.prompt.format': {
                   input: () => callOptions.inputFormat
                 },
-                "ai.prompt.messages": {
+                'ai.prompt.messages': {
                   input: () => JSON.stringify(callOptions.prompt)
                 },
-                "ai.settings.mode": mode,
+                'ai.settings.mode': mode,
                 // standardized gen-ai llm span attributes:
-                "gen_ai.system": model.provider,
-                "gen_ai.request.model": model.modelId,
-                "gen_ai.request.frequency_penalty": settings.frequencyPenalty,
-                "gen_ai.request.max_tokens": settings.maxTokens,
-                "gen_ai.request.presence_penalty": settings.presencePenalty,
-                "gen_ai.request.temperature": settings.temperature,
-                "gen_ai.request.top_k": settings.topK,
-                "gen_ai.request.top_p": settings.topP
+                'gen_ai.system': model.provider,
+                'gen_ai.request.model': model.modelId,
+                'gen_ai.request.frequency_penalty': settings.frequencyPenalty,
+                'gen_ai.request.max_tokens': settings.maxTokens,
+                'gen_ai.request.presence_penalty': settings.presencePenalty,
+                'gen_ai.request.temperature': settings.temperature,
+                'gen_ai.request.top_k': settings.topK,
+                'gen_ai.request.top_p': settings.topP
               }
             }),
             tracer,
@@ -3069,8 +2999,8 @@ var DefaultStreamObjectResult = class {
         let providerMetadata;
         let object2;
         let error;
-        let accumulatedText = "";
-        let textDelta = "";
+        let accumulatedText = '';
+        let textDelta = '';
         let response = {
           id: generateId3(),
           timestamp: currentDate(),
@@ -3087,47 +3017,52 @@ var DefaultStreamObjectResult = class {
               if (isFirstChunk) {
                 const msToFirstChunk = now2() - startTimestampMs;
                 isFirstChunk = false;
-                doStreamSpan.addEvent("ai.stream.firstChunk", {
-                  "ai.stream.msToFirstChunk": msToFirstChunk
+                doStreamSpan.addEvent('ai.stream.firstChunk', {
+                  'ai.stream.msToFirstChunk': msToFirstChunk
                 });
                 doStreamSpan.setAttributes({
-                  "ai.stream.msToFirstChunk": msToFirstChunk
+                  'ai.stream.msToFirstChunk': msToFirstChunk
                 });
               }
-              if (typeof chunk === "string") {
+              if (typeof chunk === 'string') {
                 accumulatedText += chunk;
                 textDelta += chunk;
-                const { value: currentObjectJson, state: parseState } = (0, import_ui_utils3.parsePartialJson)(accumulatedText);
-                if (currentObjectJson !== void 0 && !(0, import_ui_utils3.isDeepEqualData)(latestObjectJson, currentObjectJson)) {
+                const { value: currentObjectJson, state: parseState } = (0, import_ui_utils3.parsePartialJson)(
+                  accumulatedText
+                );
+                if (
+                  currentObjectJson !== void 0 &&
+                  !(0, import_ui_utils3.isDeepEqualData)(latestObjectJson, currentObjectJson)
+                ) {
                   const validationResult = outputStrategy.validatePartialResult({
                     value: currentObjectJson,
                     textDelta,
                     latestObject,
                     isFirstDelta,
-                    isFinalDelta: parseState === "successful-parse"
+                    isFinalDelta: parseState === 'successful-parse'
                   });
-                  if (validationResult.success && !(0, import_ui_utils3.isDeepEqualData)(
-                    latestObject,
-                    validationResult.value.partial
-                  )) {
+                  if (
+                    validationResult.success &&
+                    !(0, import_ui_utils3.isDeepEqualData)(latestObject, validationResult.value.partial)
+                  ) {
                     latestObjectJson = currentObjectJson;
                     latestObject = validationResult.value.partial;
                     controller.enqueue({
-                      type: "object",
+                      type: 'object',
                       object: latestObject
                     });
                     controller.enqueue({
-                      type: "text-delta",
+                      type: 'text-delta',
                       textDelta: validationResult.value.textDelta
                     });
-                    textDelta = "";
+                    textDelta = '';
                     isFirstDelta = false;
                   }
                 }
                 return;
               }
               switch (chunk.type) {
-                case "response-metadata": {
+                case 'response-metadata': {
                   response = {
                     id: (_a14 = chunk.id) != null ? _a14 : response.id,
                     timestamp: (_b = chunk.timestamp) != null ? _b : response.timestamp,
@@ -3135,9 +3070,9 @@ var DefaultStreamObjectResult = class {
                   };
                   break;
                 }
-                case "finish": {
-                  if (textDelta !== "") {
-                    controller.enqueue({ type: "text-delta", textDelta });
+                case 'finish': {
+                  if (textDelta !== '') {
+                    controller.enqueue({ type: 'text-delta', textDelta });
                   }
                   finishReason = chunk.finishReason;
                   usage = calculateLanguageModelUsage(chunk.usage);
@@ -3149,20 +3084,17 @@ var DefaultStreamObjectResult = class {
                     ...response,
                     headers: rawResponse == null ? void 0 : rawResponse.headers
                   });
-                  const validationResult = outputStrategy.validateFinalResult(
-                    latestObjectJson,
-                    {
-                      text: accumulatedText,
-                      response,
-                      usage
-                    }
-                  );
+                  const validationResult = outputStrategy.validateFinalResult(latestObjectJson, {
+                    text: accumulatedText,
+                    response,
+                    usage
+                  });
                   if (validationResult.success) {
                     object2 = validationResult.value;
                     self.objectPromise.resolve(object2);
                   } else {
                     error = new NoObjectGeneratedError({
-                      message: "No object generated: response did not match schema.",
+                      message: 'No object generated: response did not match schema.',
                       cause: validationResult.error,
                       text: accumulatedText,
                       response,
@@ -3181,30 +3113,33 @@ var DefaultStreamObjectResult = class {
             // invoke onFinish callback and resolve toolResults promise when the stream is about to close:
             async flush(controller) {
               try {
-                const finalUsage = usage != null ? usage : {
-                  promptTokens: NaN,
-                  completionTokens: NaN,
-                  totalTokens: NaN
-                };
+                const finalUsage =
+                  usage != null
+                    ? usage
+                    : {
+                        promptTokens: NaN,
+                        completionTokens: NaN,
+                        totalTokens: NaN
+                      };
                 doStreamSpan.setAttributes(
                   selectTelemetryAttributes({
                     telemetry,
                     attributes: {
-                      "ai.response.finishReason": finishReason,
-                      "ai.response.object": {
+                      'ai.response.finishReason': finishReason,
+                      'ai.response.object': {
                         output: () => JSON.stringify(object2)
                       },
-                      "ai.response.id": response.id,
-                      "ai.response.model": response.modelId,
-                      "ai.response.timestamp": response.timestamp.toISOString(),
-                      "ai.usage.promptTokens": finalUsage.promptTokens,
-                      "ai.usage.completionTokens": finalUsage.completionTokens,
+                      'ai.response.id': response.id,
+                      'ai.response.model': response.modelId,
+                      'ai.response.timestamp': response.timestamp.toISOString(),
+                      'ai.usage.promptTokens': finalUsage.promptTokens,
+                      'ai.usage.completionTokens': finalUsage.completionTokens,
                       // standardized gen-ai llm span attributes:
-                      "gen_ai.response.finish_reasons": [finishReason],
-                      "gen_ai.response.id": response.id,
-                      "gen_ai.response.model": response.modelId,
-                      "gen_ai.usage.input_tokens": finalUsage.promptTokens,
-                      "gen_ai.usage.output_tokens": finalUsage.completionTokens
+                      'gen_ai.response.finish_reasons': [finishReason],
+                      'gen_ai.response.id': response.id,
+                      'gen_ai.response.model': response.modelId,
+                      'gen_ai.usage.input_tokens': finalUsage.promptTokens,
+                      'gen_ai.usage.output_tokens': finalUsage.completionTokens
                     }
                   })
                 );
@@ -3213,25 +3148,27 @@ var DefaultStreamObjectResult = class {
                   selectTelemetryAttributes({
                     telemetry,
                     attributes: {
-                      "ai.usage.promptTokens": finalUsage.promptTokens,
-                      "ai.usage.completionTokens": finalUsage.completionTokens,
-                      "ai.response.object": {
+                      'ai.usage.promptTokens': finalUsage.promptTokens,
+                      'ai.usage.completionTokens': finalUsage.completionTokens,
+                      'ai.response.object': {
                         output: () => JSON.stringify(object2)
                       }
                     }
                   })
                 );
-                await (onFinish == null ? void 0 : onFinish({
-                  usage: finalUsage,
-                  object: object2,
-                  error,
-                  response: {
-                    ...response,
-                    headers: rawResponse == null ? void 0 : rawResponse.headers
-                  },
-                  warnings,
-                  experimental_providerMetadata: providerMetadata
-                }));
+                await (onFinish == null
+                  ? void 0
+                  : onFinish({
+                      usage: finalUsage,
+                      object: object2,
+                      error,
+                      response: {
+                        ...response,
+                        headers: rawResponse == null ? void 0 : rawResponse.headers
+                      },
+                      warnings,
+                      experimental_providerMetadata: providerMetadata
+                    }));
               } catch (error2) {
                 controller.error(error2);
               } finally {
@@ -3242,17 +3179,19 @@ var DefaultStreamObjectResult = class {
         );
         self.stitchableStream.addStream(transformedStream);
       }
-    }).catch((error) => {
-      self.stitchableStream.addStream(
-        new ReadableStream({
-          start(controller) {
-            controller.error(error);
-          }
-        })
-      );
-    }).finally(() => {
-      self.stitchableStream.close();
-    });
+    })
+      .catch((error) => {
+        self.stitchableStream.addStream(
+          new ReadableStream({
+            start(controller) {
+              controller.error(error);
+            }
+          })
+        );
+      })
+      .finally(() => {
+        self.stitchableStream.close();
+      });
     this.outputStrategy = outputStrategy;
   }
   get object() {
@@ -3279,13 +3218,13 @@ var DefaultStreamObjectResult = class {
         new TransformStream({
           transform(chunk, controller) {
             switch (chunk.type) {
-              case "object":
+              case 'object':
                 controller.enqueue(chunk.object);
                 break;
-              case "text-delta":
-              case "finish":
+              case 'text-delta':
+              case 'finish':
                 break;
-              case "error":
+              case 'error':
                 controller.error(chunk.error);
                 break;
               default: {
@@ -3299,9 +3238,7 @@ var DefaultStreamObjectResult = class {
     );
   }
   get elementStream() {
-    return this.outputStrategy.createElementStream(
-      this.stitchableStream.stream
-    );
+    return this.outputStrategy.createElementStream(this.stitchableStream.stream);
   }
   get textStream() {
     return createAsyncIterableStream(
@@ -3309,13 +3246,13 @@ var DefaultStreamObjectResult = class {
         new TransformStream({
           transform(chunk, controller) {
             switch (chunk.type) {
-              case "text-delta":
+              case 'text-delta':
                 controller.enqueue(chunk.textDelta);
                 break;
-              case "object":
-              case "finish":
+              case 'object':
+              case 'finish':
                 break;
-              case "error":
+              case 'error':
                 controller.error(chunk.error);
                 break;
               default: {
@@ -3337,7 +3274,7 @@ var DefaultStreamObjectResult = class {
       status: init == null ? void 0 : init.status,
       statusText: init == null ? void 0 : init.statusText,
       headers: prepareOutgoingHttpHeaders(init == null ? void 0 : init.headers, {
-        contentType: "text/plain; charset=utf-8"
+        contentType: 'text/plain; charset=utf-8'
       }),
       stream: this.textStream.pipeThrough(new TextEncoderStream())
     });
@@ -3347,24 +3284,24 @@ var DefaultStreamObjectResult = class {
     return new Response(this.textStream.pipeThrough(new TextEncoderStream()), {
       status: (_a14 = init == null ? void 0 : init.status) != null ? _a14 : 200,
       headers: prepareResponseHeaders(init == null ? void 0 : init.headers, {
-        contentType: "text/plain; charset=utf-8"
+        contentType: 'text/plain; charset=utf-8'
       })
     });
   }
 };
 
 // core/generate-text/generate-text.ts
-var import_provider_utils9 = require("@ai-sdk/provider-utils");
+var import_provider_utils9 = require('@ai-sdk/provider-utils');
 
 // errors/no-output-specified-error.ts
-var import_provider11 = require("@ai-sdk/provider");
-var name8 = "AI_NoOutputSpecifiedError";
+var import_provider11 = require('@ai-sdk/provider');
+var name8 = 'AI_NoOutputSpecifiedError';
 var marker8 = `vercel.ai.error.${name8}`;
 var symbol8 = Symbol.for(marker8);
 var _a8;
 var NoOutputSpecifiedError = class extends import_provider11.AISDKError {
   // used in isInstance
-  constructor({ message = "No output specified." } = {}) {
+  constructor({ message = 'No output specified.' } = {}) {
     super({ name: name8, message });
     this[_a8] = true;
   }
@@ -3375,8 +3312,8 @@ var NoOutputSpecifiedError = class extends import_provider11.AISDKError {
 _a8 = symbol8;
 
 // errors/tool-execution-error.ts
-var import_provider12 = require("@ai-sdk/provider");
-var name9 = "AI_ToolExecutionError";
+var import_provider12 = require('@ai-sdk/provider');
+var name9 = 'AI_ToolExecutionError';
 var marker9 = `vercel.ai.error.${name9}`;
 var symbol9 = Symbol.for(marker9);
 var _a9;
@@ -3401,7 +3338,7 @@ var ToolExecutionError = class extends import_provider12.AISDKError {
 _a9 = symbol9;
 
 // core/prompt/prepare-tools-and-tool-choice.ts
-var import_ui_utils4 = require("@ai-sdk/ui-utils");
+var import_ui_utils4 = require('@ai-sdk/ui-utils');
 
 // core/util/is-non-empty-object.ts
 function isNonEmptyObject(object2) {
@@ -3409,35 +3346,32 @@ function isNonEmptyObject(object2) {
 }
 
 // core/prompt/prepare-tools-and-tool-choice.ts
-function prepareToolsAndToolChoice({
-  tools,
-  toolChoice,
-  activeTools
-}) {
+function prepareToolsAndToolChoice({ tools, toolChoice, activeTools }) {
   if (!isNonEmptyObject(tools)) {
     return {
       tools: void 0,
       toolChoice: void 0
     };
   }
-  const filteredTools = activeTools != null ? Object.entries(tools).filter(
-    ([name14]) => activeTools.includes(name14)
-  ) : Object.entries(tools);
+  const filteredTools =
+    activeTools != null
+      ? Object.entries(tools).filter(([name14]) => activeTools.includes(name14))
+      : Object.entries(tools);
   return {
     tools: filteredTools.map(([name14, tool2]) => {
       const toolType = tool2.type;
       switch (toolType) {
         case void 0:
-        case "function":
+        case 'function':
           return {
-            type: "function",
+            type: 'function',
             name: name14,
             description: tool2.description,
             parameters: (0, import_ui_utils4.asSchema)(tool2.parameters).jsonSchema
           };
-        case "provider-defined":
+        case 'provider-defined':
           return {
-            type: "provider-defined",
+            type: 'provider-defined',
             name: name14,
             id: tool2.id,
             args: tool2.args
@@ -3448,7 +3382,12 @@ function prepareToolsAndToolChoice({
         }
       }
     }),
-    toolChoice: toolChoice == null ? { type: "auto" } : typeof toolChoice === "string" ? { type: toolChoice } : { type: "tool", toolName: toolChoice.toolName }
+    toolChoice:
+      toolChoice == null
+        ? { type: 'auto' }
+        : typeof toolChoice === 'string'
+          ? { type: toolChoice }
+          : { type: 'tool', toolName: toolChoice.toolName }
   };
 }
 
@@ -3466,12 +3405,12 @@ function removeTextAfterLastWhitespace(text2) {
 }
 
 // core/generate-text/parse-tool-call.ts
-var import_provider_utils8 = require("@ai-sdk/provider-utils");
-var import_ui_utils5 = require("@ai-sdk/ui-utils");
+var import_provider_utils8 = require('@ai-sdk/provider-utils');
+var import_ui_utils5 = require('@ai-sdk/ui-utils');
 
 // errors/invalid-tool-arguments-error.ts
-var import_provider13 = require("@ai-sdk/provider");
-var name10 = "AI_InvalidToolArgumentsError";
+var import_provider13 = require('@ai-sdk/provider');
+var name10 = 'AI_InvalidToolArgumentsError';
 var marker10 = `vercel.ai.error.${name10}`;
 var symbol10 = Symbol.for(marker10);
 var _a10;
@@ -3480,9 +3419,7 @@ var InvalidToolArgumentsError = class extends import_provider13.AISDKError {
     toolArgs,
     toolName,
     cause,
-    message = `Invalid arguments for tool ${toolName}: ${(0, import_provider13.getErrorMessage)(
-      cause
-    )}`
+    message = `Invalid arguments for tool ${toolName}: ${(0, import_provider13.getErrorMessage)(cause)}`
   }) {
     super({ name: name10, message, cause });
     this[_a10] = true;
@@ -3496,8 +3433,8 @@ var InvalidToolArgumentsError = class extends import_provider13.AISDKError {
 _a10 = symbol10;
 
 // errors/no-such-tool-error.ts
-var import_provider14 = require("@ai-sdk/provider");
-var name11 = "AI_NoSuchToolError";
+var import_provider14 = require('@ai-sdk/provider');
+var name11 = 'AI_NoSuchToolError';
 var marker11 = `vercel.ai.error.${name11}`;
 var symbol11 = Symbol.for(marker11);
 var _a11;
@@ -3505,7 +3442,7 @@ var NoSuchToolError = class extends import_provider14.AISDKError {
   constructor({
     toolName,
     availableTools = void 0,
-    message = `Model tried to call unavailable tool '${toolName}'. ${availableTools === void 0 ? "No tools are available." : `Available tools: ${availableTools.join(", ")}.`}`
+    message = `Model tried to call unavailable tool '${toolName}'. ${availableTools === void 0 ? 'No tools are available.' : `Available tools: ${availableTools.join(', ')}.`}`
   }) {
     super({ name: name11, message });
     this[_a11] = true;
@@ -3519,8 +3456,8 @@ var NoSuchToolError = class extends import_provider14.AISDKError {
 _a11 = symbol11;
 
 // errors/tool-call-repair-error.ts
-var import_provider15 = require("@ai-sdk/provider");
-var name12 = "AI_ToolCallRepairError";
+var import_provider15 = require('@ai-sdk/provider');
+var name12 = 'AI_ToolCallRepairError';
 var marker12 = `vercel.ai.error.${name12}`;
 var symbol12 = Symbol.for(marker12);
 var _a12;
@@ -3541,13 +3478,7 @@ var ToolCallRepairError = class extends import_provider15.AISDKError {
 _a12 = symbol12;
 
 // core/generate-text/parse-tool-call.ts
-async function parseToolCall({
-  toolCall,
-  tools,
-  repairToolCall,
-  system,
-  messages
-}) {
+async function parseToolCall({ toolCall, tools, repairToolCall, system, messages }) {
   if (tools == null) {
     throw new NoSuchToolError({ toolName: toolCall.toolName });
   }
@@ -3579,10 +3510,7 @@ async function parseToolCall({
     return await doParseToolCall({ toolCall: repairedToolCall, tools });
   }
 }
-async function doParseToolCall({
-  toolCall,
-  tools
-}) {
+async function doParseToolCall({ toolCall, tools }) {
   const toolName = toolCall.toolName;
   const tool2 = tools[toolName];
   if (tool2 == null) {
@@ -3592,7 +3520,10 @@ async function doParseToolCall({
     });
   }
   const schema = (0, import_ui_utils5.asSchema)(tool2.parameters);
-  const parseResult = toolCall.args.trim() === "" ? (0, import_provider_utils8.safeValidateTypes)({ value: {}, schema }) : (0, import_provider_utils8.safeParseJSON)({ text: toolCall.args, schema });
+  const parseResult =
+    toolCall.args.trim() === ''
+      ? (0, import_provider_utils8.safeValidateTypes)({ value: {}, schema })
+      : (0, import_provider_utils8.safeParseJSON)({ text: toolCall.args, schema });
   if (parseResult.success === false) {
     throw new InvalidToolArgumentsError({
       toolName,
@@ -3601,7 +3532,7 @@ async function doParseToolCall({
     });
   }
   return {
-    type: "tool-call",
+    type: 'tool-call',
     toolCallId: toolCall.toolCallId,
     toolName,
     args: parseResult.value
@@ -3609,40 +3540,33 @@ async function doParseToolCall({
 }
 
 // core/generate-text/to-response-messages.ts
-function toResponseMessages({
-  text: text2 = "",
-  tools,
-  toolCalls,
-  toolResults,
-  messageId,
-  generateMessageId
-}) {
+function toResponseMessages({ text: text2 = '', tools, toolCalls, toolResults, messageId, generateMessageId }) {
   const responseMessages = [];
   responseMessages.push({
-    role: "assistant",
-    content: [{ type: "text", text: text2 }, ...toolCalls],
+    role: 'assistant',
+    content: [{ type: 'text', text: text2 }, ...toolCalls],
     id: messageId
   });
   if (toolResults.length > 0) {
     responseMessages.push({
-      role: "tool",
+      role: 'tool',
       id: generateMessageId(),
       content: toolResults.map((toolResult) => {
         const tool2 = tools[toolResult.toolName];
-        return (tool2 == null ? void 0 : tool2.experimental_toToolResultContent) != null ? {
-          type: "tool-result",
-          toolCallId: toolResult.toolCallId,
-          toolName: toolResult.toolName,
-          result: tool2.experimental_toToolResultContent(toolResult.result),
-          experimental_content: tool2.experimental_toToolResultContent(
-            toolResult.result
-          )
-        } : {
-          type: "tool-result",
-          toolCallId: toolResult.toolCallId,
-          toolName: toolResult.toolName,
-          result: toolResult.result
-        };
+        return (tool2 == null ? void 0 : tool2.experimental_toToolResultContent) != null
+          ? {
+              type: 'tool-result',
+              toolCallId: toolResult.toolCallId,
+              toolName: toolResult.toolName,
+              result: tool2.experimental_toToolResultContent(toolResult.result),
+              experimental_content: tool2.experimental_toToolResultContent(toolResult.result)
+            }
+          : {
+              type: 'tool-result',
+              toolCallId: toolResult.toolCallId,
+              toolName: toolResult.toolName,
+              result: toolResult.result
+            };
       })
     });
   }
@@ -3651,11 +3575,11 @@ function toResponseMessages({
 
 // core/generate-text/generate-text.ts
 var originalGenerateId3 = (0, import_provider_utils9.createIdGenerator)({
-  prefix: "aitxt",
+  prefix: 'aitxt',
   size: 24
 });
 var originalGenerateMessageId = (0, import_provider_utils9.createIdGenerator)({
-  prefix: "msg",
+  prefix: 'msg',
   size: 24
 });
 async function generateText({
@@ -3676,19 +3600,16 @@ async function generateText({
   experimental_providerMetadata: providerMetadata,
   experimental_activeTools: activeTools,
   experimental_repairToolCall: repairToolCall,
-  _internal: {
-    generateId: generateId3 = originalGenerateId3,
-    currentDate = () => /* @__PURE__ */ new Date()
-  } = {},
+  _internal: { generateId: generateId3 = originalGenerateId3, currentDate = () => /* @__PURE__ */ new Date() } = {},
   onStepFinish,
   ...settings
 }) {
   var _a14;
   if (maxSteps < 1) {
     throw new InvalidArgumentError({
-      parameter: "maxSteps",
+      parameter: 'maxSteps',
       value: maxSteps,
-      message: "maxSteps must be at least 1"
+      message: 'maxSteps must be at least 1'
     });
   }
   const { maxRetries, retry } = prepareRetries({ maxRetries: maxRetriesArg });
@@ -3700,7 +3621,8 @@ async function generateText({
   });
   const initialPrompt = standardizePrompt({
     prompt: {
-      system: (_a14 = output == null ? void 0 : output.injectIntoSystemPrompt({ system, model })) != null ? _a14 : system,
+      system:
+        (_a14 = output == null ? void 0 : output.injectIntoSystemPrompt({ system, model })) != null ? _a14 : system,
       prompt,
       messages
     },
@@ -3708,27 +3630,27 @@ async function generateText({
   });
   const tracer = getTracer(telemetry);
   return recordSpan({
-    name: "ai.generateText",
+    name: 'ai.generateText',
     attributes: selectTelemetryAttributes({
       telemetry,
       attributes: {
         ...assembleOperationName({
-          operationId: "ai.generateText",
+          operationId: 'ai.generateText',
           telemetry
         }),
         ...baseTelemetryAttributes,
         // specific settings that only make sense on the outer level:
-        "ai.prompt": {
+        'ai.prompt': {
           input: () => JSON.stringify({ system, prompt, messages })
         },
-        "ai.settings.maxSteps": maxSteps
+        'ai.settings.maxSteps': maxSteps
       }
     }),
     tracer,
     fn: async (span) => {
       var _a15, _b, _c, _d, _e, _f;
       const mode = {
-        type: "regular",
+        type: 'regular',
         ...prepareToolsAndToolChoice({ tools, toolChoice, activeTools })
       };
       const callSettings = prepareCallSettings(settings);
@@ -3737,20 +3659,17 @@ async function generateText({
       let currentToolResults = [];
       let stepCount = 0;
       const responseMessages = [];
-      let text2 = "";
+      let text2 = '';
       const steps = [];
       let usage = {
         completionTokens: 0,
         promptTokens: 0,
         totalTokens: 0
       };
-      let stepType = "initial";
+      let stepType = 'initial';
       do {
-        const promptFormat = stepCount === 0 ? initialPrompt.type : "messages";
-        const stepInputMessages = [
-          ...initialPrompt.messages,
-          ...responseMessages
-        ];
+        const promptFormat = stepCount === 0 ? initialPrompt.type : 'messages';
+        const stepInputMessages = [...initialPrompt.messages, ...responseMessages];
         const promptMessages = await convertToLanguageModelPrompt({
           prompt: {
             type: promptFormat,
@@ -3760,41 +3679,41 @@ async function generateText({
           modelSupportsImageUrls: model.supportsImageUrls,
           modelSupportsUrl: model.supportsUrl
         });
-        currentModelResponse = await retry(
-          () => recordSpan({
-            name: "ai.generateText.doGenerate",
+        currentModelResponse = await retry(() =>
+          recordSpan({
+            name: 'ai.generateText.doGenerate',
             attributes: selectTelemetryAttributes({
               telemetry,
               attributes: {
                 ...assembleOperationName({
-                  operationId: "ai.generateText.doGenerate",
+                  operationId: 'ai.generateText.doGenerate',
                   telemetry
                 }),
                 ...baseTelemetryAttributes,
-                "ai.prompt.format": { input: () => promptFormat },
-                "ai.prompt.messages": {
+                'ai.prompt.format': { input: () => promptFormat },
+                'ai.prompt.messages': {
                   input: () => JSON.stringify(promptMessages)
                 },
-                "ai.prompt.tools": {
+                'ai.prompt.tools': {
                   // convert the language model level tools:
                   input: () => {
                     var _a16;
                     return (_a16 = mode.tools) == null ? void 0 : _a16.map((tool2) => JSON.stringify(tool2));
                   }
                 },
-                "ai.prompt.toolChoice": {
-                  input: () => mode.toolChoice != null ? JSON.stringify(mode.toolChoice) : void 0
+                'ai.prompt.toolChoice': {
+                  input: () => (mode.toolChoice != null ? JSON.stringify(mode.toolChoice) : void 0)
                 },
                 // standardized gen-ai llm span attributes:
-                "gen_ai.system": model.provider,
-                "gen_ai.request.model": model.modelId,
-                "gen_ai.request.frequency_penalty": settings.frequencyPenalty,
-                "gen_ai.request.max_tokens": settings.maxTokens,
-                "gen_ai.request.presence_penalty": settings.presencePenalty,
-                "gen_ai.request.stop_sequences": settings.stopSequences,
-                "gen_ai.request.temperature": settings.temperature,
-                "gen_ai.request.top_k": settings.topK,
-                "gen_ai.request.top_p": settings.topP
+                'gen_ai.system': model.provider,
+                'gen_ai.request.model': model.modelId,
+                'gen_ai.request.frequency_penalty': settings.frequencyPenalty,
+                'gen_ai.request.max_tokens': settings.maxTokens,
+                'gen_ai.request.presence_penalty': settings.presencePenalty,
+                'gen_ai.request.stop_sequences': settings.stopSequences,
+                'gen_ai.request.temperature': settings.temperature,
+                'gen_ai.request.top_k': settings.topK,
+                'gen_ai.request.top_p': settings.topP
               }
             }),
             tracer,
@@ -3812,31 +3731,32 @@ async function generateText({
               });
               const responseData = {
                 id: (_b2 = (_a16 = result.response) == null ? void 0 : _a16.id) != null ? _b2 : generateId3(),
-                timestamp: (_d2 = (_c2 = result.response) == null ? void 0 : _c2.timestamp) != null ? _d2 : currentDate(),
+                timestamp:
+                  (_d2 = (_c2 = result.response) == null ? void 0 : _c2.timestamp) != null ? _d2 : currentDate(),
                 modelId: (_f2 = (_e2 = result.response) == null ? void 0 : _e2.modelId) != null ? _f2 : model.modelId
               };
               span2.setAttributes(
                 selectTelemetryAttributes({
                   telemetry,
                   attributes: {
-                    "ai.response.finishReason": result.finishReason,
-                    "ai.response.text": {
+                    'ai.response.finishReason': result.finishReason,
+                    'ai.response.text': {
                       output: () => result.text
                     },
-                    "ai.response.toolCalls": {
+                    'ai.response.toolCalls': {
                       output: () => JSON.stringify(result.toolCalls)
                     },
-                    "ai.response.id": responseData.id,
-                    "ai.response.model": responseData.modelId,
-                    "ai.response.timestamp": responseData.timestamp.toISOString(),
-                    "ai.usage.promptTokens": result.usage.promptTokens,
-                    "ai.usage.completionTokens": result.usage.completionTokens,
+                    'ai.response.id': responseData.id,
+                    'ai.response.model': responseData.modelId,
+                    'ai.response.timestamp': responseData.timestamp.toISOString(),
+                    'ai.usage.promptTokens': result.usage.promptTokens,
+                    'ai.usage.completionTokens': result.usage.completionTokens,
                     // standardized gen-ai llm span attributes:
-                    "gen_ai.response.finish_reasons": [result.finishReason],
-                    "gen_ai.response.id": responseData.id,
-                    "gen_ai.response.model": responseData.modelId,
-                    "gen_ai.usage.input_tokens": result.usage.promptTokens,
-                    "gen_ai.usage.output_tokens": result.usage.completionTokens
+                    'gen_ai.response.finish_reasons': [result.finishReason],
+                    'gen_ai.response.id': responseData.id,
+                    'gen_ai.response.model': responseData.modelId,
+                    'gen_ai.usage.input_tokens': result.usage.promptTokens,
+                    'gen_ai.usage.output_tokens': result.usage.completionTokens
                   }
                 })
               );
@@ -3845,8 +3765,8 @@ async function generateText({
           })
         );
         currentToolCalls = await Promise.all(
-          ((_a15 = currentModelResponse.toolCalls) != null ? _a15 : []).map(
-            (toolCall) => parseToolCall({
+          ((_a15 = currentModelResponse.toolCalls) != null ? _a15 : []).map((toolCall) =>
+            parseToolCall({
               toolCall,
               tools,
               repairToolCall,
@@ -3855,44 +3775,54 @@ async function generateText({
             })
           )
         );
-        currentToolResults = tools == null ? [] : await executeTools({
-          toolCalls: currentToolCalls,
-          tools,
-          tracer,
-          telemetry,
-          messages: stepInputMessages,
-          abortSignal
-        });
-        const currentUsage = calculateLanguageModelUsage(
-          currentModelResponse.usage
-        );
+        currentToolResults =
+          tools == null
+            ? []
+            : await executeTools({
+                toolCalls: currentToolCalls,
+                tools,
+                tracer,
+                telemetry,
+                messages: stepInputMessages,
+                abortSignal
+              });
+        const currentUsage = calculateLanguageModelUsage(currentModelResponse.usage);
         usage = addLanguageModelUsage(usage, currentUsage);
-        let nextStepType = "done";
+        let nextStepType = 'done';
         if (++stepCount < maxSteps) {
-          if (continueSteps && currentModelResponse.finishReason === "length" && // only use continue when there are no tool calls:
-          currentToolCalls.length === 0) {
-            nextStepType = "continue";
+          if (
+            continueSteps &&
+            currentModelResponse.finishReason === 'length' && // only use continue when there are no tool calls:
+            currentToolCalls.length === 0
+          ) {
+            nextStepType = 'continue';
           } else if (
             // there are tool calls:
             currentToolCalls.length > 0 && // all current tool calls have results:
             currentToolResults.length === currentToolCalls.length
           ) {
-            nextStepType = "tool-result";
+            nextStepType = 'tool-result';
           }
         }
-        const originalText = (_b = currentModelResponse.text) != null ? _b : "";
-        const stepTextLeadingWhitespaceTrimmed = stepType === "continue" && // only for continue steps
-        text2.trimEnd() !== text2 ? originalText.trimStart() : originalText;
-        const stepText = nextStepType === "continue" ? removeTextAfterLastWhitespace(stepTextLeadingWhitespaceTrimmed) : stepTextLeadingWhitespaceTrimmed;
-        text2 = nextStepType === "continue" || stepType === "continue" ? text2 + stepText : stepText;
-        if (stepType === "continue") {
+        const originalText = (_b = currentModelResponse.text) != null ? _b : '';
+        const stepTextLeadingWhitespaceTrimmed =
+          stepType === 'continue' && // only for continue steps
+          text2.trimEnd() !== text2
+            ? originalText.trimStart()
+            : originalText;
+        const stepText =
+          nextStepType === 'continue'
+            ? removeTextAfterLastWhitespace(stepTextLeadingWhitespaceTrimmed)
+            : stepTextLeadingWhitespaceTrimmed;
+        text2 = nextStepType === 'continue' || stepType === 'continue' ? text2 + stepText : stepText;
+        if (stepType === 'continue') {
           const lastMessage = responseMessages[responseMessages.length - 1];
-          if (typeof lastMessage.content === "string") {
+          if (typeof lastMessage.content === 'string') {
             lastMessage.content += stepText;
           } else {
             lastMessage.content.push({
               text: stepText,
-              type: "text"
+              type: 'text'
             });
           }
         } else {
@@ -3924,25 +3854,25 @@ async function generateText({
             messages: structuredClone(responseMessages)
           },
           experimental_providerMetadata: currentModelResponse.providerMetadata,
-          isContinued: nextStepType === "continue"
+          isContinued: nextStepType === 'continue'
         };
         steps.push(currentStepResult);
         await (onStepFinish == null ? void 0 : onStepFinish(currentStepResult));
         stepType = nextStepType;
-      } while (stepType !== "done");
+      } while (stepType !== 'done');
       span.setAttributes(
         selectTelemetryAttributes({
           telemetry,
           attributes: {
-            "ai.response.finishReason": currentModelResponse.finishReason,
-            "ai.response.text": {
+            'ai.response.finishReason': currentModelResponse.finishReason,
+            'ai.response.text': {
               output: () => currentModelResponse.text
             },
-            "ai.response.toolCalls": {
+            'ai.response.toolCalls': {
               output: () => JSON.stringify(currentModelResponse.toolCalls)
             },
-            "ai.usage.promptTokens": currentModelResponse.usage.promptTokens,
-            "ai.usage.completionTokens": currentModelResponse.usage.completionTokens
+            'ai.usage.promptTokens': currentModelResponse.usage.promptTokens,
+            'ai.usage.completionTokens': currentModelResponse.usage.completionTokens
           }
         })
       );
@@ -3952,10 +3882,7 @@ async function generateText({
           if (output == null) {
             throw new NoOutputSpecifiedError();
           }
-          return output.parseOutput(
-            { text: text2 },
-            { response: currentModelResponse.response, usage }
-          );
+          return output.parseOutput({ text: text2 }, { response: currentModelResponse.response, usage });
         },
         toolCalls: currentToolCalls,
         toolResults: currentToolResults,
@@ -3975,14 +3902,7 @@ async function generateText({
     }
   });
 }
-async function executeTools({
-  toolCalls,
-  tools,
-  tracer,
-  telemetry,
-  messages,
-  abortSignal
-}) {
+async function executeTools({ toolCalls, tools, tracer, telemetry, messages, abortSignal }) {
   const toolResults = await Promise.all(
     toolCalls.map(async ({ toolCallId, toolName, args }) => {
       const tool2 = tools[toolName];
@@ -3990,17 +3910,17 @@ async function executeTools({
         return void 0;
       }
       const result = await recordSpan({
-        name: "ai.toolCall",
+        name: 'ai.toolCall',
         attributes: selectTelemetryAttributes({
           telemetry,
           attributes: {
             ...assembleOperationName({
-              operationId: "ai.toolCall",
+              operationId: 'ai.toolCall',
               telemetry
             }),
-            "ai.toolCall.name": toolName,
-            "ai.toolCall.id": toolCallId,
-            "ai.toolCall.args": {
+            'ai.toolCall.name': toolName,
+            'ai.toolCall.id': toolCallId,
+            'ai.toolCall.args': {
               output: () => JSON.stringify(args)
             }
           }
@@ -4018,14 +3938,13 @@ async function executeTools({
                 selectTelemetryAttributes({
                   telemetry,
                   attributes: {
-                    "ai.toolCall.result": {
+                    'ai.toolCall.result': {
                       output: () => JSON.stringify(result2)
                     }
                   }
                 })
               );
-            } catch (ignored) {
-            }
+            } catch (ignored) {}
             return result2;
           } catch (error) {
             throw new ToolExecutionError({
@@ -4038,7 +3957,7 @@ async function executeTools({
         }
       });
       return {
-        type: "tool-result",
+        type: 'tool-result',
         toolCallId,
         toolName,
         args,
@@ -4046,9 +3965,7 @@ async function executeTools({
       };
     })
   );
-  return toolResults.filter(
-    (result) => result != null
-  );
+  return toolResults.filter((result) => result != null);
 }
 var DefaultGenerateTextResult = class {
   constructor(options) {
@@ -4076,16 +3993,16 @@ __export(output_exports, {
   object: () => object,
   text: () => text
 });
-var import_provider_utils10 = require("@ai-sdk/provider-utils");
-var import_ui_utils6 = require("@ai-sdk/ui-utils");
+var import_provider_utils10 = require('@ai-sdk/provider-utils');
+var import_ui_utils6 = require('@ai-sdk/ui-utils');
 
 // errors/index.ts
-var import_provider16 = require("@ai-sdk/provider");
+var import_provider16 = require('@ai-sdk/provider');
 
 // core/generate-text/output.ts
 var text = () => ({
-  type: "text",
-  responseFormat: () => ({ type: "text" }),
+  type: 'text',
+  responseFormat: () => ({ type: 'text' }),
   injectIntoSystemPrompt({ system }) {
     return system;
   },
@@ -4096,30 +4013,30 @@ var text = () => ({
     return text2;
   }
 });
-var object = ({
-  schema: inputSchema
-}) => {
+var object = ({ schema: inputSchema }) => {
   const schema = (0, import_ui_utils6.asSchema)(inputSchema);
   return {
-    type: "object",
+    type: 'object',
     responseFormat: ({ model }) => ({
-      type: "json",
+      type: 'json',
       schema: model.supportsStructuredOutputs ? schema.jsonSchema : void 0
     }),
     injectIntoSystemPrompt({ system, model }) {
-      return model.supportsStructuredOutputs ? system : injectJsonInstruction({
-        prompt: system,
-        schema: schema.jsonSchema
-      });
+      return model.supportsStructuredOutputs
+        ? system
+        : injectJsonInstruction({
+            prompt: system,
+            schema: schema.jsonSchema
+          });
     },
     parsePartial({ text: text2 }) {
       const result = (0, import_ui_utils6.parsePartialJson)(text2);
       switch (result.state) {
-        case "failed-parse":
-        case "undefined-input":
+        case 'failed-parse':
+        case 'undefined-input':
           return void 0;
-        case "repaired-parse":
-        case "successful-parse":
+        case 'repaired-parse':
+        case 'successful-parse':
           return {
             // Note: currently no validation of partial results:
             partial: result.value
@@ -4134,7 +4051,7 @@ var object = ({
       const parseResult = (0, import_provider_utils10.safeParseJSON)({ text: text2 });
       if (!parseResult.success) {
         throw new NoObjectGeneratedError({
-          message: "No object generated: could not parse the response.",
+          message: 'No object generated: could not parse the response.',
           cause: parseResult.error,
           text: text2,
           response: context.response,
@@ -4147,7 +4064,7 @@ var object = ({
       });
       if (!validationResult.success) {
         throw new NoObjectGeneratedError({
-          message: "No object generated: response did not match schema.",
+          message: 'No object generated: response did not match schema.',
           cause: validationResult.error,
           text: text2,
           response: context.response,
@@ -4160,36 +4077,32 @@ var object = ({
 };
 
 // core/generate-text/smooth-stream.ts
-var import_provider17 = require("@ai-sdk/provider");
+var import_provider17 = require('@ai-sdk/provider');
 var CHUNKING_REGEXPS = {
   word: /\s*\S+\s+/m,
   line: /[^\n]*\n/m
 };
-function smoothStream({
-  delayInMs = 10,
-  chunking = "word",
-  _internal: { delay: delay2 = delay } = {}
-} = {}) {
-  const chunkingRegexp = typeof chunking === "string" ? CHUNKING_REGEXPS[chunking] : chunking;
+function smoothStream({ delayInMs = 10, chunking = 'word', _internal: { delay: delay2 = delay } = {} } = {}) {
+  const chunkingRegexp = typeof chunking === 'string' ? CHUNKING_REGEXPS[chunking] : chunking;
   if (chunkingRegexp == null) {
     throw new import_provider17.InvalidArgumentError({
-      argument: "chunking",
+      argument: 'chunking',
       message: `Chunking must be "word" or "line" or a RegExp. Received: ${chunking}`
     });
   }
   return () => {
-    let buffer = "";
+    let buffer = '';
     return new TransformStream({
       async transform(chunk, controller) {
-        if (chunk.type === "step-finish") {
+        if (chunk.type === 'step-finish') {
           if (buffer.length > 0) {
-            controller.enqueue({ type: "text-delta", textDelta: buffer });
-            buffer = "";
+            controller.enqueue({ type: 'text-delta', textDelta: buffer });
+            buffer = '';
           }
           controller.enqueue(chunk);
           return;
         }
-        if (chunk.type !== "text-delta") {
+        if (chunk.type !== 'text-delta') {
           controller.enqueue(chunk);
           return;
         }
@@ -4197,7 +4110,7 @@ function smoothStream({
         let match;
         while ((match = chunkingRegexp.exec(buffer)) != null) {
           const chunk2 = match[0];
-          controller.enqueue({ type: "text-delta", textDelta: chunk2 });
+          controller.enqueue({ type: 'text-delta', textDelta: chunk2 });
           buffer = buffer.slice(chunk2.length);
           await delay2(delayInMs);
         }
@@ -4207,8 +4120,8 @@ function smoothStream({
 }
 
 // core/generate-text/stream-text.ts
-var import_provider_utils11 = require("@ai-sdk/provider-utils");
-var import_ui_utils8 = require("@ai-sdk/ui-utils");
+var import_provider_utils11 = require('@ai-sdk/provider-utils');
+var import_ui_utils8 = require('@ai-sdk/ui-utils');
 
 // util/as-array.ts
 function asArray(value) {
@@ -4304,7 +4217,7 @@ function mergeStreams(stream1, stream2) {
 }
 
 // core/generate-text/run-tools-transformation.ts
-var import_ui_utils7 = require("@ai-sdk/ui-utils");
+var import_ui_utils7 = require('@ai-sdk/ui-utils');
 function runToolsTransformation({
   tools,
   generatorStream,
@@ -4338,24 +4251,24 @@ function runToolsTransformation({
     async transform(chunk, controller) {
       const chunkType = chunk.type;
       switch (chunkType) {
-        case "text-delta":
-        case "response-metadata":
-        case "error": {
+        case 'text-delta':
+        case 'response-metadata':
+        case 'error': {
           controller.enqueue(chunk);
           break;
         }
-        case "tool-call-delta": {
+        case 'tool-call-delta': {
           if (toolCallStreaming) {
             if (!activeToolCalls[chunk.toolCallId]) {
               controller.enqueue({
-                type: "tool-call-streaming-start",
+                type: 'tool-call-streaming-start',
                 toolCallId: chunk.toolCallId,
                 toolName: chunk.toolName
               });
               activeToolCalls[chunk.toolCallId] = true;
             }
             controller.enqueue({
-              type: "tool-call-delta",
+              type: 'tool-call-delta',
               toolCallId: chunk.toolCallId,
               toolName: chunk.toolName,
               argsTextDelta: chunk.argsTextDelta
@@ -4363,7 +4276,7 @@ function runToolsTransformation({
           }
           break;
         }
-        case "tool-call": {
+        case 'tool-call': {
           try {
             const toolCall = await parseToolCall({
               toolCall: chunk,
@@ -4378,76 +4291,78 @@ function runToolsTransformation({
               const toolExecutionId = (0, import_ui_utils7.generateId)();
               outstandingToolResults.add(toolExecutionId);
               recordSpan({
-                name: "ai.toolCall",
+                name: 'ai.toolCall',
                 attributes: selectTelemetryAttributes({
                   telemetry,
                   attributes: {
                     ...assembleOperationName({
-                      operationId: "ai.toolCall",
+                      operationId: 'ai.toolCall',
                       telemetry
                     }),
-                    "ai.toolCall.name": toolCall.toolName,
-                    "ai.toolCall.id": toolCall.toolCallId,
-                    "ai.toolCall.args": {
+                    'ai.toolCall.name': toolCall.toolName,
+                    'ai.toolCall.id': toolCall.toolCallId,
+                    'ai.toolCall.args': {
                       output: () => JSON.stringify(toolCall.args)
                     }
                   }
                 }),
                 tracer,
-                fn: async (span) => tool2.execute(toolCall.args, {
-                  toolCallId: toolCall.toolCallId,
-                  messages,
-                  abortSignal
-                }).then(
-                  (result) => {
-                    toolResultsStreamController.enqueue({
-                      ...toolCall,
-                      type: "tool-result",
-                      result
-                    });
-                    outstandingToolResults.delete(toolExecutionId);
-                    attemptClose();
-                    try {
-                      span.setAttributes(
-                        selectTelemetryAttributes({
-                          telemetry,
-                          attributes: {
-                            "ai.toolCall.result": {
-                              output: () => JSON.stringify(result)
-                            }
-                          }
-                        })
-                      );
-                    } catch (ignored) {
-                    }
-                  },
-                  (error) => {
-                    toolResultsStreamController.enqueue({
-                      type: "error",
-                      error: new ToolExecutionError({
-                        toolCallId: toolCall.toolCallId,
-                        toolName: toolCall.toolName,
-                        toolArgs: toolCall.args,
-                        cause: error
-                      })
-                    });
-                    outstandingToolResults.delete(toolExecutionId);
-                    attemptClose();
-                  }
-                )
+                fn: async (span) =>
+                  tool2
+                    .execute(toolCall.args, {
+                      toolCallId: toolCall.toolCallId,
+                      messages,
+                      abortSignal
+                    })
+                    .then(
+                      (result) => {
+                        toolResultsStreamController.enqueue({
+                          ...toolCall,
+                          type: 'tool-result',
+                          result
+                        });
+                        outstandingToolResults.delete(toolExecutionId);
+                        attemptClose();
+                        try {
+                          span.setAttributes(
+                            selectTelemetryAttributes({
+                              telemetry,
+                              attributes: {
+                                'ai.toolCall.result': {
+                                  output: () => JSON.stringify(result)
+                                }
+                              }
+                            })
+                          );
+                        } catch (ignored) {}
+                      },
+                      (error) => {
+                        toolResultsStreamController.enqueue({
+                          type: 'error',
+                          error: new ToolExecutionError({
+                            toolCallId: toolCall.toolCallId,
+                            toolName: toolCall.toolName,
+                            toolArgs: toolCall.args,
+                            cause: error
+                          })
+                        });
+                        outstandingToolResults.delete(toolExecutionId);
+                        attemptClose();
+                      }
+                    )
               });
             }
           } catch (error) {
             toolResultsStreamController.enqueue({
-              type: "error",
+              type: 'error',
               error
             });
           }
           break;
         }
-        case "finish": {
+        case 'finish': {
           finishChunk = {
-            type: "finish",
+            type: 'finish',
             finishReason: chunk.finishReason,
             logprobs: chunk.logprobs,
             usage: calculateLanguageModelUsage(chunk.usage),
@@ -4474,8 +4389,7 @@ function runToolsTransformation({
             write(chunk) {
               controller.enqueue(chunk);
             },
-            close() {
-            }
+            close() {}
           })
         ),
         toolResultsStream.pipeTo(
@@ -4495,11 +4409,11 @@ function runToolsTransformation({
 
 // core/generate-text/stream-text.ts
 var originalGenerateId4 = (0, import_provider_utils11.createIdGenerator)({
-  prefix: "aitxt",
+  prefix: 'aitxt',
   size: 24
 });
 var originalGenerateMessageId2 = (0, import_provider_utils11.createIdGenerator)({
-  prefix: "msg",
+  prefix: 'msg',
   size: 24
 });
 function streamText({
@@ -4569,12 +4483,12 @@ function createOutputTransformStream(output) {
       }
     });
   }
-  let text2 = "";
-  let textChunk = "";
-  let lastPublishedJson = "";
+  let text2 = '';
+  let textChunk = '';
+  let lastPublishedJson = '';
   return new TransformStream({
     transform(chunk, controller) {
-      if (chunk.type !== "text-delta") {
+      if (chunk.type !== 'text-delta') {
         controller.enqueue({
           part: chunk,
           partialOutput: void 0
@@ -4589,13 +4503,13 @@ function createOutputTransformStream(output) {
         if (currentJson !== lastPublishedJson) {
           controller.enqueue({
             part: {
-              type: "text-delta",
+              type: 'text-delta',
               textDelta: textChunk
             },
             partialOutput: result.partial
           });
           lastPublishedJson = currentJson;
-          textChunk = "";
+          textChunk = '';
         }
       }
     },
@@ -4603,7 +4517,7 @@ function createOutputTransformStream(output) {
       if (textChunk.length > 0) {
         controller.enqueue({
           part: {
-            type: "text-delta",
+            type: 'text-delta',
             textDelta: textChunk
           },
           partialOutput: void 0
@@ -4654,15 +4568,15 @@ var DefaultStreamTextResult = class {
     var _a14;
     if (maxSteps < 1) {
       throw new InvalidArgumentError({
-        parameter: "maxSteps",
+        parameter: 'maxSteps',
         value: maxSteps,
-        message: "maxSteps must be at least 1"
+        message: 'maxSteps must be at least 1'
       });
     }
     this.output = output;
-    let recordedStepText = "";
-    let recordedContinuationText = "";
-    let recordedFullText = "";
+    let recordedStepText = '';
+    let recordedContinuationText = '';
+    let recordedFullText = '';
     const recordedResponse = {
       id: generateId3(),
       timestamp: currentDate(),
@@ -4673,28 +4587,34 @@ var DefaultStreamTextResult = class {
     let recordedToolResults = [];
     let recordedFinishReason = void 0;
     let recordedUsage = void 0;
-    let stepType = "initial";
+    let stepType = 'initial';
     const recordedSteps = [];
     let rootSpan;
     const eventProcessor = new TransformStream({
       async transform(chunk, controller) {
         controller.enqueue(chunk);
         const { part } = chunk;
-        if (part.type === "text-delta" || part.type === "tool-call" || part.type === "tool-result" || part.type === "tool-call-streaming-start" || part.type === "tool-call-delta") {
+        if (
+          part.type === 'text-delta' ||
+          part.type === 'tool-call' ||
+          part.type === 'tool-result' ||
+          part.type === 'tool-call-streaming-start' ||
+          part.type === 'tool-call-delta'
+        ) {
           await (onChunk == null ? void 0 : onChunk({ chunk: part }));
         }
-        if (part.type === "text-delta") {
+        if (part.type === 'text-delta') {
           recordedStepText += part.textDelta;
           recordedContinuationText += part.textDelta;
           recordedFullText += part.textDelta;
         }
-        if (part.type === "tool-call") {
+        if (part.type === 'tool-call') {
           recordedToolCalls.push(part);
         }
-        if (part.type === "tool-result") {
+        if (part.type === 'tool-result') {
           recordedToolResults.push(part);
         }
-        if (part.type === "step-finish") {
+        if (part.type === 'step-finish') {
           const stepMessages = toResponseMessages({
             text: recordedContinuationText,
             tools: tools != null ? tools : {},
@@ -4704,17 +4624,20 @@ var DefaultStreamTextResult = class {
             generateMessageId
           });
           const currentStep = recordedSteps.length;
-          let nextStepType = "done";
+          let nextStepType = 'done';
           if (currentStep + 1 < maxSteps) {
-            if (continueSteps && part.finishReason === "length" && // only use continue when there are no tool calls:
-            recordedToolCalls.length === 0) {
-              nextStepType = "continue";
+            if (
+              continueSteps &&
+              part.finishReason === 'length' && // only use continue when there are no tool calls:
+              recordedToolCalls.length === 0
+            ) {
+              nextStepType = 'continue';
             } else if (
               // there are tool calls:
               recordedToolCalls.length > 0 && // all current tool calls have results:
               recordedToolResults.length === recordedToolCalls.length
             ) {
-              nextStepType = "tool-result";
+              nextStepType = 'tool-result';
             }
           }
           const currentStepResult = {
@@ -4738,16 +4661,16 @@ var DefaultStreamTextResult = class {
           recordedSteps.push(currentStepResult);
           recordedToolCalls = [];
           recordedToolResults = [];
-          recordedStepText = "";
-          if (nextStepType !== "done") {
+          recordedStepText = '';
+          if (nextStepType !== 'done') {
             stepType = nextStepType;
           }
-          if (nextStepType !== "continue") {
+          if (nextStepType !== 'continue') {
             recordedResponse.messages.push(...stepMessages);
-            recordedContinuationText = "";
+            recordedContinuationText = '';
           }
         }
-        if (part.type === "finish") {
+        if (part.type === 'finish') {
           recordedResponse.id = part.response.id;
           recordedResponse.timestamp = part.response.timestamp;
           recordedResponse.modelId = part.response.modelId;
@@ -4768,46 +4691,51 @@ var DefaultStreamTextResult = class {
           self.responsePromise.resolve(lastStep.response);
           self.toolCallsPromise.resolve(lastStep.toolCalls);
           self.toolResultsPromise.resolve(lastStep.toolResults);
-          self.providerMetadataPromise.resolve(
-            lastStep.experimental_providerMetadata
-          );
-          const finishReason = recordedFinishReason != null ? recordedFinishReason : "unknown";
-          const usage = recordedUsage != null ? recordedUsage : {
-            completionTokens: NaN,
-            promptTokens: NaN,
-            totalTokens: NaN
-          };
+          self.providerMetadataPromise.resolve(lastStep.experimental_providerMetadata);
+          const finishReason = recordedFinishReason != null ? recordedFinishReason : 'unknown';
+          const usage =
+            recordedUsage != null
+              ? recordedUsage
+              : {
+                  completionTokens: NaN,
+                  promptTokens: NaN,
+                  totalTokens: NaN
+                };
           self.finishReasonPromise.resolve(finishReason);
           self.usagePromise.resolve(usage);
           self.textPromise.resolve(recordedFullText);
           self.stepsPromise.resolve(recordedSteps);
-          await (onFinish == null ? void 0 : onFinish({
-            finishReason,
-            logprobs: void 0,
-            usage,
-            text: recordedFullText,
-            toolCalls: lastStep.toolCalls,
-            toolResults: lastStep.toolResults,
-            request: (_a15 = lastStep.request) != null ? _a15 : {},
-            response: lastStep.response,
-            warnings: lastStep.warnings,
-            experimental_providerMetadata: lastStep.experimental_providerMetadata,
-            steps: recordedSteps
-          }));
+          await (onFinish == null
+            ? void 0
+            : onFinish({
+                finishReason,
+                logprobs: void 0,
+                usage,
+                text: recordedFullText,
+                toolCalls: lastStep.toolCalls,
+                toolResults: lastStep.toolResults,
+                request: (_a15 = lastStep.request) != null ? _a15 : {},
+                response: lastStep.response,
+                warnings: lastStep.warnings,
+                experimental_providerMetadata: lastStep.experimental_providerMetadata,
+                steps: recordedSteps
+              }));
           rootSpan.setAttributes(
             selectTelemetryAttributes({
               telemetry,
               attributes: {
-                "ai.response.finishReason": finishReason,
-                "ai.response.text": { output: () => recordedFullText },
-                "ai.response.toolCalls": {
+                'ai.response.finishReason': finishReason,
+                'ai.response.text': { output: () => recordedFullText },
+                'ai.response.toolCalls': {
                   output: () => {
                     var _a16;
-                    return ((_a16 = lastStep.toolCalls) == null ? void 0 : _a16.length) ? JSON.stringify(lastStep.toolCalls) : void 0;
+                    return ((_a16 = lastStep.toolCalls) == null ? void 0 : _a16.length)
+                      ? JSON.stringify(lastStep.toolCalls)
+                      : void 0;
                   }
                 },
-                "ai.usage.promptTokens": usage.promptTokens,
-                "ai.usage.completionTokens": usage.completionTokens
+                'ai.usage.promptTokens': usage.promptTokens,
+                'ai.usage.completionTokens': usage.completionTokens
               }
             })
           );
@@ -4845,7 +4773,8 @@ var DefaultStreamTextResult = class {
     });
     const initialPrompt = standardizePrompt({
       prompt: {
-        system: (_a14 = output == null ? void 0 : output.injectIntoSystemPrompt({ system, model })) != null ? _a14 : system,
+        system:
+          (_a14 = output == null ? void 0 : output.injectIntoSystemPrompt({ system, model })) != null ? _a14 : system,
         prompt,
         messages
       },
@@ -4853,17 +4782,17 @@ var DefaultStreamTextResult = class {
     });
     const self = this;
     recordSpan({
-      name: "ai.streamText",
+      name: 'ai.streamText',
       attributes: selectTelemetryAttributes({
         telemetry,
         attributes: {
-          ...assembleOperationName({ operationId: "ai.streamText", telemetry }),
+          ...assembleOperationName({ operationId: 'ai.streamText', telemetry }),
           ...baseTelemetryAttributes,
           // specific settings that only make sense on the outer level:
-          "ai.prompt": {
+          'ai.prompt': {
             input: () => JSON.stringify({ system, prompt, messages })
           },
-          "ai.settings.maxSteps": maxSteps
+          'ai.settings.maxSteps': maxSteps
         }
       }),
       tracer,
@@ -4879,11 +4808,8 @@ var DefaultStreamTextResult = class {
           hasLeadingWhitespace,
           messageId
         }) {
-          const promptFormat = responseMessages.length === 0 ? initialPrompt.type : "messages";
-          const stepInputMessages = [
-            ...initialPrompt.messages,
-            ...responseMessages
-          ];
+          const promptFormat = responseMessages.length === 0 ? initialPrompt.type : 'messages';
+          const stepInputMessages = [...initialPrompt.messages, ...responseMessages];
           const promptMessages = await convertToLanguageModelPrompt({
             prompt: {
               type: promptFormat,
@@ -4894,50 +4820,50 @@ var DefaultStreamTextResult = class {
             modelSupportsUrl: model.supportsUrl
           });
           const mode = {
-            type: "regular",
+            type: 'regular',
             ...prepareToolsAndToolChoice({ tools, toolChoice, activeTools })
           };
           const {
             result: { stream: stream2, warnings, rawResponse, request },
             doStreamSpan,
             startTimestampMs
-          } = await retry(
-            () => recordSpan({
-              name: "ai.streamText.doStream",
+          } = await retry(() =>
+            recordSpan({
+              name: 'ai.streamText.doStream',
               attributes: selectTelemetryAttributes({
                 telemetry,
                 attributes: {
                   ...assembleOperationName({
-                    operationId: "ai.streamText.doStream",
+                    operationId: 'ai.streamText.doStream',
                     telemetry
                   }),
                   ...baseTelemetryAttributes,
-                  "ai.prompt.format": {
+                  'ai.prompt.format': {
                     input: () => promptFormat
                   },
-                  "ai.prompt.messages": {
+                  'ai.prompt.messages': {
                     input: () => JSON.stringify(promptMessages)
                   },
-                  "ai.prompt.tools": {
+                  'ai.prompt.tools': {
                     // convert the language model level tools:
                     input: () => {
                       var _a15;
                       return (_a15 = mode.tools) == null ? void 0 : _a15.map((tool2) => JSON.stringify(tool2));
                     }
                   },
-                  "ai.prompt.toolChoice": {
-                    input: () => mode.toolChoice != null ? JSON.stringify(mode.toolChoice) : void 0
+                  'ai.prompt.toolChoice': {
+                    input: () => (mode.toolChoice != null ? JSON.stringify(mode.toolChoice) : void 0)
                   },
                   // standardized gen-ai llm span attributes:
-                  "gen_ai.system": model.provider,
-                  "gen_ai.request.model": model.modelId,
-                  "gen_ai.request.frequency_penalty": settings.frequencyPenalty,
-                  "gen_ai.request.max_tokens": settings.maxTokens,
-                  "gen_ai.request.presence_penalty": settings.presencePenalty,
-                  "gen_ai.request.stop_sequences": settings.stopSequences,
-                  "gen_ai.request.temperature": settings.temperature,
-                  "gen_ai.request.top_k": settings.topK,
-                  "gen_ai.request.top_p": settings.topP
+                  'gen_ai.system': model.provider,
+                  'gen_ai.request.model': model.modelId,
+                  'gen_ai.request.frequency_penalty': settings.frequencyPenalty,
+                  'gen_ai.request.max_tokens': settings.maxTokens,
+                  'gen_ai.request.presence_penalty': settings.presencePenalty,
+                  'gen_ai.request.stop_sequences': settings.stopSequences,
+                  'gen_ai.request.temperature': settings.temperature,
+                  'gen_ai.request.top_k': settings.topK,
+                  'gen_ai.request.top_p': settings.topP
                 }
               }),
               tracer,
@@ -4973,7 +4899,7 @@ var DefaultStreamTextResult = class {
           const stepRequest = request != null ? request : {};
           const stepToolCalls = [];
           const stepToolResults = [];
-          let stepFinishReason = "unknown";
+          let stepFinishReason = 'unknown';
           let stepUsage = {
             promptTokens: 0,
             completionTokens: 0,
@@ -4981,22 +4907,19 @@ var DefaultStreamTextResult = class {
           };
           let stepProviderMetadata;
           let stepFirstChunk = true;
-          let stepText = "";
-          let fullStepText = stepType2 === "continue" ? previousStepText : "";
+          let stepText = '';
+          let fullStepText = stepType2 === 'continue' ? previousStepText : '';
           let stepLogProbs;
           let stepResponse = {
             id: generateId3(),
             timestamp: currentDate(),
             modelId: model.modelId
           };
-          let chunkBuffer = "";
+          let chunkBuffer = '';
           let chunkTextPublished = false;
           let inWhitespacePrefix = true;
           let hasWhitespaceSuffix = false;
-          async function publishTextChunk({
-            controller,
-            chunk
-          }) {
+          async function publishTextChunk({ controller, chunk }) {
             controller.enqueue(chunk);
             stepText += chunk.textDelta;
             fullStepText += chunk.textDelta;
@@ -5011,27 +4934,28 @@ var DefaultStreamTextResult = class {
                   if (stepFirstChunk) {
                     const msToFirstChunk = now2() - startTimestampMs;
                     stepFirstChunk = false;
-                    doStreamSpan.addEvent("ai.stream.firstChunk", {
-                      "ai.response.msToFirstChunk": msToFirstChunk
+                    doStreamSpan.addEvent('ai.stream.firstChunk', {
+                      'ai.response.msToFirstChunk': msToFirstChunk
                     });
                     doStreamSpan.setAttributes({
-                      "ai.response.msToFirstChunk": msToFirstChunk
+                      'ai.response.msToFirstChunk': msToFirstChunk
                     });
                     controller.enqueue({
-                      type: "step-start",
+                      type: 'step-start',
                       messageId,
                       request: stepRequest,
                       warnings: warnings != null ? warnings : []
                     });
                   }
-                  if (chunk.type === "text-delta" && chunk.textDelta.length === 0) {
+                  if (chunk.type === 'text-delta' && chunk.textDelta.length === 0) {
                     return;
                   }
                   const chunkType = chunk.type;
                   switch (chunkType) {
-                    case "text-delta": {
+                    case 'text-delta': {
                       if (continueSteps) {
-                        const trimmedChunkText = inWhitespacePrefix && hasLeadingWhitespace ? chunk.textDelta.trimStart() : chunk.textDelta;
+                        const trimmedChunkText =
+                          inWhitespacePrefix && hasLeadingWhitespace ? chunk.textDelta.trimStart() : chunk.textDelta;
                         if (trimmedChunkText.length === 0) {
                           break;
                         }
@@ -5043,7 +4967,7 @@ var DefaultStreamTextResult = class {
                           await publishTextChunk({
                             controller,
                             chunk: {
-                              type: "text-delta",
+                              type: 'text-delta',
                               textDelta: split.prefix + split.whitespace
                             }
                           });
@@ -5053,17 +4977,17 @@ var DefaultStreamTextResult = class {
                       }
                       break;
                     }
-                    case "tool-call": {
+                    case 'tool-call': {
                       controller.enqueue(chunk);
                       stepToolCalls.push(chunk);
                       break;
                     }
-                    case "tool-result": {
+                    case 'tool-result': {
                       controller.enqueue(chunk);
                       stepToolResults.push(chunk);
                       break;
                     }
-                    case "response-metadata": {
+                    case 'response-metadata': {
                       stepResponse = {
                         id: (_a15 = chunk.id) != null ? _a15 : stepResponse.id,
                         timestamp: (_b = chunk.timestamp) != null ? _b : stepResponse.timestamp,
@@ -5071,27 +4995,27 @@ var DefaultStreamTextResult = class {
                       };
                       break;
                     }
-                    case "finish": {
+                    case 'finish': {
                       stepUsage = chunk.usage;
                       stepFinishReason = chunk.finishReason;
                       stepProviderMetadata = chunk.experimental_providerMetadata;
                       stepLogProbs = chunk.logprobs;
                       const msToFinish = now2() - startTimestampMs;
-                      doStreamSpan.addEvent("ai.stream.finish");
+                      doStreamSpan.addEvent('ai.stream.finish');
                       doStreamSpan.setAttributes({
-                        "ai.response.msToFinish": msToFinish,
-                        "ai.response.avgCompletionTokensPerSecond": 1e3 * stepUsage.completionTokens / msToFinish
+                        'ai.response.msToFinish': msToFinish,
+                        'ai.response.avgCompletionTokensPerSecond': (1e3 * stepUsage.completionTokens) / msToFinish
                       });
                       break;
                     }
-                    case "tool-call-streaming-start":
-                    case "tool-call-delta": {
+                    case 'tool-call-streaming-start':
+                    case 'tool-call-delta': {
                       controller.enqueue(chunk);
                       break;
                     }
-                    case "error": {
+                    case 'error': {
                       controller.enqueue(chunk);
-                      stepFinishReason = "error";
+                      stepFinishReason = 'error';
                       break;
                     }
                     default: {
@@ -5103,51 +5027,58 @@ var DefaultStreamTextResult = class {
                 // invoke onFinish callback and resolve toolResults promise when the stream is about to close:
                 async flush(controller) {
                   const stepToolCallsJson = stepToolCalls.length > 0 ? JSON.stringify(stepToolCalls) : void 0;
-                  let nextStepType = "done";
+                  let nextStepType = 'done';
                   if (currentStep + 1 < maxSteps) {
-                    if (continueSteps && stepFinishReason === "length" && // only use continue when there are no tool calls:
-                    stepToolCalls.length === 0) {
-                      nextStepType = "continue";
+                    if (
+                      continueSteps &&
+                      stepFinishReason === 'length' && // only use continue when there are no tool calls:
+                      stepToolCalls.length === 0
+                    ) {
+                      nextStepType = 'continue';
                     } else if (
                       // there are tool calls:
                       stepToolCalls.length > 0 && // all current tool calls have results:
                       stepToolResults.length === stepToolCalls.length
                     ) {
-                      nextStepType = "tool-result";
+                      nextStepType = 'tool-result';
                     }
                   }
-                  if (continueSteps && chunkBuffer.length > 0 && (nextStepType !== "continue" || // when the next step is a regular step, publish the buffer
-                  stepType2 === "continue" && !chunkTextPublished)) {
+                  if (
+                    continueSteps &&
+                    chunkBuffer.length > 0 &&
+                    (nextStepType !== 'continue' || // when the next step is a regular step, publish the buffer
+                      (stepType2 === 'continue' && !chunkTextPublished))
+                  ) {
                     await publishTextChunk({
                       controller,
                       chunk: {
-                        type: "text-delta",
+                        type: 'text-delta',
                         textDelta: chunkBuffer
                       }
                     });
-                    chunkBuffer = "";
+                    chunkBuffer = '';
                   }
                   try {
                     doStreamSpan.setAttributes(
                       selectTelemetryAttributes({
                         telemetry,
                         attributes: {
-                          "ai.response.finishReason": stepFinishReason,
-                          "ai.response.text": { output: () => stepText },
-                          "ai.response.toolCalls": {
+                          'ai.response.finishReason': stepFinishReason,
+                          'ai.response.text': { output: () => stepText },
+                          'ai.response.toolCalls': {
                             output: () => stepToolCallsJson
                           },
-                          "ai.response.id": stepResponse.id,
-                          "ai.response.model": stepResponse.modelId,
-                          "ai.response.timestamp": stepResponse.timestamp.toISOString(),
-                          "ai.usage.promptTokens": stepUsage.promptTokens,
-                          "ai.usage.completionTokens": stepUsage.completionTokens,
+                          'ai.response.id': stepResponse.id,
+                          'ai.response.model': stepResponse.modelId,
+                          'ai.response.timestamp': stepResponse.timestamp.toISOString(),
+                          'ai.usage.promptTokens': stepUsage.promptTokens,
+                          'ai.usage.completionTokens': stepUsage.completionTokens,
                           // standardized gen-ai llm span attributes:
-                          "gen_ai.response.finish_reasons": [stepFinishReason],
-                          "gen_ai.response.id": stepResponse.id,
-                          "gen_ai.response.model": stepResponse.modelId,
-                          "gen_ai.usage.input_tokens": stepUsage.promptTokens,
-                          "gen_ai.usage.output_tokens": stepUsage.completionTokens
+                          'gen_ai.response.finish_reasons': [stepFinishReason],
+                          'gen_ai.response.id': stepResponse.id,
+                          'gen_ai.response.model': stepResponse.modelId,
+                          'gen_ai.usage.input_tokens': stepUsage.promptTokens,
+                          'gen_ai.usage.output_tokens': stepUsage.completionTokens
                         }
                       })
                     );
@@ -5156,7 +5087,7 @@ var DefaultStreamTextResult = class {
                     doStreamSpan.end();
                   }
                   controller.enqueue({
-                    type: "step-finish",
+                    type: 'step-finish',
                     finishReason: stepFinishReason,
                     usage: stepUsage,
                     experimental_providerMetadata: stepProviderMetadata,
@@ -5167,13 +5098,13 @@ var DefaultStreamTextResult = class {
                       headers: rawResponse == null ? void 0 : rawResponse.headers
                     },
                     warnings,
-                    isContinued: nextStepType === "continue",
+                    isContinued: nextStepType === 'continue',
                     messageId
                   });
                   const combinedUsage = addLanguageModelUsage(usage, stepUsage);
-                  if (nextStepType === "done") {
+                  if (nextStepType === 'done') {
                     controller.enqueue({
-                      type: "finish",
+                      type: 'finish',
                       finishReason: stepFinishReason,
                       usage: combinedUsage,
                       experimental_providerMetadata: stepProviderMetadata,
@@ -5185,14 +5116,14 @@ var DefaultStreamTextResult = class {
                     });
                     self.closeStream();
                   } else {
-                    if (stepType2 === "continue") {
+                    if (stepType2 === 'continue') {
                       const lastMessage = responseMessages[responseMessages.length - 1];
-                      if (typeof lastMessage.content === "string") {
+                      if (typeof lastMessage.content === 'string') {
                         lastMessage.content += stepText;
                       } else {
                         lastMessage.content.push({
                           text: stepText,
-                          type: "text"
+                          type: 'text'
                         });
                       }
                     } else {
@@ -5214,10 +5145,9 @@ var DefaultStreamTextResult = class {
                       stepType: nextStepType,
                       previousStepText: fullStepText,
                       hasLeadingWhitespace: hasWhitespaceSuffix,
-                      messageId: (
+                      messageId:
                         // keep the same id when continuing a step:
-                        nextStepType === "continue" ? messageId : generateMessageId()
-                      )
+                        nextStepType === 'continue' ? messageId : generateMessageId()
                     });
                   }
                 }
@@ -5233,8 +5163,8 @@ var DefaultStreamTextResult = class {
             completionTokens: 0,
             totalTokens: 0
           },
-          previousStepText: "",
-          stepType: "initial",
+          previousStepText: '',
+          stepType: 'initial',
           hasLeadingWhitespace: false,
           messageId: generateMessageId()
         });
@@ -5243,7 +5173,7 @@ var DefaultStreamTextResult = class {
       self.addStream(
         new ReadableStream({
           start(controller) {
-            controller.enqueue({ type: "error", error });
+            controller.enqueue({ type: 'error', error });
             controller.close();
           }
         })
@@ -5299,9 +5229,9 @@ var DefaultStreamTextResult = class {
       this.teeStream().pipeThrough(
         new TransformStream({
           transform({ part }, controller) {
-            if (part.type === "text-delta") {
+            if (part.type === 'text-delta') {
               controller.enqueue(part.textDelta);
-            } else if (part.type === "error") {
+            } else if (part.type === 'error') {
               controller.error(part.error);
             }
           }
@@ -5337,15 +5267,15 @@ var DefaultStreamTextResult = class {
     );
   }
   toDataStreamInternal({
-    getErrorMessage: getErrorMessage5 = () => "An error occurred.",
+    getErrorMessage: getErrorMessage5 = () => 'An error occurred.',
     // mask error messages for safety by default
     sendUsage = true
   } = {}) {
-    let aggregatedResponse = "";
+    let aggregatedResponse = '';
     const callbackTransformer = new TransformStream({
       async transform(chunk, controller) {
         controller.enqueue(chunk);
-        if (chunk.type === "text-delta") {
+        if (chunk.type === 'text-delta') {
           aggregatedResponse += chunk.textDelta;
         }
       }
@@ -5354,31 +5284,31 @@ var DefaultStreamTextResult = class {
       transform: async (chunk, controller) => {
         const chunkType = chunk.type;
         switch (chunkType) {
-          case "text-delta": {
-            controller.enqueue((0, import_ui_utils8.formatDataStreamPart)("text", chunk.textDelta));
+          case 'text-delta': {
+            controller.enqueue((0, import_ui_utils8.formatDataStreamPart)('text', chunk.textDelta));
             break;
           }
-          case "tool-call-streaming-start": {
+          case 'tool-call-streaming-start': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("tool_call_streaming_start", {
+              (0, import_ui_utils8.formatDataStreamPart)('tool_call_streaming_start', {
                 toolCallId: chunk.toolCallId,
                 toolName: chunk.toolName
               })
             );
             break;
           }
-          case "tool-call-delta": {
+          case 'tool-call-delta': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("tool_call_delta", {
+              (0, import_ui_utils8.formatDataStreamPart)('tool_call_delta', {
                 toolCallId: chunk.toolCallId,
                 argsTextDelta: chunk.argsTextDelta
               })
             );
             break;
           }
-          case "tool-call": {
+          case 'tool-call': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("tool_call", {
+              (0, import_ui_utils8.formatDataStreamPart)('tool_call', {
                 toolCallId: chunk.toolCallId,
                 toolName: chunk.toolName,
                 args: chunk.args
@@ -5386,50 +5316,52 @@ var DefaultStreamTextResult = class {
             );
             break;
           }
-          case "tool-result": {
+          case 'tool-result': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("tool_result", {
+              (0, import_ui_utils8.formatDataStreamPart)('tool_result', {
                 toolCallId: chunk.toolCallId,
                 result: chunk.result
               })
             );
             break;
           }
-          case "error": {
-            controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("error", getErrorMessage5(chunk.error))
-            );
+          case 'error': {
+            controller.enqueue((0, import_ui_utils8.formatDataStreamPart)('error', getErrorMessage5(chunk.error)));
             break;
           }
-          case "step-start": {
+          case 'step-start': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("start_step", {
+              (0, import_ui_utils8.formatDataStreamPart)('start_step', {
                 messageId: chunk.messageId
               })
             );
             break;
           }
-          case "step-finish": {
+          case 'step-finish': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("finish_step", {
+              (0, import_ui_utils8.formatDataStreamPart)('finish_step', {
                 finishReason: chunk.finishReason,
-                usage: sendUsage ? {
-                  promptTokens: chunk.usage.promptTokens,
-                  completionTokens: chunk.usage.completionTokens
-                } : void 0,
+                usage: sendUsage
+                  ? {
+                      promptTokens: chunk.usage.promptTokens,
+                      completionTokens: chunk.usage.completionTokens
+                    }
+                  : void 0,
                 isContinued: chunk.isContinued
               })
             );
             break;
           }
-          case "finish": {
+          case 'finish': {
             controller.enqueue(
-              (0, import_ui_utils8.formatDataStreamPart)("finish_message", {
+              (0, import_ui_utils8.formatDataStreamPart)('finish_message', {
                 finishReason: chunk.finishReason,
-                usage: sendUsage ? {
-                  promptTokens: chunk.usage.promptTokens,
-                  completionTokens: chunk.usage.completionTokens
-                } : void 0
+                usage: sendUsage
+                  ? {
+                      promptTokens: chunk.usage.promptTokens,
+                      completionTokens: chunk.usage.completionTokens
+                    }
+                  : void 0
               })
             );
             break;
@@ -5443,21 +5375,17 @@ var DefaultStreamTextResult = class {
     });
     return this.fullStream.pipeThrough(callbackTransformer).pipeThrough(streamPartsTransformer);
   }
-  pipeDataStreamToResponse(response, {
-    status,
-    statusText,
-    headers,
-    data,
-    getErrorMessage: getErrorMessage5,
-    sendUsage
-  } = {}) {
+  pipeDataStreamToResponse(
+    response,
+    { status, statusText, headers, data, getErrorMessage: getErrorMessage5, sendUsage } = {}
+  ) {
     writeToServerResponse({
       response,
       status,
       statusText,
       headers: prepareOutgoingHttpHeaders(headers, {
-        contentType: "text/plain; charset=utf-8",
-        dataStreamVersion: "v1"
+        contentType: 'text/plain; charset=utf-8',
+        dataStreamVersion: 'v1'
       }),
       stream: this.toDataStream({ data, getErrorMessage: getErrorMessage5, sendUsage })
     });
@@ -5468,7 +5396,7 @@ var DefaultStreamTextResult = class {
       status: init == null ? void 0 : init.status,
       statusText: init == null ? void 0 : init.statusText,
       headers: prepareOutgoingHttpHeaders(init == null ? void 0 : init.headers, {
-        contentType: "text/plain; charset=utf-8"
+        contentType: 'text/plain; charset=utf-8'
       }),
       stream: this.textStream.pipeThrough(new TextEncoderStream())
     });
@@ -5479,7 +5407,9 @@ var DefaultStreamTextResult = class {
       getErrorMessage: options == null ? void 0 : options.getErrorMessage,
       sendUsage: options == null ? void 0 : options.sendUsage
     }).pipeThrough(new TextEncoderStream());
-    return (options == null ? void 0 : options.data) ? mergeStreams(options == null ? void 0 : options.data.stream, stream) : stream;
+    return (options == null ? void 0 : options.data)
+      ? mergeStreams(options == null ? void 0 : options.data.stream, stream)
+      : stream;
   }
   mergeIntoDataStream(writer) {
     writer.merge(
@@ -5488,32 +5418,22 @@ var DefaultStreamTextResult = class {
       })
     );
   }
-  toDataStreamResponse({
-    headers,
-    status,
-    statusText,
-    data,
-    getErrorMessage: getErrorMessage5,
-    sendUsage
-  } = {}) {
-    return new Response(
-      this.toDataStream({ data, getErrorMessage: getErrorMessage5, sendUsage }),
-      {
-        status,
-        statusText,
-        headers: prepareResponseHeaders(headers, {
-          contentType: "text/plain; charset=utf-8",
-          dataStreamVersion: "v1"
-        })
-      }
-    );
+  toDataStreamResponse({ headers, status, statusText, data, getErrorMessage: getErrorMessage5, sendUsage } = {}) {
+    return new Response(this.toDataStream({ data, getErrorMessage: getErrorMessage5, sendUsage }), {
+      status,
+      statusText,
+      headers: prepareResponseHeaders(headers, {
+        contentType: 'text/plain; charset=utf-8',
+        dataStreamVersion: 'v1'
+      })
+    });
   }
   toTextStreamResponse(init) {
     var _a14;
     return new Response(this.textStream.pipeThrough(new TextEncoderStream()), {
       status: (_a14 = init == null ? void 0 : init.status) != null ? _a14 : 200,
       headers: prepareResponseHeaders(init == null ? void 0 : init.headers, {
-        contentType: "text/plain; charset=utf-8"
+        contentType: 'text/plain; charset=utf-8'
       })
     });
   }
@@ -5526,14 +5446,11 @@ var experimental_wrapLanguageModel = ({
   modelId,
   providerId
 }) => {
-  async function doTransform({
-    params,
-    type
-  }) {
+  async function doTransform({ params, type }) {
     return transformParams ? await transformParams({ params, type }) : params;
   }
   return {
-    specificationVersion: "v1",
+    specificationVersion: 'v1',
     provider: providerId != null ? providerId : model.provider,
     modelId: modelId != null ? modelId : model.modelId,
     defaultObjectGenerationMode: model.defaultObjectGenerationMode,
@@ -5541,12 +5458,12 @@ var experimental_wrapLanguageModel = ({
     supportsUrl: model.supportsUrl,
     supportsStructuredOutputs: model.supportsStructuredOutputs,
     async doGenerate(params) {
-      const transformedParams = await doTransform({ params, type: "generate" });
+      const transformedParams = await doTransform({ params, type: 'generate' });
       const doGenerate = async () => model.doGenerate(transformedParams);
       return wrapGenerate ? wrapGenerate({ doGenerate, params: transformedParams, model }) : doGenerate();
     },
     async doStream(params) {
-      const transformedParams = await doTransform({ params, type: "stream" });
+      const transformedParams = await doTransform({ params, type: 'stream' });
       const doStream = async () => model.doStream(transformedParams);
       return wrapStream ? wrapStream({ doStream, params: transformedParams, model }) : doStream();
     }
@@ -5554,47 +5471,49 @@ var experimental_wrapLanguageModel = ({
 };
 
 // core/prompt/append-response-messages.ts
-function appendResponseMessages({
-  messages,
-  responseMessages
-}) {
+function appendResponseMessages({ messages, responseMessages }) {
   var _a14;
   const clonedMessages = structuredClone(messages);
   for (const message of responseMessages) {
     const role = message.role;
     switch (role) {
-      case "assistant": {
+      case 'assistant': {
         clonedMessages.push({
-          role: "assistant",
+          role: 'assistant',
           id: message.id,
           createdAt: /* @__PURE__ */ new Date(),
           // generate a createdAt date for the message, will be overridden by the client
           // only include text in the content:
-          content: typeof message.content === "string" ? message.content : message.content.filter((part) => part.type === "text").map((part) => part.text).join(""),
+          content:
+            typeof message.content === 'string'
+              ? message.content
+              : message.content
+                  .filter((part) => part.type === 'text')
+                  .map((part) => part.text)
+                  .join(''),
           // separate tool calls from the content:
-          toolInvocations: (typeof message.content === "string" ? [] : message.content.filter((part) => part.type === "tool-call")).map((call) => ({
-            state: "call",
+          toolInvocations: (typeof message.content === 'string'
+            ? []
+            : message.content.filter((part) => part.type === 'tool-call')
+          ).map((call) => ({
+            state: 'call',
             ...call
           }))
         });
         break;
       }
-      case "tool": {
+      case 'tool': {
         const previousMessage = clonedMessages[clonedMessages.length - 1];
-        (_a14 = previousMessage.toolInvocations) != null ? _a14 : previousMessage.toolInvocations = [];
-        if (previousMessage.role !== "assistant") {
-          throw new Error(
-            `Tool result must follow an assistant message: ${previousMessage.role}`
-          );
+        (_a14 = previousMessage.toolInvocations) != null ? _a14 : (previousMessage.toolInvocations = []);
+        if (previousMessage.role !== 'assistant') {
+          throw new Error(`Tool result must follow an assistant message: ${previousMessage.role}`);
         }
         for (const part of message.content) {
-          const toolCall = previousMessage.toolInvocations.find(
-            (call) => call.toolCallId === part.toolCallId
-          );
+          const toolCall = previousMessage.toolInvocations.find((call) => call.toolCallId === part.toolCallId);
           if (!toolCall) {
-            throw new Error("Tool call not found in previous message");
+            throw new Error('Tool call not found in previous message');
           }
-          toolCall.state = "result";
+          toolCall.state = 'result';
           const toolResult = toolCall;
           toolResult.result = part.result;
         }
@@ -5610,12 +5529,8 @@ function appendResponseMessages({
 }
 
 // core/registry/custom-provider.ts
-var import_provider18 = require("@ai-sdk/provider");
-function experimental_customProvider({
-  languageModels,
-  textEmbeddingModels,
-  fallbackProvider
-}) {
+var import_provider18 = require('@ai-sdk/provider');
+function experimental_customProvider({ languageModels, textEmbeddingModels, fallbackProvider }) {
   return {
     languageModel(modelId) {
       if (languageModels != null && modelId in languageModels) {
@@ -5624,7 +5539,7 @@ function experimental_customProvider({
       if (fallbackProvider) {
         return fallbackProvider.languageModel(modelId);
       }
-      throw new import_provider18.NoSuchModelError({ modelId, modelType: "languageModel" });
+      throw new import_provider18.NoSuchModelError({ modelId, modelType: 'languageModel' });
     },
     textEmbeddingModel(modelId) {
       if (textEmbeddingModels != null && modelId in textEmbeddingModels) {
@@ -5633,14 +5548,14 @@ function experimental_customProvider({
       if (fallbackProvider) {
         return fallbackProvider.textEmbeddingModel(modelId);
       }
-      throw new import_provider18.NoSuchModelError({ modelId, modelType: "textEmbeddingModel" });
+      throw new import_provider18.NoSuchModelError({ modelId, modelType: 'textEmbeddingModel' });
     }
   };
 }
 
 // core/registry/no-such-provider-error.ts
-var import_provider19 = require("@ai-sdk/provider");
-var name13 = "AI_NoSuchProviderError";
+var import_provider19 = require('@ai-sdk/provider');
+var name13 = 'AI_NoSuchProviderError';
 var marker13 = `vercel.ai.error.${name13}`;
 var symbol13 = Symbol.for(marker13);
 var _a13;
@@ -5664,7 +5579,7 @@ var NoSuchProviderError = class extends import_provider19.NoSuchModelError {
 _a13 = symbol13;
 
 // core/registry/provider-registry.ts
-var import_provider20 = require("@ai-sdk/provider");
+var import_provider20 = require('@ai-sdk/provider');
 function experimental_createProviderRegistry(providers) {
   const registry = new DefaultProviderRegistry();
   for (const [id, provider] of Object.entries(providers)) {
@@ -5684,7 +5599,7 @@ var DefaultProviderRegistry = class {
     if (provider == null) {
       throw new NoSuchProviderError({
         modelId: id,
-        modelType: "languageModel",
+        modelType: 'languageModel',
         providerId: id,
         availableProviders: Object.keys(this.providers)
       });
@@ -5692,7 +5607,7 @@ var DefaultProviderRegistry = class {
     return provider;
   }
   splitId(id, modelType) {
-    const index = id.indexOf(":");
+    const index = id.indexOf(':');
     if (index === -1) {
       throw new import_provider20.NoSuchModelError({
         modelId: id,
@@ -5704,22 +5619,22 @@ var DefaultProviderRegistry = class {
   }
   languageModel(id) {
     var _a14, _b;
-    const [providerId, modelId] = this.splitId(id, "languageModel");
+    const [providerId, modelId] = this.splitId(id, 'languageModel');
     const model = (_b = (_a14 = this.getProvider(providerId)).languageModel) == null ? void 0 : _b.call(_a14, modelId);
     if (model == null) {
-      throw new import_provider20.NoSuchModelError({ modelId: id, modelType: "languageModel" });
+      throw new import_provider20.NoSuchModelError({ modelId: id, modelType: 'languageModel' });
     }
     return model;
   }
   textEmbeddingModel(id) {
     var _a14;
-    const [providerId, modelId] = this.splitId(id, "textEmbeddingModel");
+    const [providerId, modelId] = this.splitId(id, 'textEmbeddingModel');
     const provider = this.getProvider(providerId);
     const model = (_a14 = provider.textEmbeddingModel) == null ? void 0 : _a14.call(provider, modelId);
     if (model == null) {
       throw new import_provider20.NoSuchModelError({
         modelId: id,
-        modelType: "textEmbeddingModel"
+        modelType: 'textEmbeddingModel'
       });
     }
     return model;
@@ -5738,9 +5653,13 @@ function tool(tool2) {
 }
 
 // core/util/cosine-similarity.ts
-function cosineSimilarity(vector1, vector2, options = {
-  throwErrorForEmptyVectors: false
-}) {
+function cosineSimilarity(
+  vector1,
+  vector2,
+  options = {
+    throwErrorForEmptyVectors: false
+  }
+) {
   const { throwErrorForEmptyVectors } = options;
   if (vector1.length !== vector2.length) {
     throw new Error(
@@ -5749,9 +5668,9 @@ function cosineSimilarity(vector1, vector2, options = {
   }
   if (throwErrorForEmptyVectors && vector1.length === 0) {
     throw new InvalidArgumentError({
-      parameter: "vector1",
+      parameter: 'vector1',
       value: vector1,
-      message: "Vectors cannot be empty"
+      message: 'Vectors cannot be empty'
     });
   }
   const magnitude1 = magnitude(vector1);
@@ -5762,22 +5681,14 @@ function cosineSimilarity(vector1, vector2, options = {
   return dotProduct(vector1, vector2) / (magnitude1 * magnitude2);
 }
 function dotProduct(vector1, vector2) {
-  return vector1.reduce(
-    (accumulator, value, index) => accumulator + value * vector2[index],
-    0
-  );
+  return vector1.reduce((accumulator, value, index) => accumulator + value * vector2[index], 0);
 }
 function magnitude(vector) {
   return Math.sqrt(dotProduct(vector, vector));
 }
 
 // core/util/simulate-readable-stream.ts
-function simulateReadableStream({
-  chunks,
-  initialDelayInMs = 0,
-  chunkDelayInMs = 0,
-  _internal
-}) {
+function simulateReadableStream({ chunks, initialDelayInMs = 0, chunkDelayInMs = 0, _internal }) {
   var _a14;
   const delay2 = (_a14 = _internal == null ? void 0 : _internal.delay) != null ? _a14 : delay;
   let index = 0;
@@ -5794,7 +5705,7 @@ function simulateReadableStream({
 }
 
 // streams/assistant-response.ts
-var import_ui_utils10 = require("@ai-sdk/ui-utils");
+var import_ui_utils10 = require('@ai-sdk/ui-utils');
 function AssistantResponse({ threadId, messageId }, process2) {
   const stream = new ReadableStream({
     async start(controller) {
@@ -5802,53 +5713,48 @@ function AssistantResponse({ threadId, messageId }, process2) {
       const textEncoder = new TextEncoder();
       const sendMessage = (message) => {
         controller.enqueue(
-          textEncoder.encode(
-            (0, import_ui_utils10.formatAssistantStreamPart)("assistant_message", message)
-          )
+          textEncoder.encode((0, import_ui_utils10.formatAssistantStreamPart)('assistant_message', message))
         );
       };
       const sendDataMessage = (message) => {
         controller.enqueue(
-          textEncoder.encode(
-            (0, import_ui_utils10.formatAssistantStreamPart)("data_message", message)
-          )
+          textEncoder.encode((0, import_ui_utils10.formatAssistantStreamPart)('data_message', message))
         );
       };
       const sendError = (errorMessage) => {
-        controller.enqueue(
-          textEncoder.encode((0, import_ui_utils10.formatAssistantStreamPart)("error", errorMessage))
-        );
+        controller.enqueue(textEncoder.encode((0, import_ui_utils10.formatAssistantStreamPart)('error', errorMessage)));
       };
       const forwardStream = async (stream2) => {
         var _a15, _b;
         let result = void 0;
         for await (const value of stream2) {
           switch (value.event) {
-            case "thread.message.created": {
+            case 'thread.message.created': {
               controller.enqueue(
                 textEncoder.encode(
-                  (0, import_ui_utils10.formatAssistantStreamPart)("assistant_message", {
+                  (0, import_ui_utils10.formatAssistantStreamPart)('assistant_message', {
                     id: value.data.id,
-                    role: "assistant",
-                    content: [{ type: "text", text: { value: "" } }]
+                    role: 'assistant',
+                    content: [{ type: 'text', text: { value: '' } }]
                   })
                 )
               );
               break;
             }
-            case "thread.message.delta": {
+            case 'thread.message.delta': {
               const content = (_a15 = value.data.delta.content) == null ? void 0 : _a15[0];
-              if ((content == null ? void 0 : content.type) === "text" && ((_b = content.text) == null ? void 0 : _b.value) != null) {
+              if (
+                (content == null ? void 0 : content.type) === 'text' &&
+                ((_b = content.text) == null ? void 0 : _b.value) != null
+              ) {
                 controller.enqueue(
-                  textEncoder.encode(
-                    (0, import_ui_utils10.formatAssistantStreamPart)("text", content.text.value)
-                  )
+                  textEncoder.encode((0, import_ui_utils10.formatAssistantStreamPart)('text', content.text.value))
                 );
               }
               break;
             }
-            case "thread.run.completed":
-            case "thread.run.requires_action": {
+            case 'thread.run.completed':
+            case 'thread.run.requires_action': {
               result = value.data;
               break;
             }
@@ -5858,7 +5764,7 @@ function AssistantResponse({ threadId, messageId }, process2) {
       };
       controller.enqueue(
         textEncoder.encode(
-          (0, import_ui_utils10.formatAssistantStreamPart)("assistant_control_data", {
+          (0, import_ui_utils10.formatAssistantStreamPart)('assistant_control_data', {
             threadId,
             messageId
           })
@@ -5876,15 +5782,13 @@ function AssistantResponse({ threadId, messageId }, process2) {
         controller.close();
       }
     },
-    pull(controller) {
-    },
-    cancel() {
-    }
+    pull(controller) {},
+    cancel() {}
   });
   return new Response(stream, {
     status: 200,
     headers: {
-      "Content-Type": "text/plain; charset=utf-8"
+      'Content-Type': 'text/plain; charset=utf-8'
     }
   });
 }
@@ -5896,23 +5800,21 @@ __export(langchain_adapter_exports, {
   toDataStream: () => toDataStream,
   toDataStreamResponse: () => toDataStreamResponse
 });
-var import_ui_utils11 = require("@ai-sdk/ui-utils");
+var import_ui_utils11 = require('@ai-sdk/ui-utils');
 
 // streams/stream-callbacks.ts
 function createCallbacksTransformer(callbacks = {}) {
   const textEncoder = new TextEncoder();
-  let aggregatedResponse = "";
+  let aggregatedResponse = '';
   return new TransformStream({
     async start() {
-      if (callbacks.onStart)
-        await callbacks.onStart();
+      if (callbacks.onStart) await callbacks.onStart();
     },
     async transform(message, controller) {
       controller.enqueue(textEncoder.encode(message));
       aggregatedResponse += message;
-      if (callbacks.onToken)
-        await callbacks.onToken(message);
-      if (callbacks.onText && typeof message === "string") {
+      if (callbacks.onToken) await callbacks.onToken(message);
+      if (callbacks.onText && typeof message === 'string') {
         await callbacks.onText(message);
       }
     },
@@ -5929,45 +5831,43 @@ function createCallbacksTransformer(callbacks = {}) {
 
 // streams/langchain-adapter.ts
 function toDataStreamInternal(stream, callbacks) {
-  return stream.pipeThrough(
-    new TransformStream({
-      transform: async (value, controller) => {
-        var _a14;
-        if (typeof value === "string") {
-          controller.enqueue(value);
-          return;
-        }
-        if ("event" in value) {
-          if (value.event === "on_chat_model_stream") {
-            forwardAIMessageChunk(
-              (_a14 = value.data) == null ? void 0 : _a14.chunk,
-              controller
-            );
+  return stream
+    .pipeThrough(
+      new TransformStream({
+        transform: async (value, controller) => {
+          var _a14;
+          if (typeof value === 'string') {
+            controller.enqueue(value);
+            return;
           }
-          return;
+          if ('event' in value) {
+            if (value.event === 'on_chat_model_stream') {
+              forwardAIMessageChunk((_a14 = value.data) == null ? void 0 : _a14.chunk, controller);
+            }
+            return;
+          }
+          forwardAIMessageChunk(value, controller);
         }
-        forwardAIMessageChunk(value, controller);
-      }
-    })
-  ).pipeThrough(createCallbacksTransformer(callbacks)).pipeThrough(new TextDecoderStream()).pipeThrough(
-    new TransformStream({
-      transform: async (chunk, controller) => {
-        controller.enqueue((0, import_ui_utils11.formatDataStreamPart)("text", chunk));
-      }
-    })
-  );
+      })
+    )
+    .pipeThrough(createCallbacksTransformer(callbacks))
+    .pipeThrough(new TextDecoderStream())
+    .pipeThrough(
+      new TransformStream({
+        transform: async (chunk, controller) => {
+          controller.enqueue((0, import_ui_utils11.formatDataStreamPart)('text', chunk));
+        }
+      })
+    );
 }
 function toDataStream(stream, callbacks) {
-  return toDataStreamInternal(stream, callbacks).pipeThrough(
-    new TextEncoderStream()
-  );
+  return toDataStreamInternal(stream, callbacks).pipeThrough(new TextEncoderStream());
 }
 function toDataStreamResponse(stream, options) {
   var _a14;
-  const dataStream = toDataStreamInternal(
-    stream,
-    options == null ? void 0 : options.callbacks
-  ).pipeThrough(new TextEncoderStream());
+  const dataStream = toDataStreamInternal(stream, options == null ? void 0 : options.callbacks).pipeThrough(
+    new TextEncoderStream()
+  );
   const data = options == null ? void 0 : options.data;
   const init = options == null ? void 0 : options.init;
   const responseStream = data ? mergeStreams(data.stream, dataStream) : dataStream;
@@ -5975,8 +5875,8 @@ function toDataStreamResponse(stream, options) {
     status: (_a14 = init == null ? void 0 : init.status) != null ? _a14 : 200,
     statusText: init == null ? void 0 : init.statusText,
     headers: prepareResponseHeaders(init == null ? void 0 : init.headers, {
-      contentType: "text/plain; charset=utf-8",
-      dataStreamVersion: "v1"
+      contentType: 'text/plain; charset=utf-8',
+      dataStreamVersion: 'v1'
     })
   });
 }
@@ -5984,12 +5884,12 @@ function mergeIntoDataStream(stream, options) {
   options.dataStream.merge(toDataStreamInternal(stream, options.callbacks));
 }
 function forwardAIMessageChunk(chunk, controller) {
-  if (typeof chunk.content === "string") {
+  if (typeof chunk.content === 'string') {
     controller.enqueue(chunk.content);
   } else {
     const content = chunk.content;
     for (const item of content) {
-      if (item.type === "text") {
+      if (item.type === 'text') {
         controller.enqueue(item.text);
       }
     }
@@ -6003,42 +5903,42 @@ __export(llamaindex_adapter_exports, {
   toDataStream: () => toDataStream2,
   toDataStreamResponse: () => toDataStreamResponse2
 });
-var import_provider_utils13 = require("@ai-sdk/provider-utils");
-var import_ui_utils12 = require("@ai-sdk/ui-utils");
+var import_provider_utils13 = require('@ai-sdk/provider-utils');
+var import_ui_utils12 = require('@ai-sdk/ui-utils');
 function toDataStreamInternal2(stream, callbacks) {
   const trimStart = trimStartOfStream();
-  return (0, import_provider_utils13.convertAsyncIteratorToReadableStream)(stream[Symbol.asyncIterator]()).pipeThrough(
-    new TransformStream({
-      async transform(message, controller) {
-        controller.enqueue(trimStart(message.delta));
-      }
-    })
-  ).pipeThrough(createCallbacksTransformer(callbacks)).pipeThrough(new TextDecoderStream()).pipeThrough(
-    new TransformStream({
-      transform: async (chunk, controller) => {
-        controller.enqueue((0, import_ui_utils12.formatDataStreamPart)("text", chunk));
-      }
-    })
-  );
+  return (0, import_provider_utils13.convertAsyncIteratorToReadableStream)(stream[Symbol.asyncIterator]())
+    .pipeThrough(
+      new TransformStream({
+        async transform(message, controller) {
+          controller.enqueue(trimStart(message.delta));
+        }
+      })
+    )
+    .pipeThrough(createCallbacksTransformer(callbacks))
+    .pipeThrough(new TextDecoderStream())
+    .pipeThrough(
+      new TransformStream({
+        transform: async (chunk, controller) => {
+          controller.enqueue((0, import_ui_utils12.formatDataStreamPart)('text', chunk));
+        }
+      })
+    );
 }
 function toDataStream2(stream, callbacks) {
-  return toDataStreamInternal2(stream, callbacks).pipeThrough(
-    new TextEncoderStream()
-  );
+  return toDataStreamInternal2(stream, callbacks).pipeThrough(new TextEncoderStream());
 }
 function toDataStreamResponse2(stream, options = {}) {
   var _a14;
   const { init, data, callbacks } = options;
-  const dataStream = toDataStreamInternal2(stream, callbacks).pipeThrough(
-    new TextEncoderStream()
-  );
+  const dataStream = toDataStreamInternal2(stream, callbacks).pipeThrough(new TextEncoderStream());
   const responseStream = data ? mergeStreams(data.stream, dataStream) : dataStream;
   return new Response(responseStream, {
     status: (_a14 = init == null ? void 0 : init.status) != null ? _a14 : 200,
     statusText: init == null ? void 0 : init.statusText,
     headers: prepareResponseHeaders(init == null ? void 0 : init.headers, {
-      contentType: "text/plain; charset=utf-8",
-      dataStreamVersion: "v1"
+      contentType: 'text/plain; charset=utf-8',
+      dataStreamVersion: 'v1'
     })
   });
 }
@@ -6050,15 +5950,14 @@ function trimStartOfStream() {
   return (text2) => {
     if (isStreamStart) {
       text2 = text2.trimStart();
-      if (text2)
-        isStreamStart = false;
+      if (text2) isStreamStart = false;
     }
     return text2;
   };
 }
 
 // streams/stream-data.ts
-var import_ui_utils13 = require("@ai-sdk/ui-utils");
+var import_ui_utils13 = require('@ai-sdk/ui-utils');
 
 // util/constants.ts
 var HANGING_STREAM_WARNING_TIME_MS = 15 * 1e3;
@@ -6074,16 +5973,13 @@ var StreamData = class {
     this.stream = new ReadableStream({
       start: async (controller) => {
         self.controller = controller;
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === 'development') {
           self.warningTimeout = setTimeout(() => {
-            console.warn(
-              "The data stream is hanging. Did you forget to close it with `data.close()`?"
-            );
+            console.warn('The data stream is hanging. Did you forget to close it with `data.close()`?');
           }, HANGING_STREAM_WARNING_TIME_MS);
         }
       },
-      pull: (controller) => {
-      },
+      pull: (controller) => {},
       cancel: (reason) => {
         this.isClosed = true;
       }
@@ -6091,10 +5987,10 @@ var StreamData = class {
   }
   async close() {
     if (this.isClosed) {
-      throw new Error("Data Stream has already been closed.");
+      throw new Error('Data Stream has already been closed.');
     }
     if (!this.controller) {
-      throw new Error("Stream controller is not initialized.");
+      throw new Error('Stream controller is not initialized.');
     }
     this.controller.close();
     this.isClosed = true;
@@ -6104,85 +6000,84 @@ var StreamData = class {
   }
   append(value) {
     if (this.isClosed) {
-      throw new Error("Data Stream has already been closed.");
+      throw new Error('Data Stream has already been closed.');
     }
     if (!this.controller) {
-      throw new Error("Stream controller is not initialized.");
+      throw new Error('Stream controller is not initialized.');
     }
-    this.controller.enqueue(
-      this.encoder.encode((0, import_ui_utils13.formatDataStreamPart)("data", [value]))
-    );
+    this.controller.enqueue(this.encoder.encode((0, import_ui_utils13.formatDataStreamPart)('data', [value])));
   }
   appendMessageAnnotation(value) {
     if (this.isClosed) {
-      throw new Error("Data Stream has already been closed.");
+      throw new Error('Data Stream has already been closed.');
     }
     if (!this.controller) {
-      throw new Error("Stream controller is not initialized.");
+      throw new Error('Stream controller is not initialized.');
     }
     this.controller.enqueue(
-      this.encoder.encode((0, import_ui_utils13.formatDataStreamPart)("message_annotations", [value]))
+      this.encoder.encode((0, import_ui_utils13.formatDataStreamPart)('message_annotations', [value]))
     );
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  AISDKError,
-  APICallError,
-  AssistantResponse,
-  DownloadError,
-  EmptyResponseBodyError,
-  InvalidArgumentError,
-  InvalidDataContentError,
-  InvalidMessageRoleError,
-  InvalidPromptError,
-  InvalidResponseDataError,
-  InvalidToolArgumentsError,
-  JSONParseError,
-  LangChainAdapter,
-  LlamaIndexAdapter,
-  LoadAPIKeyError,
-  MessageConversionError,
-  NoContentGeneratedError,
-  NoObjectGeneratedError,
-  NoOutputSpecifiedError,
-  NoSuchModelError,
-  NoSuchProviderError,
-  NoSuchToolError,
-  Output,
-  RetryError,
-  StreamData,
-  ToolCallRepairError,
-  ToolExecutionError,
-  TypeValidationError,
-  UnsupportedFunctionalityError,
-  appendResponseMessages,
-  convertToCoreMessages,
-  cosineSimilarity,
-  createDataStream,
-  createDataStreamResponse,
-  createIdGenerator,
-  embed,
-  embedMany,
-  experimental_createProviderRegistry,
-  experimental_customProvider,
-  experimental_generateImage,
-  experimental_wrapLanguageModel,
-  formatAssistantStreamPart,
-  formatDataStreamPart,
-  generateId,
-  generateObject,
-  generateText,
-  jsonSchema,
-  parseAssistantStreamPart,
-  parseDataStreamPart,
-  pipeDataStreamToResponse,
-  processDataStream,
-  processTextStream,
-  simulateReadableStream,
-  smoothStream,
-  streamObject,
-  streamText,
-  tool
-});
+0 &&
+  (module.exports = {
+    AISDKError,
+    APICallError,
+    AssistantResponse,
+    DownloadError,
+    EmptyResponseBodyError,
+    InvalidArgumentError,
+    InvalidDataContentError,
+    InvalidMessageRoleError,
+    InvalidPromptError,
+    InvalidResponseDataError,
+    InvalidToolArgumentsError,
+    JSONParseError,
+    LangChainAdapter,
+    LlamaIndexAdapter,
+    LoadAPIKeyError,
+    MessageConversionError,
+    NoContentGeneratedError,
+    NoObjectGeneratedError,
+    NoOutputSpecifiedError,
+    NoSuchModelError,
+    NoSuchProviderError,
+    NoSuchToolError,
+    Output,
+    RetryError,
+    StreamData,
+    ToolCallRepairError,
+    ToolExecutionError,
+    TypeValidationError,
+    UnsupportedFunctionalityError,
+    appendResponseMessages,
+    convertToCoreMessages,
+    cosineSimilarity,
+    createDataStream,
+    createDataStreamResponse,
+    createIdGenerator,
+    embed,
+    embedMany,
+    experimental_createProviderRegistry,
+    experimental_customProvider,
+    experimental_generateImage,
+    experimental_wrapLanguageModel,
+    formatAssistantStreamPart,
+    formatDataStreamPart,
+    generateId,
+    generateObject,
+    generateText,
+    jsonSchema,
+    parseAssistantStreamPart,
+    parseDataStreamPart,
+    pipeDataStreamToResponse,
+    processDataStream,
+    processTextStream,
+    simulateReadableStream,
+    smoothStream,
+    streamObject,
+    streamText,
+    tool
+  });
 //# sourceMappingURL=index.js.map

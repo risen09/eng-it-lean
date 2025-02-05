@@ -12,13 +12,13 @@
     "imageFilename": "kart1.jpg",
     "words": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
   },
-{
+  {
     "id": 4,
     "description": "ReactJS",
     "imageFilename": "kart1.jpg",
     "words": [23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
   },
-{
+  {
     "id": 5,
     "description": "NodeJS",
     "imageFilename": "kart1.jpg",

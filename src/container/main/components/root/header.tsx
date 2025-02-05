@@ -15,6 +15,7 @@ import {
   MDBCollapse,
   MDBBtn
 } from 'mdb-react-ui-kit';
+import { useCookies } from 'react-cookie';
 
 export const App = () => {
   const pagesV1 = [
@@ -25,6 +26,7 @@ export const App = () => {
     { id: 5, title: 'О проекте', navigation: 'eng-it-lean.about' }
   ];
   const [openBasic, setOpenBasic] = useState(false);
+  const [cookies] = useCookies(['auth_token']);
 
   return (
     <MDBNavbar expand="lg" light bgColor="light">
@@ -65,11 +67,25 @@ export const App = () => {
             </MDBNavbarItem>
           </MDBNavbarNav>
         </MDBCollapse>
-        <div className="">
-          <MDBBtn color="success" tag={Link} to="entry" className="mt-1">
-            Вход
+        {cookies.auth_token && (
+          <MDBBtn color="success" tag={Link} to={getNavigationsValue('eng-it-lean.account')}>
+            Аккаунт
           </MDBBtn>
-        </div>
+        )}
+        {!cookies.auth_token && (
+          <div>
+            <div className="btn-nav">
+              <MDBBtn color="success" tag={Link} to={getNavigationsValue('eng-it-lean.registration')}>
+                Регистрация
+              </MDBBtn>
+            </div>
+            <div className="btn-nav mx-2">
+              <MDBBtn color="success" tag={Link} to={getNavigationsValue('eng-it-lean.entry')}>
+                Вход
+              </MDBBtn>
+            </div>
+          </div>
+        )}
       </MDBContainer>
     </MDBNavbar>
   );
