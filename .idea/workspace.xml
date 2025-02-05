@@ -5,11 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3393da0c-05bd-4c5b-89cd-24604c06325b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_02_2025,_23_37_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_02_2025,_23_37_[Changes]1/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_02_2025__23_37__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/container/home/images/bannerblock1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/container/about/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bro.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/bro.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/dictionaries/images/kart1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/dictionaries/images/kart1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/home/images/bannerblock1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/images/bannerblock1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/home/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/componenets/HeaderNav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/componenets/HeaderNav.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/router.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/router.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +44,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="UiBootsrapHomeBody" />
+        <entry key="$PROJECT_DIR$" value="uiBootrsrapV2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -54,8 +60,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Rebasing dev",
-    "last_opened_file_path": "/home/eldar/project/sber/pr_2",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "/home/eldar/project/sber/pr_2/src/container",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -71,6 +77,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/container" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -108,8 +115,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start" />
-        <item itemvalue="npm.build" />
         <item itemvalue="npm.test" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
   </component>
@@ -134,6 +143,7 @@
       <workItem from="1738403342217" duration="5853000" />
       <workItem from="1738411383550" duration="6401000" />
       <workItem from="1738514699917" duration="1042000" />
+      <workItem from="1738747189150" duration="9484000" />
     </task>
     <servers />
   </component>

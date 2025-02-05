@@ -45,6 +45,32 @@ router.post('/:id', (req, res) => {
   res.status(200).send(data); 
 });
 
+router.post('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const updatedUnit = req.body;
+
+  if (!updatedUnit) {
+    return res.status(400).send('No unit to be added');
+  }
+
+  if (!data) {
+    return res.status(500).send('No data to be updated');
+  }
+
+  const index = data.findIndex((unit) => unit.id === id);
+
+  if (index < 0) {
+    return res.status(404).send('Not found');
+  }
+
+  data.splice(index, 1);
+
+  data.push(updatedUnit);
+
+  fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
+  res.status(200).send(data); 
+});
+
 router.put('/', (req, res) => {
   const newUnit = req.body;
 

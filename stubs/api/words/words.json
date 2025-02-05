@@ -132,5 +132,306 @@
       "During model validation, its ability to make accurate predictions on new data is checked.",
       "Validation showed that the model is robust against changes in data and has low generalization error."
     ]
+  },
+  {
+    "id": 13,
+    "word": "resume",
+    "translation": "резюме",
+    "definition": "a document containing a summary of your work experience, education, and skills that you submit when applying for a job",
+    "synonyms": ["CV", "curriculum vitae"],
+    "examples": [
+      "Make sure to update your resume before the interview."
+    ]
+  },
+  {
+    "id": 14,
+    "word": "interviewer",
+    "translation": "интервьюер",
+    "definition": "the person who conducts an interview, typically a representative of the company or organization offering the job",
+    "synonyms": ["questioner", "examiner"],
+    "examples": [
+      "The interviewer asked about my previous work experiences."
+    ]
+  },
+  {
+    "id": 15,
+    "word": "qualification",
+    "translation": "квалификация",
+    "definition": "a quality, skill, or attribute that makes someone suitable for a particular job or activity",
+    "synonyms": ["credential", "competence"],
+    "examples": [
+      "Do you have any qualifications in project management?"
+    ]
+  },
+  {
+    "id": 16,
+    "word": "experience",
+    "translation": "опыт",
+    "definition": "practical contact with and observation of facts or events, especially those gained through employment",
+    "synonyms": ["background", "track record"],
+    "examples": [
+      "She has five years of experience in marketing."
+    ]
+  },
+  {
+    "id": 17,
+    "word": "skillset",
+    "translation": "набор навыков",
+    "definition": "the range of skills and abilities possessed by an individual",
+    "synonyms": ["abilities", "talents"],
+    "examples": [
+      "Her skillset includes proficiency in several programming languages."
+    ]
+  },
+  {
+    "id": 18,
+    "word": "cover letter",
+    "translation": "сопроводительное письмо",
+    "definition": "a document sent with your resume that provides additional information on why you're qualified for the position",
+    "synonyms": ["application letter", "letter of introduction"],
+    "examples": [
+      "Always include a well-written cover letter with your application."
+    ]
+  },
+  {
+    "id": 19,
+    "word": "hiring manager",
+    "translation": "менеджер по найму",
+    "definition": "the person responsible for making hiring decisions within a company or department",
+    "synonyms": ["recruiter", "HR manager"],
+    "examples": [
+      "The hiring manager will review all applications and select candidates for interviews."
+    ]
+  },
+  {
+    "id": 20,
+    "word": "job description",
+    "translation": "описание вакансии",
+    "definition": "a detailed account of the responsibilities, duties, required skills, and working conditions associated with a specific job",
+    "synonyms": ["position profile", "role specification"],
+    "examples": [
+      "Read the job description carefully to understand what the employer is looking for."
+    ]
+  },
+  {
+    "id": 21,
+    "word": "salary negotiation",
+    "translation": "переговоры о зарплате",
+    "definition": "the process of discussing and agreeing upon the compensation for a job, including salary, benefits, and other forms of remuneration",
+    "synonyms": ["compensation discussion", "pay bargaining"],
+    "examples": [
+      "It's important to prepare for salary negotiations during the final stages of the interview process."
+    ]
+  },
+  {
+    "id": 22,
+    "word": "reference",
+    "translation": "рекомендация",
+    "definition": "a person who can vouch for your qualifications, character, and work ethic, often contacted by potential employers",
+    "synonyms": ["endorsement", "testimonial"],
+    "examples": [
+      "Be prepared to provide references from former supervisors or colleagues."
+    ]
+  },
+  {
+    "id": 23,
+    "word": "component",
+    "translation": "компонент",
+    "definition": "A reusable piece of code that renders part of the user interface.",
+    "synonyms": ["module", "widget"],
+    "examples": [
+      "In React, components are the building blocks of the UI."
+    ]
+  },
+  {
+    "id": 24,
+    "word": "props",
+    "translation": "пропсы",
+    "definition": "Short for 'properties', these are read-only components passed down from parent components to child components.",
+    "synonyms": ["attributes", "parameters"],
+    "examples": [
+      "Props allow you to pass data between components."
+    ]
+  },
+  {
+    "id": 25,
+    "word": "state",
+    "translation": "состояние",
+    "definition": "An object that holds data specific to a component which may change over time.",
+    "synonyms": ["data", "context"],
+    "examples": [
+      "Managing state is crucial for dynamic web applications."
+    ]
+  },
+  {
+    "id": 26,
+    "word": "render",
+    "translation": "рендеринг",
+    "definition": "The process of updating the DOM to match the current state of a component.",
+    "synonyms": ["update", "refresh"],
+    "examples": [
+      "React efficiently handles rendering to ensure smooth updates."
+    ]
+  },
+  {
+    "id": 27,
+    "word": "virtual DOM",
+    "translation": "виртуальный DOM",
+    "definition": "A lightweight copy of the actual DOM maintained by React to improve performance by minimizing updates to the real DOM.",
+    "synonyms": ["shadow tree", "virtual representation"],
+    "examples": [
+      "Virtual DOM allows React to update only necessary parts of the UI."
+    ]
+  },
+  {
+    "id": 28,
+    "word": "JSX",
+    "translation": "JSX",
+    "definition": "A syntax extension to JavaScript used in React to describe what the user interface should look like.",
+    "synonyms": ["template language", "syntax extension"],
+    "examples": [
+      "JSX makes it easier to write and understand React components."
+    ]
+  },
+  {
+    "id": 29,
+    "word": "hooks",
+    "translation": "хуки",
+    "definition": "Functions that let you use state and other React features without writing a class.",
+    "synonyms": ["functionalities", "utilities"],
+    "examples": [
+      "Hooks make functional components more powerful."
+    ]
+  },
+  {
+    "id": 30,
+    "word": "event handling",
+    "translation": "обработка событий",
+    "definition": "The mechanism by which React components respond to user actions such as clicks, key presses, etc.",
+    "synonyms": ["interaction management", "action response"],
+    "examples": [
+      "Event handlers in React allow you to define how components react to user interactions."
+    ]
+  },
+  {
+    "id": 31,
+    "word": "lifecycle methods",
+    "translation": "методы жизненного цикла",
+    "definition": "Methods called at different stages of a component's existence, allowing developers to perform tasks at each stage.",
+    "synonyms": ["phase callbacks", "stage handlers"],
+    "examples": [
+      "Lifecycle methods help manage the behavior of components throughout their lifecycle."
+    ]
+  },
+  {
+    "id": 32,
+    "word": "routing",
+    "translation": "маршрутизация",
+    "definition": "The process of defining and managing navigation paths within a single-page application.",
+    "synonyms": ["navigation control", "path management"],
+    "examples": [
+      "React Router is commonly used for routing in React apps."
+    ]
+  },
+
+  {
+    "id": 33,
+    "word": "server-side",
+    "translation": "серверная сторона",
+    "definition": "Refers to operations performed by the server in contrast to client-side operations.",
+    "synonyms": ["backend", "back-end"],
+    "examples": [
+      "Node.js is primarily used for server-side development."
+    ]
+  },
+  {
+    "id": 34,
+    "word": "asynchronous",
+    "translation": "асинхронный",
+    "definition": "Programming model where operations execute independently of other operations, allowing efficient handling of multiple requests simultaneously.",
+    "synonyms": ["non-blocking", "concurrent"],
+    "examples": [
+      "Node.js uses asynchronous I/O to handle many concurrent connections efficiently."
+    ]
+  },
+  {
+    "id": 35,
+    "word": "callback",
+    "translation": "коллбек",
+    "definition": "A function passed into another function as an argument, which is then invoked inside the outer function to complete some kind of routine or action.",
+    "synonyms": ["handler", "continuation"],
+    "examples": [
+      "Callbacks are widely used in Node.js for handling asynchronous operations."
+    ]
+  },
+  {
+    "id": 36,
+    "word": "event loop",
+    "translation": "цикл событий",
+    "definition": "Mechanism in Node.js that handles asynchronous operations and ensures non-blocking I/O by offloading operations to the system kernel whenever possible.",
+    "synonyms": ["event-driven architecture", "runtime environment"],
+    "examples": [
+      "The event loop is fundamental to understanding how Node.js works."
+    ]
+  },
+  {
+    "id": 37,
+    "word": "package manager",
+    "translation": "менеджер пакетов",
+    "definition": "Tool used to install, update, configure, and remove packages in Node.js projects.",
+    "synonyms": ["dependency manager", "library manager"],
+    "examples": [
+      "npm and yarn are popular package managers for Node.js."
+    ]
+  },
+  {
+    "id": 38,
+    "word": "middleware",
+    "translation": "промежуточное ПО",
+    "definition": "Software that sits between an application and the backend infrastructure, providing additional functionality to the request-response cycle.",
+    "synonyms": ["interceptor", "filter"],
+    "examples": [
+      "Express.js uses middleware to handle common tasks like logging, authentication, and error handling."
+    ]
+  },
+  {
+    "id": 39,
+    "word": "REST API",
+    "translation": "REST API",
+    "definition": "Architectural style for building APIs using HTTP methods to perform CRUD operations on resources.",
+    "synonyms": ["web service", "API design pattern"],
+    "examples": [
+      "Many Node.js applications implement RESTful APIs to communicate with clients."
+    ]
+  },
+  {
+    "id": 40,
+    "word": "streams",
+    "translation": "потоки",
+    "definition": "Data structures that facilitate continuous transfer of data in chunks rather than loading everything into memory at once.",
+    "synonyms": ["data flow", "pipeline"],
+    "examples": [
+      "Streams are useful for handling large files or continuous data in Node.js."
+    ]
+  },
+  {
+    "id": 41,
+    "word": "cluster module",
+    "translation": "модуль кластера",
+    "definition": "Built-in module in Node.js that allows an application to be split into multiple processes running on separate CPU cores, improving performance and scalability.",
+    "synonyms": ["multi-processing", "parallel execution"],
+    "examples": [
+      "Using the cluster module can significantly enhance the throughput of a Node.js application."
+    ]
+  },
+  {
+    "id": 42,
+    "word": "event emitter",
+    "translation": "излучатель событий",
+    "definition": "Class in Node.js that facilitates communication between objects in an application by emitting named events that other objects can listen to.",
+    "synonyms": ["publisher-subscriber", "observer pattern"],
+    "examples": [
+      "Event emitters are useful for implementing custom event-based systems in Node.js."
+    ]
   }
 ]
