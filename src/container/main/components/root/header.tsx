@@ -73,7 +73,7 @@ export const App = () => {
           </MDBBtn>
         )}
         {!cookies.auth_token && (
-          <div>
+          <div className="d-flex justify-content-end align-items-center">
             <div className="btn-nav">
               <MDBBtn color="success" tag={Link} to={getNavigationsValue('eng-it-lean.registration')}>
                 Регистрация

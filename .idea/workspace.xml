@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3393da0c-05bd-4c5b-89cd-24604c06325b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/images/bannerblock1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/images/bannerblock1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/images/bannerblock2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/images/bannerblock2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/images/block1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/images/block1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/images/kart1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/images/main.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/images/main.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/images/osn_banner2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/main/components/root/header.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +51,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "uiBootrsrapV2",
+    "git-widget-placeholder": "dev",
     "last_opened_file_path": "/home/eldar/project/sber/pr_2/src/container",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
