@@ -3,7 +3,7 @@ import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBTypography } from 'mdb-react-ui-ki
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { useGetUserQuery, usePostUsersMutation } from '../../store/api';
+import { useGetUserQuery, usePostUsersMutation, useSaveUserMutation } from '../../store/api';
 import { useCookies } from 'react-cookie';
 
 function AccountPage() {
@@ -15,17 +15,17 @@ function AccountPage() {
   const [reminderText, setReminderText] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  const [cookies] = useCookies(["auth_token"]);
-  const {data: user} = useGetUserQuery(cookies.auth_token);
-  const { register, handleSubmit, setValue} = useForm();
+  const [cookies] = useCookies(['auth_token']);
+  const { data: user } = useGetUserQuery(cookies.auth_token);
+  const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
     if (user) {
-      setValue("email", user?.email);
-      setValue("password", "");
-      setValue("nickname", user?.nickname);
-      setValue("age", user?.age);
-      setValue("about", user?.about);
+      setValue('email', user?.email);
+      setValue('password', '');
+      setValue('nickname', user?.nickname);
+      setValue('age', user?.age);
+      setValue('about', user?.about);
     }
   }, [user]);
 
@@ -56,18 +56,18 @@ function AccountPage() {
     navigate(getNavigationsValue('eng-it-lean.main'));
   };
 
-  const [postUsers, isLoading] = usePostUsersMutation();
+  const [saveUser] = useSaveUserMutation();
 
   const handleSave = async (data) => {
-    postUsers({
-          id: Date.now(),
-          public_id: Date.now(),
-          email: data.email,
-          password: data.password,
-          age: data.age,
-          nickname: data.nickname,
-          about: data.about,
-    })
+    saveUser({
+      id: -1,
+      public_id: user.public_id,
+      email: data.email,
+      password: data.password,
+      age: data.age,
+      nickname: data.nickname,
+      about: data.about
+    });
   };
 
   return (
@@ -81,45 +81,15 @@ function AccountPage() {
             <form>
               <div className="container-fluid justify-content-center my-0 py-3">
                 <label className="form-label">Электронная почта</label>
-                <MDBInput
-                  id="form1"
-                  type="email"
-                  required
-                  {...register('email')}
-                  className="my-0 py-2"
-                />
+                <MDBInput id="form1" type="email" required {...register('email')} className="my-0 py-2" />
                 <label className="form-label">Никнейм</label>
-                <MDBInput
-                  id="form4"
-                  type="string"
-                  required
-                  {...register('nickname')}
-                  className="my-0 py-2"
-                />
+                <MDBInput id="form4" type="string" required {...register('nickname')} className="my-0 py-2" />
                 <label className="form-label">Возраст</label>
-                <MDBInput
-                  id="form5"
-                  type="number"
-                  required
-                  {...register('age')}
-                  className="my-0 py-2"
-                />
+                <MDBInput id="form5" type="number" required {...register('age')} className="my-0 py-2" />
                 <label className="form-label">Пароль</label>
-                <MDBInput
-                  id="form2"
-                  type="password"
-                  required
-                  {...register('password')}
-                  className="my-0 py-2"
-                />
+                <MDBInput id="form2" type="password" required {...register('password')} className="my-0 py-2" />
                 <label className="form-label">О себе</label>
-                <MDBInput
-                  id="form6"
-                  type="about"
-                  required
-                  {...register('about')}
-                  className="my-0 py-2"
-                />
+                <MDBInput id="form6" type="about" required {...register('about')} className="my-0 py-2" />
               </div>
               <div className="container-fluid d-flex justify-content-center my-0 py-2"></div>
             </form>

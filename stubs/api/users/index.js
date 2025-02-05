@@ -3,7 +3,7 @@ const fs = require('fs');
 
 module.exports = router;
 
-let data = require('./users.json');
+const data = require('./users.json');
 const path = require('path');
 router.get('/', (req, res) => {
   res.send(data);
@@ -48,33 +48,21 @@ router.get('/account', (req, res) => {
     res.status(404).send('Пользователь не найден');
   }
   console.log(user);
-  res.send({...user, id: -1});
+  res.send({ ...user, id: -1 });
 });
 
 router.post('/account/save', (req, res) => {
   const updatedUser = req.body;
   const { public_id } = updatedUser;
-  console.log(public_id);
   const index = data.findIndex((user) => user.public_id == public_id);
 
-  if (!index) {
+  if (!index || index === -1) {
     res.status(404).send('Пользователь не найден');
   }
-  console.log(index);
-  
-  data[index].email = updatedUser.email;
-  data[index].password = updatedUser.password;
-  data[index].nickname = updatedUser.nickname;
-  data[index].age = updatedUser.age;
-  data[index].about = updatedUser.about;
-  
-  fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(data), (err) => {
-    if (err) {
-      console.error('Ошибка при записи данных в файл users.json', err);
-      res.status(500).send('Ошибка при записи данных в файл users.json');
-    } else {
-      console.log('Данные успешно записаны в файл users.json');
-      res.status(200).send('Данные успешно записаны в файл users.json');
-    }
-  });
+
+  data[index] = { ...data[index], ...updatedUser, id: data[index].id, password: data[index].password };
+
+  fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(data));
+
+  res.status(200);
 });
