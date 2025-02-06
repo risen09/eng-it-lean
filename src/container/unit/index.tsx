@@ -13,7 +13,7 @@ const UnitPage = (): React.ReactElement => {
   const { id } = useParams();
   const { data: unit, isLoading, error } = useGetUnitQuery(parseInt(id));
   const [cookies] = useCookies(['auth_token']);
-  const canEdit = getFeatures('eng-it-lean')?.['unit.edit'] && cookies.auth_token && unit?.author == cookies.auth_token;
+  const canEdit = getFeatures('eng-it-lean')?.['unit.edit'] && cookies.auth_token && unit?.author?.public_id == cookies.auth_token;
 
   return (
     <>

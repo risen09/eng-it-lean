@@ -235,7 +235,6 @@ const HomePage = (): React.ReactElement => {
           </MDBCol>
         </MDBRow>
       </div>
-      )
       <div className="container my-2 py-5">
         <MDBRow className="g-2 justify-content-center">
           {dictionaries
