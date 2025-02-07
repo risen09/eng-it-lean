@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.1](https://github.com/risen09/eng-it-lean/compare/v1.0.0...v1.0.1) (2025-02-07)
+
+
+### Bug Fixes
+
+* wrong check if user is author of unit ([435e86b](https://github.com/risen09/eng-it-lean/commit/435e86b43a2dc2518cde8332f42afbe0d270ca73))
+
 ## [0.5.0](https://github.com/risen09/eng-it-lean/compare/v0.4.0...v0.5.0) (2025-02-05)
 
 ### ⚠ BREAKING CHANGES
