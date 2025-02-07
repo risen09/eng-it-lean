@@ -1,14 +1,12 @@
 import React from 'react';
-import { render, screen, getByRole } from '@testing-library/react';
+import { screen, getByRole } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, jest, test } from '@jest/globals';
 import DictionaryPage from '../index';
-import { Wrapper } from '../../../__tests__/wrapper';
 import {
   mockGetDictionary,
   spyedGetDictionaryWords
 } from '../../../__tests__/mocks/api/dictionaries/get-dictionary-words';
-import { mockPutWord } from '../../../__tests__/mocks/api/words/put-word';
 import { renderWithRouter } from '../../../__tests__/utils';
 
 describe('DictionaryPage', () => {
@@ -88,7 +86,6 @@ describe('DictionaryPage', () => {
     expect(modalTranslationInput).toBeInTheDocument();
     await user.type(modalTranslationInput, data.translation);
 
-    const mockedPutWord = mockPutWord(data);
     const mockedSubmit = jest.fn();
     const submitButton = screen.getByText('Добавить', { exact: true });
     screen.getByRole('form', { name: 'word-form' }).onsubmit = mockedSubmit;

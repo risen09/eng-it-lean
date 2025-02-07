@@ -10,7 +10,8 @@
     "build:prod": "npm run clean && brojs build",
     "clean": "rimraf dist",
     "eslint": "eslint .",
-    "prettier": "npx prettier . --write",
+    "eslint:fix": "eslint . --fix",
+    "format": "npx prettier . --write",
     "release": "commit-and-tag-version"
   },
   "author": "int.tern.dev",

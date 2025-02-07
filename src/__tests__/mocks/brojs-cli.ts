@@ -27,7 +27,7 @@ jest.mock<typeof import('@brojs/cli')>('@brojs/cli', () => {
           value: 'true',
           key: 'unit.edit'
         }
-      }
+      };
     }
   };
 });

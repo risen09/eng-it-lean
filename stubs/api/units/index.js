@@ -42,7 +42,7 @@ router.post('/:id', (req, res) => {
   data.push(updatedUnit);
 
   fs.writeFileSync(path.join(__dirname, 'units.json'), JSON.stringify(data));
-  res.status(200).send(data); 
+  res.status(200).send(data);
 });
 
 router.post('/:id', (req, res) => {
@@ -68,7 +68,7 @@ router.post('/:id', (req, res) => {
   data.push(updatedUnit);
 
   fs.writeFileSync(path.join(__dirname, 'data', 'units.json'), JSON.stringify(data));
-  res.status(200).send(data); 
+  res.status(200).send(data);
 });
 
 router.put('/', (req, res) => {
@@ -118,7 +118,7 @@ router.get('/:id', (req, res) => {
   }
 
   const user = users.find((user) => user.public_id == unit.author);
-  console.log(user)
+  console.log(user);
 
-  res.send({...unit, author: user});
+  res.send({ ...unit, author: user });
 });

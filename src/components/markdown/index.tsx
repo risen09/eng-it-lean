@@ -3,6 +3,7 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import PropTypes from 'prop-types';
 
 const MarkdownStyled = ({ children }: { children: string }): React.ReactElement => {
   return (
@@ -11,27 +12,27 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
       remarkPlugins={[remarkGfm]}
       components={{
         h1(props) {
-          const { node, ...rest } = props;
-          return <MDBTypography tag="h3" variant="h3" className='text-center' {...rest} />;
+          const { ...rest } = props;
+          return <MDBTypography tag="h3" variant="h3" className="text-center" {...rest} />;
         },
         h2(props) {
-          const { node, ...rest } = props;
+          const { ...rest } = props;
           return <MDBTypography tag="h4" variant="h4" {...rest} />;
         },
         h3(props) {
-          const { node, ...rest } = props;
+          const { ...rest } = props;
           return <MDBTypography tag="h5" variant="h5" {...rest} />;
         },
         h4(props) {
-          const { node, ...rest } = props;
+          const { ...rest } = props;
           return <MDBTypography tag="h6" variant="h6" {...rest} />;
         },
         h5(props) {
-          const { node, ...rest } = props;
+          const { ...rest } = props;
           return <MDBTypography tag="h6" variant="h6" {...rest} />;
         },
         h6(props) {
-          const { node, ...rest } = props;
+          const { ...rest } = props;
           return <MDBTypography tag="h6" variant="h6" {...rest} />;
         },
         p(props) {
@@ -41,7 +42,7 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
           return <MDBTypography tag="strong" {...props} />;
         },
         blockquote(props) {
-          const { node, ...rest } = props;
+          const { ...rest } = props;
           return <MDBTypography blockquote {...rest} />;
         },
         table(props) {
@@ -54,15 +55,12 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
           return <MDBTableBody {...props} />;
         },
         code(props) {
-          const { children, className, node, ...rest } = props;
+          const { children, className, ...rest } = props;
           const match = /language-(\w+)/.exec(className || '');
           return match ? (
-            <SyntaxHighlighter
-              {...rest}
-              PreTag="div"
-              children={String(children).replace(/\n$/, '')}
-              language={match[1]}
-            />
+            <SyntaxHighlighter {...rest} PreTag="div" language={match[1]}>
+              {String(children).replace(/\n$/, '')}
+            </SyntaxHighlighter>
           ) : (
             <code {...rest} className={className}>
               {children}
@@ -74,6 +72,10 @@ const MarkdownStyled = ({ children }: { children: string }): React.ReactElement 
       {children}
     </Markdown>
   );
+};
+
+MarkdownStyled.propTypes = {
+  className: PropTypes.string
 };
 
 export default MarkdownStyled;

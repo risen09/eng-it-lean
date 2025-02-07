@@ -24,7 +24,7 @@ module.exports = {
   },
   features: {
     'eng-it-lean': {
-      'unit.edit': true,
+      'unit.edit': true
     }
   },
   config: {

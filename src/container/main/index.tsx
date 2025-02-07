@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { setupStore } from '../../store';
 import { router } from './router';

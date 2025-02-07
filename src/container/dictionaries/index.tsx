@@ -14,6 +14,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useGetDictionariesQuery } from '../../store/api';
+import kart1 from './images/kart1.jpg';
 
 const DictionariesPage = (): React.ReactElement => {
   const { data: dictionaries, isLoading, error } = useGetDictionariesQuery(undefined);
@@ -29,15 +30,10 @@ const DictionariesPage = (): React.ReactElement => {
         {isLoading && <MDBCol md="12">Загрузка...</MDBCol>}
         {dictionaries
           ?.map((dictionary) => (
-            <MDBCol md="4">
+            <MDBCol key={dictionary.id} md="4">
               <MDBCard style={{ width: '18rem' }} className="m-2 rounded-4 shadow-sm">
                 <MDBRipple rippleColor="light" rippleTag="div" className="bg-image hover-overlay">
-                  <MDBCardImage
-                    src={require('./images/' + dictionary.imageFilename)}
-                    fluid
-                    alt="..."
-                    className="rounded-top"
-                  />
+                  <MDBCardImage src={kart1} fluid alt="..." className="rounded-top" />
                   <div className="mask" style={{ backgroundColor: 'rgba(251, 251, 251, 0.15)' }}></div>
                 </MDBRipple>
                 <MDBCardBody>

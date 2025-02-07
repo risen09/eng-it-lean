@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
   console.log(updatedData);
 
   fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(updatedData));
-  
+
   res.send(updatedData);
 });
 

@@ -9,11 +9,8 @@ import {
   MDBModalContent,
   MDBModalHeader,
   MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter
+  MDBModalBody
 } from 'mdb-react-ui-kit';
-import { getNavigationValue } from '@brojs/cli';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Word } from '../../../service/words/types';
 
 const WordItem = ({ word }: { word: Word }): React.ReactElement => {

@@ -20,7 +20,7 @@ describe('user messages', () => {
     expect(result).toThrowError();
   });
 });
-*/ 
+*/
 
 describe('tool calls', () => {
   it('should stringify arguments to tool calls', () => {

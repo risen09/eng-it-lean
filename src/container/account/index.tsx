@@ -12,26 +12,25 @@ import {
 } from 'mdb-react-ui-kit';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetUnitsQuery, useGetUserQuery, useSaveUserMutation } from '../../store/api';
 import { useCookies } from 'react-cookie';
 import { LinkContainer } from 'react-router-bootstrap';
-import  avatar from './images/avatar.jpg';
+import avatar from './images/avatar.jpg';
 
 function AccountPage() {
   const navigate = useNavigate();
-  const [reminders, setReminders] = useState(() => {
+  const [reminders] = useState(() => {
     const savedReminders = localStorage.getItem('reminders');
     return savedReminders ? JSON.parse(savedReminders) : [];
   });
-  const [reminderText, setReminderText] = useState('');
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [, setCurrentTime] = useState(new Date());
 
-  const [cookies] = useCookies(['auth_token']);
+  const [cookies, setCookies] = useCookies(['auth_token']);
   const { data: user } = useGetUserQuery(cookies.auth_token);
   const { register, handleSubmit, setValue } = useForm();
 
-  const { data: units, isLoading: isLoadingUnits, error } = useGetUnitsQuery();
+  const { data: units, isLoading: isLoadingUnits } = useGetUnitsQuery();
 
   useEffect(() => {
     if (user) {
@@ -41,7 +40,7 @@ function AccountPage() {
       setValue('age', user?.age);
       setValue('about', user?.about);
     }
-  }, [user]);
+  }, [user, setValue]);
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -54,19 +53,8 @@ function AccountPage() {
     localStorage.setItem('reminders', JSON.stringify(reminders));
   }, [reminders]);
 
-  const handleAddReminder = () => {
-    if (reminderText) {
-      setReminders([...reminders, { text: reminderText, time: new Date() }]);
-      setReminderText('');
-    }
-  };
-
-  const handleDeleteReminder = (index) => {
-    const updatedReminders = reminders.filter((_, i) => i !== index);
-    setReminders(updatedReminders);
-  };
-
-  const handleCancel = (): void => {
+  const handleExit = (): void => {
+    setCookies('auth_token', null);
     navigate(getNavigationsValue('eng-it-lean.main'));
   };
 
@@ -94,22 +82,35 @@ function AccountPage() {
           <MDBTypography tag="p" className="text-muted mb-5 fs-6">
             <form>
               <div className="container-fluid justify-content-center my-0 py-3">
-                <label className="form-label">Электронная почта</label>
-                <MDBInput id="form1" type="email" required {...register('email')} className="my-0 py-2" />
-                <label className="form-label">Никнейм</label>
-                <MDBInput id="form4" type="string" required {...register('nickname')} className="my-0 py-2" />
-                <label className="form-label">Возраст</label>
-                <MDBInput id="form5" type="number" required {...register('age')} className="my-0 py-2" />
-                <label className="form-label">Пароль</label>
-                <MDBInput id="form2" type="password" required {...register('password')} className="my-0 py-2" />
-                <label className="form-label">О себе</label>
-                <MDBInput id="form6" type="about" required {...register('about')} className="my-0 py-2" />
+                <label htmlFor="formEmail" className="form-label">
+                  Электронная почта
+                </label>
+                <MDBInput id="formEmail" type="email" required {...register('email')} className="my-0 py-2" />
+                <label htmlFor="formNickname" className="form-label">
+                  Никнейм
+                </label>
+                <MDBInput id="formNickname" type="string" required {...register('nickname')} className="my-0 py-2" />
+                <label htmlFor="formAge" className="form-label">
+                  Возраст
+                </label>
+                <MDBInput id="formAge" type="number" required {...register('age')} className="my-0 py-2" />
+                <label htmlFor="formPassword" className="form-label">
+                  Пароль
+                </label>
+                <MDBInput id="formPassword" type="password" required {...register('password')} className="my-0 py-2" />
+                <label htmlFor="formAbout" className="form-label">
+                  О себе
+                </label>
+                <MDBInput id="formAbout" type="about" required {...register('about')} className="my-0 py-2" />
               </div>
               <div className="container-fluid d-flex justify-content-center my-0 py-2"></div>
             </form>
           </MDBTypography>
           <MDBBtn color="success" onClick={handleSubmit(handleSave)} className="">
             Сохранить изменения
+          </MDBBtn>
+          <MDBBtn color="danger" className="mx-2" onClick={handleExit} to="main">
+            Выйти
           </MDBBtn>
         </MDBCol>
       </MDBRow>
@@ -122,7 +123,7 @@ function AccountPage() {
           units
             .filter((unit) => unit.author.id === user?.public_id)
             .map((unit) => (
-              <MDBCol xl={4} lg={6} className="mb-4">
+              <MDBCol key={unit.id} xl={4} lg={6} className="mb-4">
                 <MDBCard key={unit.id}>
                   <MDBCardBody>
                     <MDBCardTitle className="text-muted ">{unit.name}</MDBCardTitle>
@@ -135,40 +136,6 @@ function AccountPage() {
             ))}
       </MDBRow>
     </div>
-    /*
-    <div className="container">
-      <h1 style={{ textAlign: 'center' }}>Личный кабинет</h1>
-      <div className="reminder-container">
-        <h2 style={{ fontSize: '16px' }}>Добавить заметку:</h2>
-        <input
-          type="text"
-          value={reminderText}
-          onChange={e => setReminderText(e.target.value)}
-          placeholder="Введите заметку"
-        />
-        <button onClick={handleAddReminder}>Добавить</button>
-        <ul>
-          {reminders.map((reminder, index) => (
-            <li key={index}>
-              {reminder.text} — {reminder.time.toLocaleString()}
-              <button onClick={() => handleDeleteReminder(index)}>Удалить</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="clock-container">
-        <h2 style={{ fontSize: '16px' }}>Текущее время:</h2>
-        <p>{currentTime.toLocaleString()}</p>
-      </div>
-
-      <div className="btn-nav d-flex justify-content-center py-2">
-        <MDBBtn color="success" onClick={handleCancel} to="main">
-          Выйти
-        </MDBBtn>
-      </div>
-    </div>
-    */
   );
 }
 

@@ -9,6 +9,7 @@ import hooksPlugin from 'eslint-plugin-react-hooks';
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
+  { ignores: ['stubs/**', 'packages/**', '**/*.config.{js,mjs,cjs}'] },
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

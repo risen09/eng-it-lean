@@ -1,7 +1,7 @@
 import React from 'react';
 import MarkdownStyled from '../../components/markdown';
 import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MDXEditorMethods } from '@mdxeditor/editor';
 import Editor from '../../components/editor';
 import { usePostUnitMutation } from '../../store/api';

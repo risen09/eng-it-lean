@@ -1,5 +1,5 @@
-import { render, screen, getByRole } from '@testing-library/react';
-import { Wrapper } from "./wrapper";
+import { render } from '@testing-library/react';
+import { Wrapper } from './wrapper';
 
 const renderWithRouter = (ui, { route = '/' } = {}) => {
   window.history.pushState({}, 'Test page', route);

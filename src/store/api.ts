@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery, QueryReturnValue } from '@reduxjs/toolkit/query/react';
+import { createApi, fakeBaseQuery, QueryReturnValue } from '@reduxjs/toolkit/query/react';
 import { dictionaryService } from '../service/dictionary';
 import { GetDictionaryResponse, GetDictionariesResponse } from '../service/dictionary/types';
 import { wordsService } from '../service/words';
@@ -11,7 +11,7 @@ import { GetLoginResponse, GetUserListResponse, GetUserResponse, User } from '..
 
 const createQueryFromPromise =
   <ARGS, RES>(fn: (...args: Array<ARGS>) => Promise<RES>) =>
-  async (...args): Promise<QueryReturnValue<RES, any, any>> => {
+  async (...args): Promise<QueryReturnValue<RES, unknown, unknown>> => {
     try {
       const data = await fn(...args);
       return { data };
@@ -23,7 +23,7 @@ const createQueryFromPromise =
 // Define a service using a base URL and expected endpoints
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: '' }),
+  baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     getDictionaries: builder.query<GetDictionariesResponse, undefined>({
       queryFn: createQueryFromPromise(() => dictionaryService.getDictionaries())
@@ -62,7 +62,7 @@ export const api = createApi({
     putUnit: builder.mutation<GetUnitResponse, PutUnitRequest>({
       queryFn: createQueryFromPromise((unit: PutUnitRequest) => unitService.putUnit(unit))
     }),
-    deleteUnit: builder.mutation<any, number>({
+    deleteUnit: builder.mutation<undefined, number>({
       queryFn: createQueryFromPromise((id: number) => unitService.deleteUnit(id))
     }),
 

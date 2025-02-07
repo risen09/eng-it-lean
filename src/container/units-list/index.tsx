@@ -1,8 +1,8 @@
-import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBBtn, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
+import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
 import React from 'react';
 import { useGetUnitsQuery } from '../../store/api';
 import { LinkContainer } from 'react-router-bootstrap';
-import { getConfigValue, getNavigationsValue, getNavigationValue } from '@brojs/cli';
+import { getNavigationsValue, getNavigationValue } from '@brojs/cli';
 import { Link } from 'react-router-dom';
 import mainKurs from './images/bannerblock1.jpg';
 
@@ -40,7 +40,7 @@ const UnitsPage = (): React.ReactElement => {
 
           {units &&
             units.map((unit) => (
-              <MDBCol xl={4} lg={6} className="mb-4">
+              <MDBCol key={unit.id} xl={4} lg={6} className="mb-4">
                 <MDBCard key={unit.id}>
                   <MDBCardBody>
                     <MDBCardTitle className="text-muted ">{unit.name}</MDBCardTitle>

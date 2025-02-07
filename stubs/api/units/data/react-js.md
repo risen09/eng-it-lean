@@ -1,8 +1,11 @@
 ### Цель урока:
+
 Изучение основ ReactJS для веб-разработки.
 
 ### Лексика:
+
 **Базовая лексика:**
+
 1. Компонент (`Component`) – элемент интерфейса, который можно использовать повторно.
 2. Просмотр (`View`) – представление компонента, отображаемое на экране.
 3. Состояние (`State`) – объект, который хранит данные о состоянии компонента.
@@ -11,22 +14,25 @@
 6. Реактивность (`Reactivity`) – свойство React, позволяющее автоматически обновлять представления при изменении данных.
 
 **Расширенная лексика:**
+
 1. JSX (`JavaScript XML`) – синтаксический сахар для JavaScript, используемый в React для описания компонентов.
 2. Функциональный компонент (`Functional Component`) – компонент, реализованный как функция.
 3. Классный компонент (`Class Component`) – компонент, реализованный как класс.
 4. Мутный компонент (`Hooks`) – новые функции, такие как `useState` и `useEffect`, которые позволяют добавлять реактивность в функциональные компоненты.
 
 ### Грамматический фокус:
+
 **Правило:**
 Реактивность в React основана на концепции одностороннего потока данных (unidirectional data flow). Это означает, что данные могут двигаться только в одном направлении: от родителя к дочерним компонентам. Это помогает поддерживать порядок и предсказуемость в приложении.
 
 **Пример:**
+
 ```javascript
 class Counter extends React.Component {
   state = { count: 0 };
 
   incrementCount = () => {
-    this.setState(prevState => ({ count: prevState.count + 1 }));
+    this.setState((prevState) => ({ count: prevState.count + 1 }));
   };
 
   render() {
@@ -47,25 +53,28 @@ ReactDOM.render(element, document.getElementById('root'));
 Одной из распространенных ошибок является попытка изменить состояние напрямую через свойства компонента вместо использования метода `this.setState()`. Это может привести к неожиданным результатам и нарушению реактивности. Всегда следует использовать `this.setState()` для обновления состояния.
 
 ### Контекстуализация:
+
 **Текст:**
+
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>React Example</title>
-</head>
-<body>
-  <div id="root"></div>
-  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-  <script src="main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Example</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="main.js"></script>
+  </body>
 </html>
 ```
 
 ### Упражнения:
+
 **Письменное задание:**
 Создайте простой компонент React, который отображает текущее время. Используйте JSX для описания компонента и метод `setInterval` для обновления времени каждые секунду.
 
@@ -74,6 +83,7 @@ ReactDOM.render(element, document.getElementById('root'));
 
 **Аналитическое задание:**
 Найдите и исправьте ошибки в следующем коде:
+
 ```javascript
 class Counter extends React.Component {
   state = { count: 0 };
@@ -98,6 +108,7 @@ ReactDOM.render(element, document.getElementById('root'));
 
 **Перевод сложной конструкции:**
 Переведите следующий код на русский язык, сохраняя структуру и смысл:
+
 ```javascript
 function App() {
   const [count, setCount] = useState(0);
@@ -118,7 +129,9 @@ ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 ### Домашнее задание:
+
 **Текстовые задачи:**
+
 1. Написать функцию, которая принимает два числа и возвращает сумму этих чисел. Использовать функциональные компоненты и JSX.
 2. Создать классный компонент, который отображает список пользователей с возможностью добавления новых пользователей.
 3. Найти и исправить ошибки в коде, используя знания о правильном использовании `this.setState()`.

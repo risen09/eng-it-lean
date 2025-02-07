@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import { usePostUsersMutation } from '../../store/api';
 import { useNavigate } from 'react-router-dom';
 import { getNavigationsValue } from '@brojs/cli';
@@ -13,7 +13,7 @@ const RegistrationPage = (): React.ReactElement => {
     navigate(getNavigationsValue('eng-it-lean.main'));
   };
 
-  const [postUsers, isLoading] = usePostUsersMutation();
+  const [postUsers, { isLoading }] = usePostUsersMutation();
 
   const handleRegister = (data): void => {
     postUsers({
@@ -92,7 +92,7 @@ const RegistrationPage = (): React.ReactElement => {
                 <MDBBtn outline color="success" onClick={handleCancel} className="me-2">
                   Отменить
                 </MDBBtn>
-                <MDBBtn color="success" onClick={handleSubmit(handleRegister)} className="">
+                <MDBBtn color="success" disabled={isLoading} onClick={handleSubmit(handleRegister)} className="">
                   Зарегистрироваться
                 </MDBBtn>
               </div>

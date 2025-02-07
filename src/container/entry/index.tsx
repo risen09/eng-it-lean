@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
 import { getNavigationsValue } from '@brojs/cli';
 import { useCookies } from 'react-cookie';
@@ -9,13 +9,13 @@ import { usePostLoginMutation } from '../../store/api';
 const LoginPage: React.FC = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['auth_token']);
+  const [, setCookie] = useCookies(['auth_token']);
 
   const handleCancel = (): void => {
     navigate(getNavigationsValue('eng-it-lean.main'));
   };
 
-  const [postLogin, isLoading] = usePostLoginMutation();
+  const [postLogin, { isLoading }] = usePostLoginMutation();
 
   const handleEntry = async (data) => {
     const response = await postLogin({ email: data.email, password: data.password });
@@ -65,7 +65,7 @@ const LoginPage: React.FC = () => {
                 <MDBBtn outline color="success" onClick={handleCancel} className="me-2">
                   Отменить
                 </MDBBtn>
-                <MDBBtn color="success" onClick={handleSubmit(handleEntry)} className="">
+                <MDBBtn color="success" disabled={isLoading} onClick={handleSubmit(handleEntry)} className="">
                   Войти
                 </MDBBtn>
               </div>

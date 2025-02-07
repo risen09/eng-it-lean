@@ -1,4 +1,4 @@
-import { User } from "../users/types";
+import { User } from '../users/types';
 
 export interface Unit {
   id: number;

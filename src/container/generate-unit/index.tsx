@@ -22,27 +22,7 @@ import {
 } from 'mdb-react-ui-kit';
 import MarkdownStyled from '../../components/markdown';
 import { usePutUnitMutation } from '../../store/api';
-import {
-  BlockTypeSelect,
-  BoldItalicUnderlineToggles,
-  ChangeCodeMirrorLanguage,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  CodeToggle,
-  headingsPlugin,
-  InsertCodeBlock,
-  InsertTable,
-  listsPlugin,
-  ListsToggle,
-  markdownShortcutPlugin,
-  MDXEditor,
-  MDXEditorMethods,
-  quotePlugin,
-  tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-  UndoRedo
-} from '@mdxeditor/editor';
+import { MDXEditorMethods } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import Editor from '../../components/editor';
 import { useCookies } from 'react-cookie';
@@ -63,7 +43,7 @@ export default function GenerateUnitPage() {
     onResponse: (response) => {
       console.log('Received HTTP response from server:', response);
     },
-    streamProtocol: 'text',
+    streamProtocol: 'text'
   });
 
   const inputIsEmpty = input === '';
@@ -71,7 +51,7 @@ export default function GenerateUnitPage() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const toggleOpen = () => setIsModalOpen(!isModalOpen);
 
-  const [cookies] = useCookies(['auth_token'])
+  const [cookies] = useCookies(['auth_token']);
   const [putUnit, { isLoading }] = usePutUnitMutation();
   const handleCreate = () => {
     putUnit({
@@ -98,7 +78,7 @@ export default function GenerateUnitPage() {
   return (
     <>
       <div className="container my-2 py-5">
-      <MDBTypography tag="h2" className="text-muted mb-5 text-center">
+        <MDBTypography tag="h2" className="text-muted mb-5 text-center">
           Генерация нового урока
         </MDBTypography>
         <MDBRow tag="form" onSubmit={handleSubmit} className="">
@@ -159,7 +139,7 @@ export default function GenerateUnitPage() {
         <MDBRow>
           <MDBCol size={4} />
           <MDBCol size={4} className="text-center">
-            <MDBBtn type="button" className='w-75' disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
+            <MDBBtn type="button" className="w-75" disabled={completionIsEmpty} color="success" onClick={toggleOpen}>
               Сохранить
             </MDBBtn>
           </MDBCol>

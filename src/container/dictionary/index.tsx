@@ -4,7 +4,6 @@ import {
   MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBCardImage,
   MDBIcon,
   MDBModal,
   MDBModalDialog,
@@ -14,9 +13,7 @@ import {
   MDBModalContent,
   MDBModalBody,
   MDBInput,
-  MDBTextArea,
-  MDBListGroup,
-  MDBListGroupItem
+  MDBTextArea
 } from 'mdb-react-ui-kit';
 import WordItem from './components/WordItem';
 import { useParams } from 'react-router-dom';
@@ -74,7 +71,7 @@ const DictionaryPage = (): React.ReactElement => {
 
           {dictionary &&
             dictionary.words?.map((word: Word) => (
-              <MDBCol xl={4} lg={6} className="mb-4">
+              <MDBCol key={word.id} xl={4} lg={6} className="mb-4">
                 <WordItem key={word.id} word={word} />
               </MDBCol>
             ))}

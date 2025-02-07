@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../../components/card';
-import { DictionaryItem } from './types';
 import { getNavigationsValue } from '@brojs/cli';
-import { getConfigValue } from '@brojs/cli';
 import { useGetDictionariesQuery } from '../../store/api';
 import mainKurs from './images/main.jpg';
 import imgBlock1 from './images/block1.jpg';
 import imgBlock2 from './images/block2.jpg';
 import bannerblock1 from './images/bannerblock1.jpg';
 import bannerblock2 from './images/bannerblock2.jpg';
+import kart1 from './images/kart1.jpg';
 import {
   MDBCarousel,
   MDBCarouselItem,
   MDBCarouselCaption,
-  MDBContainer,
   MDBCol,
   MDBRow,
   MDBTypography,
@@ -39,7 +36,7 @@ const StyledCarousel = styled(MDBCarousel)`
   }
   .carousel-control-next-icon,
   .carousel-control-prev-icon {
-    color: #14A44D; /* Зелёный цвет */
+    color: #14a44d; /* Зелёный цвет */
   }
 
   .custom-carousel .carousel-control-prev,
@@ -138,7 +135,7 @@ const CustomCarousel = () => {
 };
 
 const HomePage = (): React.ReactElement => {
-  const { data: dictionaries, isLoading, error } = useGetDictionariesQuery(undefined);
+  const { data: dictionaries } = useGetDictionariesQuery(undefined);
 
   return (
     <div>
@@ -239,15 +236,10 @@ const HomePage = (): React.ReactElement => {
         <MDBRow className="g-2 justify-content-center">
           {dictionaries
             ?.map((dictionary) => (
-              <MDBCol md="4">
+              <MDBCol key={dictionary.id} md="4">
                 <MDBCard style={{ width: '18rem' }} className="rounded-4 shadow-sm">
                   <MDBRipple rippleColor="light" rippleTag="div" className="bg-image hover-overlay">
-                    <MDBCardImage
-                      src={require('./images/' + dictionary.imageFilename)}
-                      fluid
-                      alt="..."
-                      className="rounded-top"
-                    />
+                    <MDBCardImage src={kart1} fluid alt="..." className="rounded-top" />
                     <div className="mask" style={{ backgroundColor: 'rgba(251, 251, 251, 0.15)' }}></div>
                   </MDBRipple>
                   <MDBCardBody>
